@@ -1,0 +1,16 @@
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\interfaces\IProductDAO.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\repositories\ProductRepository.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\interfaces\ProductService.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\Application.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\entities\MealInfo.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\interfaces\IProductService.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\DietManager.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\DietController.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\MealInfoObject.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\interfaces\ProductDAO.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\DifficultyLevel.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\repositories\DietRepository.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\entities\Meal.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\exceptions\ProductNotFound.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\entities\Exercise.java
+C:\Users\Nobody\eclipse-workspace\workout-connection\src\main\java\workoutconnection\entities\Product.java

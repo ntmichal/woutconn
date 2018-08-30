@@ -1,0 +1,255 @@
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<script
+		src="https://code.jquery.com/jquery-3.3.1.js"
+		integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+		crossorigin="anonymous"></script>
+		<style>
+				table, td, th {    
+					border: 1px solid #ddd;
+					text-align: left;
+				}
+				
+				table {
+					border-collapse: collapse;
+					width: 100%;
+				}
+				
+				th, td {
+					padding: 15px;
+				}
+		</style>
+	</head>
+	<body>
+		<div id="wgoals1">
+			Cele treningowe.
+			<div id="wgoals2">
+				<table>
+					<tr>
+						<th>id</th>
+						<th>cel treningowy</th>
+						<th>data rozpoczecia</th>
+						<th>data zakonczenia</th>
+						<th>Zapotrzebowanie kaloryczne</th>							
+					</tr>
+
+				</table>
+			</div>
+		</div>
+		<div>
+			Posiłki.
+			<button id = "button_1">Pokaż wcześniejsze</button>
+			<button disabled>Posiłki na dziś</button>
+			<button id = "button_2">Pokaż zaplanowane na kolejne dni</button>
+
+			<div id = "mealcontainer">
+				<h4 id = "date_today"></h4>
+				<div id = "kontener"></div>
+				<button id = "add_meal">Dodaj posiłek</button>
+
+				<div id= "create_meal" style="display:none">
+					Name: <input id = "meal_name" type ="text"/> <br />
+					Date: <input id = "meal_date" type="date"/> <br />
+					Products: 
+						<button id = "product_list">+</button>
+						<div id="product_list_div" style="display:none"></div>
+					<button id="send_meal">Akceptuj</button>
+				</div>
+
+				<div>
+					<h5>Podsumowanie dnia</h5>
+				</div>
+
+			</div>
+		</div>
+		<div>
+			<h4>Plany treningowe.</h4>
+		</div>
+	<script>
+		findAllMeals();
+		userGoals();
+
+		var stringMealsOlder = "";
+		var stringMealsNewer = "";
+		$("#button_1").on("click", ()=>{
+			alert(stringMealsOlder);
+		});
+		$("#button_2").on("click", ()=>{
+			alert(stringMealsNewer);
+		});
+
+
+		$("#product_list").on("click", ()=>{
+			productList();
+		});
+		$("#add_meal").on("click", ()=>{
+			$("#create_meal").css("display","block");
+		});
+
+		var date = new Date();
+		var month = date.getMonth() + 1;
+		var year = date.getFullYear();
+		var day = date.getDate();
+		var data =  day + "." + month + "." + year;
+		if(month < 10){
+			month = '0'+month;
+		}
+
+		var compareData = year + "-" +month+"-"+day;
+		$("#date_today").text(data);
+		function findAllMeals(userid = 1){
+			$.ajax({
+				type: "GET",
+				url: 'http://localhost:8080/api/meal/ ' + userid,
+				contentType: 'application/json',
+				dataType: 'json',
+				success: (data)=>{
+					console.log(data);
+					console.log('all meals success');		
+
+					data.forEach(element => {
+						if(element.meal.mealDate == compareData){
+							$('#kontener').append(element.meal.name  + "<button> - </button> </br>");
+							element.products.forEach(element => {
+								$('#kontener').append("<ul>" + element.name + "</ul>");
+							});
+							$('#kontener').append("<ul><button>+</button></ul>");
+						}else if(element.meal.mealDate < compareData){
+
+
+							stringMealsOlder += element.meal.name + " " + element.meal.mealDate + "\n";
+							element.products.forEach(element => {
+								stringMealsOlder += "  " + element.name + "\n";
+							});
+							//console.log(stringMealsOlder);
+						}else if(element.meal.mealDate > compareData){
+							
+							stringMealsNewer += element.meal.name + " " + element.meal.mealDate + "\n";
+							element.products.forEach(element => {
+								stringMealsNewer += "  " + element.name + "\n";
+							});
+							//console.log(stringMealsNewer);
+						}
+					});
+			
+				},
+				error: (error)=>{
+					console.log('all meals errors');
+				}
+
+			})
+		}
+		
+		function userGoals(userid = 1){
+			$.ajax({
+				type: "GET",
+				url: "http://localhost:8080/api/usergoals/" + userid,
+				contentType: 'application/json',
+				dataType: 'json',
+				success: (data) => {
+					console.log("user goals success");
+					$("#wgoals2 table").append("<tr id = \"goals3\"></tr>");
+					data.forEach(element => {
+						$("#goals3").append("<td>"+element.id+"</td><td>"+ element.cel_treningowy +"</td>  <td> " + element.data_rozpoczecia + " </td><td> " + element.data_zakonczenia + "</td><td>" + element.zapotrzebowanie_kcal +"</td>");			
+					});
+				},
+				error: (error)=>{
+					console.log("user goals get error");
+				}
+			})
+		}
+
+		function productList(){
+			$.ajax({
+				type: "GET",
+				url: "http://localhost:8080/api/product/list",
+				contentType: 'application/json',
+				dataType: 'json',
+				success: (data) =>{
+
+
+					var stringHTML = "<div><li>";
+
+
+					data.forEach(element => {
+						stringHTML += "<ul>" +  element.id + ", " + element.name +  "</ul><button onClick=addProduct("+ (element.id - 1) +")>+</button>";
+					});
+
+					stringHTML += "</li></div>";
+					$("#product_list_div").append(stringHTML);
+					$("#product_list_div").css("display","block");
+					
+					productList = data;
+				
+				},
+				error: () =>{
+					console.log("product error");
+				}
+			})
+		}
+		
+		var productList;
+		
+		var MealInfoObject = Array();
+		var mealInfo = Array();
+		var mealProducts = Array();
+
+		//autoryzacja nie wiem jak to ogarnie ale musi XD
+		var mealUser = Array();
+		
+		mealInfo =
+			{
+				name : "posiłek nr 9",
+				date : "2018-08-24",
+			}
+		mealUser = {			
+            id: 1,
+            username: "janpierwszy",
+            password: "123",
+            email: "email@gmail.com"
+        }
+		
+
+		function addProduct(product_id){
+			console.log("Product added");
+			mealProducts.push(productList[product_id]);
+			console.log(mealProducts);
+		}
+
+		$("#send_meal").on("click" , ()=>{
+
+			mealInfo = {
+				name : $("#meal_name").val(),
+				date : $("#meal_date").val()
+			};
+			MealInfoObject = 
+				{ 	meal : mealInfo,
+					user: mealUser,
+					products : mealProducts
+				};
+			
+			postMEAL(MealInfoObject);
+		});
+
+		function postMEAL(MIO){
+			$.ajax({
+				type: "POST",
+				contentType: "application/json",
+				url: 'http://localhost:8080/api/meal/',
+				data: JSON.stringify(MIO),
+				dataType: "JSON",
+				timeout: 600000,
+				succes: () =>{
+					console.log("succcess post to database");
+				},
+				error: () =>{
+					console.log("error głupi baranie ");
+					console.log(MIO);
+				}
+			});
+		}
+	</script>
+	</body>
+
+</html>
