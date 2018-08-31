@@ -18,8 +18,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	
 	static final String client_id = "workoutconnection-client";
-	//static final String client_secret = "$2y$04$RiHVAIE1tJtYtFwoJtntheX5CSGjM7MS3oGsizGQa.JQ26fcF0qaO";//to moje
-	//static final String client_secret = "$2a$04$e/c1/RfsWuThaWFCrcCuJeoyvwCV0URN/6Pn9ZFlrtIWaU/vj/BfG";
 	// String client_secret = "workoutconnection-secret";
 	static final String client_secret = "$2a$10$fJE7NVz.nvFWxKRjJ4ao7uE.OqBMiy.D2xSrb/wGvbcUqixUVniQa";
 	static final String password = "password";
