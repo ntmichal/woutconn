@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import workoutconnection.dao.UserGoalsDAO;
 import workoutconnection.entities.MealInfo;
 import workoutconnection.entities.Product;
 import workoutconnection.entities.UserGoals;
 import workoutconnection.interfaces.MealInfoService;
 import workoutconnection.interfaces.ProductService;
-import workoutconnection.interfaces.UserGoalsDAO;
 
 
 /**
