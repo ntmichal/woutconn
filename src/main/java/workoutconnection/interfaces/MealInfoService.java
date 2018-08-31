@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import workoutconnection.MealInfoObject;
-import workoutconnection.entities.MealInfo;
+import workoutconnection.dao.IMealInfoDAO;
 import workoutconnection.entities.Product;
 
 

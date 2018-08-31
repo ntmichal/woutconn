@@ -1,4 +1,4 @@
-package workoutconnection.interfaces;
+package workoutconnection.dao;
 
 
 
