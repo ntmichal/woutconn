@@ -1,4 +1,6 @@
-package workoutconnection.interfaces;
+package workoutconnection.service;
+
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -10,14 +12,11 @@ import org.springframework.stereotype.Service;
 
 import workoutconnection.entities.User;
 
-@Service
-public class UserSerivce implements UserDetailsService{
 
-	@Autowired
-	private EntityManager entityManager;
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return (User)entityManager.createQuery("From User WHERE USER_NAME = " + username);
-	}
+public interface IUserSerivce{
+
+    User save(User user);
+    List<User> findAll();
+    void delete(int id);
 
 }

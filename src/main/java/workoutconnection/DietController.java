@@ -20,8 +20,8 @@ import workoutconnection.dao.UserGoalsDAO;
 import workoutconnection.entities.MealInfo;
 import workoutconnection.entities.Product;
 import workoutconnection.entities.UserGoals;
-import workoutconnection.interfaces.MealInfoService;
-import workoutconnection.interfaces.ProductService;
+import workoutconnection.service.MealInfoService;
+import workoutconnection.service.ProductService;
 
 
 /**
