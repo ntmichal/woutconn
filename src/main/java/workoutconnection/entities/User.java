@@ -2,7 +2,7 @@ package workoutconnection.entities;
 
 
 import java.util.Collection;
-import java.util.List;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,10 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
@@ -46,37 +44,10 @@ public class User implements UserDetails{
     @Column(name = "ENABLED")
     private boolean enabled;
     
-//    @Transient
-//    private List<SimpleGrantedAuthority> authority;
-    
-//    public User(String username, String password, List<SimpleGrantedAuthority> authority) {
-// 
-//		this.username = username;
-//		this.password = password;
-//
-//	}
-
-//	public User(int id, String username, String password, boolean accountExpired, boolean accountLocked,
-//			boolean credentialsExpired, boolean enabled) {
-//		super();
-//		this.id = id;
-//		this.username = username;
-//		this.password = password;
-//		this.accountExpired = accountExpired;
-//		this.accountLocked = accountLocked;
-//		this.credentialsExpired = credentialsExpired;
-//		this.enabled = enabled;
-//	}
 
 	public int getId() {
 		return id;
 	}
-
-
-
-
-
-
 
 	public void setId(int id) {
 		this.id = id;
@@ -153,46 +124,35 @@ public class User implements UserDetails{
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return this.getId() + " -------------------- " + this.getUsername() + "------------------ " + this.getPassword();
+		return this.getId() + " -- " + this.getUsername() + "- " + this.getPassword();
 	}
-
-
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return null;
 	}
 
-
-
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
+
+		return !this.accountExpired;
 	}
-
-
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
+
+		return !this.accountLocked;
 	}
-
-
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
+
+		return !this.credentialsExpired;
 	}
-
-
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
+		return !this.enabled;
 	}
 
 

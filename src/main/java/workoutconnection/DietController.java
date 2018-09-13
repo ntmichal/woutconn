@@ -43,10 +43,9 @@ import workoutconnection.service.ProductService;
 @RestController
 public class DietController {
 
-	@Autowired
-	private TokenStore tokenStore;
+//	@Autowired
+//	private TokenStore tokenStore;
 
-	
 	@Autowired
 	private ProductService productService;
 	@Autowired
@@ -55,7 +54,7 @@ public class DietController {
 	@Autowired
 	private UserGoalsDAO userDAO;
 	
-	//first of all should be done list of products
+
 	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/api/product/list", method = RequestMethod.GET)
 	public List<Product> productList(){
@@ -113,9 +112,9 @@ public class DietController {
 	@RequestMapping(value = "/api/meal", method = RequestMethod.POST)
 	public ResponseEntity<Object> createMeal(OAuth2Authentication auth,Authentication authentication, @RequestBody MealInfoObject meal){
 		
-		final OAuth2AuthenticationDetails oAuthDetails = (OAuth2AuthenticationDetails)auth.getDetails(); 
+		//final OAuth2AuthenticationDetails oAuthDetails = (OAuth2AuthenticationDetails)auth.getDetails(); 
 		
-		String accessToken = oAuthDetails.getTokenValue();
+		//String accessToken = oAuthDetails.getTokenValue();
 		User currentUser = (User)SecurityContextHolder.getContext()
 													.getAuthentication()
 													.getPrincipal();

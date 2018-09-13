@@ -1,11 +1,9 @@
 package workoutconnection.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,9 +28,7 @@ public class UserServiceImpl implements UserDetailsService, IUserService {
 		return user;
 	}
 
-	private List<SimpleGrantedAuthority> getAuthority() {
-		return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
-	}
+
 
 	public List<User> findAll() {
 		List<User> list = new ArrayList<>();

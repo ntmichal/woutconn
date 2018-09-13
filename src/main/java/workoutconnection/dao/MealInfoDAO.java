@@ -115,7 +115,7 @@ public class MealInfoDAO implements IMealInfoDAO {
 		
 		String HQL2 = "From User WHERE id = " + meal.getUserid();
 		User user = (User)entityManager.createQuery(HQL2).getSingleResult();
-		//query check czy wystepuje w bazie danych juz dany posiłek
+
 		String queryChceckHQL = "SELECT Count(meal_id) FROM MealInfo WHERE meal_id = " + meal.getMeal().getId();
 		
 		Long numberOfRows = (Long)entityManager.createQuery(queryChceckHQL).getSingleResult();
