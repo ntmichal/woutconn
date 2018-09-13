@@ -1,19 +1,27 @@
 package workoutconnection.entities;
 
 
+import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 
 
 @Entity
 @Table(name="users")
-public class User{
+public class User implements UserDetails{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,10 +46,35 @@ public class User{
     @Column(name = "ENABLED")
     private boolean enabled;
     
+//    @Transient
+//    private List<SimpleGrantedAuthority> authority;
     
+//    public User(String username, String password, List<SimpleGrantedAuthority> authority) {
+// 
+//		this.username = username;
+//		this.password = password;
+//
+//	}
+
+//	public User(int id, String username, String password, boolean accountExpired, boolean accountLocked,
+//			boolean credentialsExpired, boolean enabled) {
+//		super();
+//		this.id = id;
+//		this.username = username;
+//		this.password = password;
+//		this.accountExpired = accountExpired;
+//		this.accountLocked = accountLocked;
+//		this.credentialsExpired = credentialsExpired;
+//		this.enabled = enabled;
+//	}
+
 	public int getId() {
 		return id;
 	}
+
+
+
+
 
 
 
@@ -121,6 +154,45 @@ public class User{
 	public String toString() {
 		// TODO Auto-generated method stub
 		return this.getId() + " -------------------- " + this.getUsername() + "------------------ " + this.getPassword();
+	}
+
+
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+
+
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 
