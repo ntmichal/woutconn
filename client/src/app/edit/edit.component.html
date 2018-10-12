@@ -1,0 +1,15 @@
+<button>Save</button><button>Discard Changes</button>
+<div>
+    <ul>
+      <li>{{globals.userMeal.meal.name}}<button>Zmień nazwę</button></li>
+      <li>{{globals.userMeal.meal.meal_date}}</li>
+    </ul>
+</div>
+<div>
+  <h5>Dodaj lub usuń produkty</h5>
+  <ul>
+  <li><button>Dodaj</button></li>
+  <li *ngFor="let product of gloabls.userMeal.product">{{product.name}} <button (click)="deleteProductFromMeal(product)"> Usuń</button></li>
+
+  </ul>
+</div>
