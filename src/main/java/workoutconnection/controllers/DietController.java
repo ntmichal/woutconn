@@ -1,34 +1,31 @@
-package workoutconnection;
+package workoutconnection.controllers;
 
 import java.net.URI;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-import org.springframework.security.oauth2.provider.token.TokenStore;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.oauth2.common.OAuth2AccessToken;
+//import org.springframework.security.oauth2.provider.OAuth2Authentication;
+//import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+//import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import io.jsonwebtoken.Claims;
+import workoutconnection.config.TokenProvider;
 import workoutconnection.dao.UserGoalsDAO;
 import workoutconnection.entities.Product;
-import workoutconnection.entities.User;
 import workoutconnection.entities.UserGoals;
+import workoutconnection.models.MealInfoObject;
 import workoutconnection.service.MealInfoService;
 import workoutconnection.service.ProductService;
 
@@ -39,12 +36,12 @@ import workoutconnection.service.ProductService;
  * @author Michał Maciocha
  * 
  */
-
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class DietController {
 
-//	@Autowired
-//	private TokenStore tokenStore;
+	@Autowired
+	private TokenProvider tokenProvider;
 
 	@Autowired
 	private ProductService productService;
@@ -55,7 +52,7 @@ public class DietController {
 	private UserGoalsDAO userDAO;
 	
 
-	@CrossOrigin(origins = "http://localhost:8080")
+//	@CrossOrigin(origins = "http://localhost:8080")
 	@RequestMapping(value = "/api/product/list", method = RequestMethod.GET)
 	public List<Product> productList(){
 
@@ -90,12 +87,16 @@ public class DietController {
 	
 	/**
 	 * 
-	 * @return list of products
+	 * @return list of meals
 	 */
-	@RequestMapping(value = "/api/meal/{userid}", method = RequestMethod.GET)
-	public List<MealInfoObject> mealsList(@PathVariable int userid){
-
-		return mealInfoService.getAllMeals(userid);
+	@RequestMapping(value = "/api/meal", method = RequestMethod.GET)
+	public List<MealInfoObject> mealsList(@RequestHeader("Authorization") String bearerToken){
+		String token = bearerToken.replace("Bearer ", "");
+		Claims userToken = tokenProvider.getAllClaimsFromToken(token);
+		int idFromToken = userToken.get("id", Integer.class);
+		
+		return mealInfoService.getAllMeals(idFromToken);
+	
 	}
 
 	
@@ -110,18 +111,18 @@ public class DietController {
 	
 	//insert meal
 	@RequestMapping(value = "/api/meal", method = RequestMethod.POST)
-	public ResponseEntity<Object> createMeal(OAuth2Authentication auth,Authentication authentication, @RequestBody MealInfoObject meal){
+	public ResponseEntity<Object> createMeal(@RequestBody MealInfoObject meal){
 		
-		//final OAuth2AuthenticationDetails oAuthDetails = (OAuth2AuthenticationDetails)auth.getDetails(); 
-		
-		//String accessToken = oAuthDetails.getTokenValue();
-		User currentUser = (User)SecurityContextHolder.getContext()
-													.getAuthentication()
-													.getPrincipal();
-
-		meal.setUserid(currentUser.getId());
-		mealInfoService.insertMeal(meal);
-		
+//		//final OAuth2AuthenticationDetails oAuthDetails = (OAuth2AuthenticationDetails)auth.getDetails(); 
+//		
+//		//String accessToken = oAuthDetails.getTokenValue();
+//		User currentUser = (User)SecurityContextHolder.getContext()
+//													.getAuthentication()
+//													.getPrincipal();
+//
+//		meal.setUserid(currentUser.getId());
+//		mealInfoService.insertMeal(meal);
+//		
 		return null;
 	}
 	

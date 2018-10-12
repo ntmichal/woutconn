@@ -10,11 +10,11 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import workoutconnection.MealInfoObject;
 import workoutconnection.entities.Meal;
 import workoutconnection.entities.MealInfo;
 import workoutconnection.entities.Product;
 import workoutconnection.entities.User;
+import workoutconnection.models.MealInfoObject;
 
 @Transactional
 @Repository
