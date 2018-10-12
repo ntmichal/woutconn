@@ -21,7 +21,7 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import workoutconnection.YearMonthDay;
+import workoutconnection.models.YearMonthDay;
 
 
 
