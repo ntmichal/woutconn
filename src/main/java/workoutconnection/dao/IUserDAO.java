@@ -13,4 +13,6 @@ public interface IUserDAO {
     User save(User user);
     List<User> findAll();
     void deleteById(int id);
+    boolean isUserExist(String username);
+    boolean isEmailExist(String email);
 }
