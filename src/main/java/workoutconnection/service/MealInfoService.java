@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import workoutconnection.MealInfoObject;
 import workoutconnection.dao.IMealInfoDAO;
 import workoutconnection.entities.Product;
+import workoutconnection.models.MealInfoObject;
 
 
 @Service

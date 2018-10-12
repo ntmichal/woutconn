@@ -1,6 +1,6 @@
 package workoutconnection.entities;
 
-import workoutconnection.DifficultyLevel;
+import workoutconnection.models.DifficultyLevel;
 
 public class Exercise {
 	private long id;

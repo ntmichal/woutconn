@@ -4,9 +4,9 @@ package workoutconnection.dao;
 
 import java.util.List;
 
-import workoutconnection.MealInfoObject;
 import workoutconnection.entities.MealInfo;
 import workoutconnection.entities.Product;
+import workoutconnection.models.MealInfoObject;
 
 
 public interface IMealInfoDAO {

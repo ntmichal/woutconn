@@ -1,4 +1,4 @@
-package workoutconnection.entities;
+package workoutconnection.models;
 
 public class MealSum {
 	int carbs;

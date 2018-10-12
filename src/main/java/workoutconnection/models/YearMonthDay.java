@@ -1,4 +1,4 @@
-package workoutconnection;
+package workoutconnection.models;
 
 public class YearMonthDay {
 		Integer Year;
