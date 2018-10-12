@@ -1,6 +1,7 @@
 package workoutconnection.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -46,6 +47,22 @@ public class UserDAO  implements IUserDAO{
 		return user;
 	}
 
+	@Override
+	public boolean isUserExist(String username) {
+		String HQL = "From User where user_name = '"+username+"'";	
+
+		int user = entityManager.createQuery(HQL).getResultList().size();
+		return user != 0 ? true : false;
+	}
+
+	@Override
+	public boolean isEmailExist(String email) {
+		String HQL = "From User where email = '"+email+"'";	
+
+		int user = entityManager.createQuery(HQL).getResultList().size();
+		return user != 0 ? true : false;
+	}
+	
 
 
 }
