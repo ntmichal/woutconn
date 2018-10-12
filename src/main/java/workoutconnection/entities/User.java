@@ -2,17 +2,21 @@ package workoutconnection.entities;
 
 
 import java.util.Collection;
+import java.util.List;
 
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 
@@ -32,6 +36,9 @@ public class User implements UserDetails{
     @Column(name = "PASSWORD")
     private String password;
 
+    @Column(name="EMAIL")
+    private String email;
+    
     @Column(name = "ACCOUNT_EXPIRED")
     private boolean accountExpired;
 
@@ -44,6 +51,9 @@ public class User implements UserDetails{
     @Column(name = "ENABLED")
     private boolean enabled;
     
+
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+    private List<Authority> authorities;
 
 	public int getId() {
 		return id;
@@ -121,6 +131,14 @@ public class User implements UserDetails{
 
 
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
@@ -129,7 +147,7 @@ public class User implements UserDetails{
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return (Collection<? extends GrantedAuthority>) authorities;
 	}
 
 	@Override
@@ -152,13 +170,8 @@ public class User implements UserDetails{
 
 	@Override
 	public boolean isEnabled() {
-		return !this.enabled;
+		return this.enabled;
 	}
 
-
-
-
-
-	
 	
 }
