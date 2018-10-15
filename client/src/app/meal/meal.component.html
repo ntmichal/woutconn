@@ -1,0 +1,20 @@
+
+<div>
+  <input type="text" 
+    placeholder="meal name"
+    [(ngModel)]="mealname" 
+    name="mealname"
+    >
+  <input type="date"
+  [(ngModel)]="mealdate"
+  name="mealdate"
+  >
+  <h5>Chose product</h5>
+  <ul>
+    <li *ngFor="let product of productList">{{product.name}} <button (click)="add(product)">Add</button></li>
+  </ul>
+  <ul>
+    <li *ngFor="let product of chosenProducts">{{product.name}} <button>Delete</button> </li>
+  </ul>
+  <button (click)="addMeal()">AddMeal</button>
+</div>
