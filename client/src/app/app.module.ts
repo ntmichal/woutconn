@@ -17,6 +17,8 @@ import {AuthService} from './auth.service';
 import { EditComponent } from './edit/edit.component';
 
 import { Globals } from './globals';
+import { MealComponent } from './meal/meal.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,6 +26,7 @@ import { Globals } from './globals';
     HomeComponent,
     DietComponent,
     EditComponent,
+    MealComponent,
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.context.SecurityContextHolder;
@@ -111,19 +112,15 @@ public class DietController {
 	
 	//insert meal
 	@RequestMapping(value = "/api/meal", method = RequestMethod.POST)
-	public ResponseEntity<Object> createMeal(@RequestBody MealInfoObject meal){
+	public ResponseEntity<Object> createMeal(@RequestHeader("Authorization") String token, @RequestBody MealInfoObject meal){
 		
-//		//final OAuth2AuthenticationDetails oAuthDetails = (OAuth2AuthenticationDetails)auth.getDetails(); 
-//		
-//		//String accessToken = oAuthDetails.getTokenValue();
-//		User currentUser = (User)SecurityContextHolder.getContext()
-//													.getAuthentication()
-//													.getPrincipal();
-//
-//		meal.setUserid(currentUser.getId());
-//		mealInfoService.insertMeal(meal);
-//		
-		return null;
+		
+		int idFromToken = tokenProvider.getAllClaimsFromToken(token.replace("Bearer ", "")).get("id", Integer.class);
+		meal.setUserid(idFromToken);
+		mealInfoService.insertMeal(meal);
+		
+		
+		return ResponseEntity.accepted().body(HttpStatus.CREATED);
 	}
 	
 

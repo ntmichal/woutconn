@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Globals} from '../globals';
+import { DietService} from '../diet.service';
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
@@ -7,16 +8,38 @@ import {Globals} from '../globals';
 })
 export class EditComponent implements OnInit {
 
-  constructor(private globals:Globals) { }
+  constructor(private globals:Globals, private dietService:DietService) { }
 
- 
+  productList:Array<any>;
+
   ngOnInit() {
-    console.log(this.globals);
+
+    this.dietService.getProducts().subscribe(data =>{
+      this.productList = data;
+    })
   }
-  updateMeal(){
-    
-  }
-  deleteProductFromMeal(){
+  updateMeal(prod){
+    this.dietService.updateMeal(prod, prod.meal.id).subscribe();
 
   }
+  addProduct(prod){
+    this.globals.usermeal.products.push(prod);
+
+  }
+  deleteProductFromMeal(prod){
+
+
+    const index = 
+      this.globals.usermeal.products.map(
+        element =>
+        { return element.id }
+        ).indexOf(prod.id);
+
+        console.log(index);
+      this.globals.usermeal.products.splice(index,1);  
+      
+
+    }
+
+  
 }

@@ -25,7 +25,7 @@ export class DietComponent implements OnInit {
   }
 
   edit(usermeal){
-    this.globals.userMeal = usermeal;
+    this.globals.usermeal = usermeal;
     this.router.navigate(['edit']);
 
   }
