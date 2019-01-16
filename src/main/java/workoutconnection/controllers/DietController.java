@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.Authentication;
@@ -53,7 +54,7 @@ public class DietController {
 	private UserGoalsDAO userDAO;
 	
 
-//	@CrossOrigin(origins = "http://localhost:8080")
+
 	@RequestMapping(value = "/api/product/list", method = RequestMethod.GET)
 	public List<Product> productList(){
 
@@ -69,7 +70,10 @@ public class DietController {
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(savedProduct.getId()).toUri();
 		
-		return ResponseEntity.created(location).build();
+
+		return ResponseEntity.created(location).header("id", Integer.toString(savedProduct.getId())).build();
+		
+	
 	}
 
 	//delete product only from admin panel, function for admins/moderators
@@ -115,7 +119,9 @@ public class DietController {
 	public ResponseEntity<Object> createMeal(@RequestHeader("Authorization") String token, @RequestBody MealInfoObject meal){
 		
 		
-		int idFromToken = tokenProvider.getAllClaimsFromToken(token.replace("Bearer ", "")).get("id", Integer.class);
+		int idFromToken = tokenProvider
+				.getAllClaimsFromToken(token.replace("Bearer ", ""))
+				.get("id", Integer.class);
 		meal.setUserid(idFromToken);
 		mealInfoService.insertMeal(meal);
 		
