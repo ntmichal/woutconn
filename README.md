@@ -1,4 +1,4 @@
-#workout-connection
+# workout-connection
 
 Webapp for monitoring diet and training
 
