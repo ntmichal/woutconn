@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,9 @@ import workoutconnection.entities.Product;
 import workoutconnection.entities.User;
 import workoutconnection.models.MealInfoObject;
 
-@Transactional
+
 @Repository
+@Transactional
 public class MealInfoDAO implements IMealInfoDAO {
 
 	@Autowired
@@ -98,57 +100,39 @@ public class MealInfoDAO implements IMealInfoDAO {
 
 	@Override
 	public void updateMeal(MealInfoObject meal) {
-		
-		
-		String HQL = "DELETE FROM MealInfo WHERE" + meal.getMeal().getId();
+		String HQL = "DELETE FROM MealInfo WHERE meal_id = " + meal.getMeal().getId();
 
 		entityManager.createQuery(HQL).executeUpdate();
 
+		
+		
 		this.insertMeal(meal);
 	}
 
 	@Override
 	public void insertMeal(MealInfoObject meal) {
-		
-		List<Product> products = meal.getProducts();
-		Meal getMeal = meal.getMeal();
-		
-		String HQL2 = "From User WHERE id = " + meal.getUserid();
-		User user = (User)entityManager.createQuery(HQL2).getSingleResult();
+		int k = 0;
 
-		String queryChceckHQL = "SELECT Count(meal_id) FROM MealInfo WHERE meal_id = " + meal.getMeal().getId();
+		String HQL = "From User WHERE id = :id";	
+		Query q = (Query)entityManager.createQuery(HQL);
+		q.setParameter("id", meal.getUserid());
+		User user = (User)q.getSingleResult();
 		
-		Long numberOfRows = (Long)entityManager.createQuery(queryChceckHQL).getSingleResult();
-		System.out.println(numberOfRows + " " + " number of records ");
+		MealInfo tempMealInfo = new MealInfo();
+		meal.meal.setUser(user);
+		tempMealInfo.setUser(user);
+		tempMealInfo.setMeal(meal.getMeal());
 
-		int id = -1;
-
-		MealInfo tempMeal = new MealInfo();
-		Meal ml = new Meal();
-		ml = meal.getMeal();
-		if(numberOfRows.intValue() == 0) {
-			
-			tempMeal.setMeal(meal.getMeal());
-			tempMeal.setUser(user);
-			tempMeal.setProduct(meal.getProducts().get(0));
-			id = entityManager.merge(tempMeal).getMeal().getId();		
-			ml.setId(id);
-			numberOfRows++;
-		
-		}	
-		if(numberOfRows > 0) {		
-			for(Product i : meal.getProducts()) {
-		
-				tempMeal.setMeal(ml);
-				tempMeal.setProduct(i);
-				entityManager.merge(tempMeal);
+		for(Product i : meal.getProducts()) {			
+			tempMealInfo.setProduct(i);
+			if(k == 0) {
+				k = entityManager.merge(tempMealInfo).getMeal().getId();
+				tempMealInfo.getMeal().setId(k);
+				continue;
 			}
+			entityManager.merge(tempMealInfo);	
+			
 		}
-
-
-		
-		
-		
 		
 	}
 
