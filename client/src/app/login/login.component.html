@@ -1,19 +1,16 @@
-Login
-<div>
-  <form>
-    <input type="text" placeholder="login" [(ngModel)]="username" name="username" required>
-    <input type="password" placeholder="password" [(ngModel)]="password" name="password" required>
-    <button (click)="login()">Login</button>
-  </form>
-</div> 
-<!-- Register
-<div>
-    <form>
-        <input type="text" placeholder="login" [(ngModel)]="username" name="username" required>
-        <input type="password" placeholder="password" [(ngModel)]="password" name="password" required>
-        <input type="password" placeholder="re-password" [(ngModel)]="password" name="password" required>
-        <input type="text" placeholder="email" [(ngModel)]="email" name="email" required>
-        <button (click)="register()">Register</button>
-      </form>
-</div> -->
+<div class="grid-container">
+  <div class="left-panel">
+      
+  </div>
+  <div class="right-panel">
+      
+      <div class="login-form">
+          <form>
+              <input type="text" placeholder="name" [(ngModel)]="username" name="username" required>
+              <input type="password" placeholder="password" [(ngModel)]="password" name="password" required>
+              <button (click)="login()">Login</button>
+          </form>
 
+      </div>
+  </div>
+</div> 

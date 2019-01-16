@@ -1,0 +1,184 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+} 
+body {font-family: Verdana, sans-serif;}
+.grid-container{
+    display: grid;
+    grid-gap: 0rem;
+    grid-template-columns: 100px 6fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 
+        "sidebar dashboard dashboard";
+
+    width: 100vw;
+    height: 100vh;
+}
+.sidebar{
+    grid-area: sidebar;
+    height: 100%;
+    background-color: #FBA827;
+}
+.sidebar ul{
+    position: relative;
+    top: 100px;
+    margin: 0;
+    padding: 0;
+   
+}
+.sidebar ul li{
+    text-decoration: none;
+    list-style: none;
+
+}
+
+.sidebar ul li a{
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+.sidebar ul li a:hover{
+    background-color: #fdd79b;
+}
+.sidebar ul li a span{
+    display: block;
+    position: relative;
+    left: 15px;
+}
+
+.dashboard{
+    grid-area: dashboard;
+    display: grid;
+    margin: 10px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 480px 600fr;
+    grid-template-areas:
+        "diet usergoals"
+        "workout workout";
+    grid-gap: 5px;
+
+}
+.diet{
+    grid-area:diet;
+    background-color: #fef5e6;
+
+}
+.usergoals{
+    grid-area: usergoals;
+    background-color: #fef5e6;
+}
+.workout{
+    grid-area: workout;
+    background-color: #fef5e6;
+}
+.diet table{
+    border-collapse: collapse;
+    width: 100%;
+}
+.title{
+    width: 45%;
+    text-align: left;
+}
+.diet table th{
+    background-color: #FBA827;
+    border-collapse: collapse;
+    height: 45px;
+    padding: 5px;
+    border-bottom: 1px solid rgb(255, 231, 192);
+}
+.diet table td{
+    background-color: rgb(255, 209, 136);
+    border-collapse: collapse;
+    height: 15px;
+    padding: 5px;
+    border-bottom: 1px solid rgb(255, 231, 192);
+}
+
+.datebanner{
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+ .usergoals ul {
+    list-style: none;
+}
+/* .usergoals ul li{
+    display: inline;
+} */ 
+
+.workout-table {
+    list-style-type: none;
+    width: 360px;
+    display: table;
+    table-layout: fixed;
+  }
+.workout-table li {
+    display: table-cell;
+    width: 120px;
+    text-align: center;
+    background-color: #fdd79b;
+    border-bottom: 1px solid #fef5e6;
+}
+.hidden{
+    display: none;
+}
+.workout{
+
+}
+.no{
+    display: inline-block;
+}
+
+.btn-workout{
+    border: 1px solid #fdd79b;
+    width: 80px;
+    height: 40px;
+    line-height: 40px;
+}
+.btn-workout:hover{
+    cursor: pointer;
+}
+.date-box{
+    /* display: block; */
+    width: 80px;
+    height: 40px;
+    line-height: 40px;
+}
+
+.product-info{
+    display: inline-block;
+    width: 70px;
+}
+.product-name{
+    display: inline-block;
+    width: 120px;
+}
+
+.dateContainer{
+    position: relative;
+    width:360px;
+    margin: 0 auto;
+}
+.dateContainer ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  
+}
+
+.dateContainer ul li{
+    background-color: #FBA827;
+    display: inline-block;
+    cursor: pointer;
+    margin: 2px;
+    height: 50px;
+    width: 110px;
+    line-height: 50px;
+    text-align: center;
+
+}

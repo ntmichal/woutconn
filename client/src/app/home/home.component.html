@@ -1,13 +1,202 @@
-<h3>User goals</h3>
-<ul>
-    <li *ngFor="let goal of userGoals">
-        {{goal.cel_treningowy}}
-        {{goal.data_rozpoczecia}}
-        {{goal.data_zakonczenia}}
-        {{goal.zapotrzebowanie_kcal}}
-    </li>
-</ul>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"> 
 
-<a href="/diet">Diet controller</a>
-<a href="">Workout Controller</a>
+<div class="grid-container">
+            <div class="sidebar">
+                <ul>
+                    <li>
+                       <a href="#">User <span>Profile</span></a> 
+                    </li>
+                    <li>
+                        <a href="/diet">Diet <span>Manager</span></a>
+                    </li>
+                    <li>
+                        <a href="#">Workout <span>Manager</span></a> 
+                    </li>
+                </ul>
+            </div>
+            <div class="dashboard">
+                <div class="diet">
+ 
+                <div>
+                    <div class="dateContainer">
+                        <ul>
+                            <li (click)="decreaseDate()">{{this.formatDate(this.prevDate)}}</li>
+                            <li>{{this.formatDate(this.currentDate)}}</li>
+                            <li (click)="increaseDate()">{{this.formatDate(this.nextDate)}}</li>
+                        </ul>       
+                    </div>
+                    <div>
 
+                        <ng-container *ngFor="let oneMeal of userDiet; let i = index">
+                                <ng-container *ngIf="oneMeal.meal.mealDate == this.formatDate(this.currentDate)">
+                                    <table>
+                                    <tr (click)="openTable(i)">    
+                                        <th class="title">                                  
+                                            <button type="button" class="close" style="float: left">
+                                                    <i class="fas fa-caret-down"></i>
+                                            </button>
+                                            {{oneMeal.meal.name}}
+                                        </th>
+        
+                                        <th>Proteins:{{this.Proteins(oneMeal.products)}}</th>
+                                        <th>Fats: {{this.Fats(oneMeal.products)}}</th>
+                                        <th>Carbs: {{this.Carbs(oneMeal.products)}}</th>
+                                        <th>Calories: {{this.Calories(oneMeal.products)}}</th>
+                                        <th>
+                                            <button type="button" class="close" aria-label="Close">
+                                                    <i class="fas fa-cog"></i>
+                                            </button>
+                                        </th> 
+                                    </tr>
+                                    <ng-container  *ngFor="let product of oneMeal.products" >
+                                         <tr [hidden]="tableManagment(i)">
+                                            <td class="title">{{product.name}}</td>
+                                            <td>{{product.proteins}}</td>
+                                            <td>{{product.fats}}</td>
+                                            <td>{{product.carbs}}</td>
+                                            <td>{{product.kcal}}</td>
+                                            <td></td>
+                                        </tr> 
+                                    </ng-container>
+                                    </table>
+                                </ng-container>
+        
+                            </ng-container>
+                            <button class="btn-workout" (click)="open(content)">Add meal</button> 
+      
+                    </div>                                 
+                  </div> 
+
+
+                  <!-- modale do zmiany  -->
+                  <ng-template #content let-modal>
+                        <div class="modal-header">
+                          <h4 class="modal-title" id="modal-basic-title">Add meal</h4>
+                          <button type="button" class="close" aria-label="Close" (click)="closeAndDiscard()" (click)="modal.dismiss()">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                            <label>Meal name:</label>
+                            <input type="text" class="form-control" [(ngModel)]="object.meal.name"/>
+                            <button type="button" class="btn btn-outline-dark" (click)="open(products)">Chose products</button> 
+                            
+                            <span>Meal products:</span>   
+                            <hr>
+                            <ul class="list-group">
+                                <ng-container *ngFor="let product of object.products">
+                                    <li class="list-group-item">
+                                        <span class="product-name">{{product.name}} </span>
+                                        <span class="product-info">B: {{product.proteins}}</span> 
+                                        <span class="product-info">W: {{product.carbs}}</span> 
+                                        <span class="product-info">T: {{product.fats}}</span> 
+                                        <span class="product-info">                          
+                                            <button type="button" class="close" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </span> 
+                                    </li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-outline-dark" (click)="closeAndSave()" (click)="modal.close()">Save & Close</button>
+                          <button type="button" class="btn btn-outline-dark" (click)="closeAndDiscard()" (click)="modal.close()">Close</button>
+                        </div>
+                    </ng-template>
+                      
+
+                    <ng-template #products let-modal>
+                            <div class="modal-header">
+                              <h4 class="modal-title" id="modal-basic-title">Chose products </h4>
+                              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                            <label for="typeahead-basic">Search for a product</label>
+                            <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search"/>
+                            <button class="btn btn-outline-dark" (click)="addProductToMeal()">Add</button>
+                            <button class="btn btn-outline-dark" (click)="open(ownproduct)">Add own product</button>  
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Close</button>
+                            </div>
+                    </ng-template>
+
+                    <ng-template #ownproduct let-modal>
+
+                        <div class="modal-header">
+                          <h4 class="modal-title" id="modal-basic-title">Add own product</h4>
+                          <button type="button" class="close" aria-label="Close" (click)="closeOwnProductWithoutSave()" (click)="modal.dismiss()">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                                
+                        <label>Nazwa produkty</label>
+                        <input class="form-control" type="text" [(ngModel)]="productName"/>
+                        <label>Białko g/100g</label>
+                        <input class="form-control" type="text" [(ngModel)]="productProteins"/>
+                        <label>Fats g/100g</label>
+                        <input class="form-control" type="text" [(ngModel)]="productFats"/>
+                        <label>Węglowodany g/100g</label>
+                        <input class="form-control" type="text" [(ngModel)]="productCarbs"/>
+                        <label>Kcal kcal/100g</label>
+                        <input class="form-control" type="text" [(ngModel)]="productKcal"/>
+                        <label>Waga produktu</label>
+                        <input class="form-control" type="text" [(ngModel)]="productWeight" />
+                        
+                        <button type="button" class="btn btn-outline-dark" (click)="addProduct()" (click)="modal.dismiss()">Save product</button>
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-outline-dark" (click)="closeOwnProductWithoutSave()" (click)="modal.dismiss()">Close</button>
+                        </div>
+                    </ng-template>
+
+
+                </div>
+                <div class="usergoals">
+                   <ul>
+                       <li>Starts: </li>
+                       <li>Ends: </li>
+                       <li>Kalorie dziś: {{this.caloriesThisDay}}</li>
+                       <li>Zapotrzebowanie kaloryczne: {{this.userGoals[this.userGoals.length-1].zapotrzebowanie_kcal}}</li>
+                       <li>{{calcDiffer()}}</li>
+                   </ul>
+
+
+                </div>
+                <div class="workout">
+                        <ng-container *ngFor="let workout of userWorkouts">
+                                <div class="no">
+                                    <h3>{{workout.name}}</h3>
+                                    <ul class="workout-table">               
+                                            <li>EXERCISE</li>
+                                            <li>SETS</li>
+                                            <li>REPS</li>
+                                    </ul>
+                                    <ng-container *ngFor="let exercise of workout.exercises">
+                                        <ng-container *ngFor="let exe of exercise.exercises">
+                                            <ul class="workout-table">               
+                                                <li>{{exe.exercise}}</li>
+                                                <ng-container *ngIf="exercise.workoutType == 'SETS'"> 
+                                                    <li>{{exe.range[1]}}</li>
+                                                    <li>{{exe.range[0]}}</li>
+                                                </ng-container>
+                                                <ng-container *ngIf="exercise.workoutType == 'ROUNDS'"> 
+                                                    <li></li>
+                                                    <li>{{exe.range}}</li>
+                                                </ng-container>   
+                                            </ul>
+                              
+                                        </ng-container>                                       
+                                    </ng-container>
+                                </div>
+                        </ng-container>
+                </div>
+
+    </div>
+</div>

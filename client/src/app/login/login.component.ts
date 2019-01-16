@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { TokenStorageService } from '../token-storage.service';
+
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
 
   constructor(
@@ -14,9 +17,11 @@ export class LoginComponent implements OnInit {
      ,private tokenStorage:TokenStorageService
     ){ }
 
+  closeResult:string;
   username:string;
   password:string;
   email:string;
+
   login(){
     this.authService.authenticate(this.username,this.password).subscribe(data =>{
       this.tokenStorage.saveToken(data.token);
