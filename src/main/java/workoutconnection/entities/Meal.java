@@ -21,7 +21,7 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import workoutconnection.models.YearMonthDay;
+
 
 
 
@@ -30,14 +30,11 @@ public class Meal {
 
 	@Id
 	@Column(name="id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	@Column(name="name")
 	private String name;
-	
-	//@Column(name="user_id")
-	//private int user_id;
 	
 	@Column(name="meal_date")
 	private LocalDate mealDate;
@@ -98,22 +95,7 @@ public class Meal {
 		System.out.println("year " + year + "month " + month + "hash: " + yearMonth.hashCode());
 		return yearMonth;
 	}
-	public YearMonthDay sortByWeek() {
-		
 
-
-		
-		// Or use a specific locale, or configure your own rules
-		WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
-		int weekNumber = this.getMealDate().get(weekFields.weekOfWeekBasedYear());
-		
-		int year = this.getMealDate().getYear();
-		int month = this.getMealDate().getMonth().getValue();
-		
-		YearMonthDay y1 = new YearMonthDay(year, month, weekNumber);
-		
-		return y1;
-	}
 	@Override
 	public String toString() {
 		return "Meal [id=" + id + ", name=" + name + ", user_id= , mealDate=" + mealDate
