@@ -8,16 +8,14 @@ import { HomeComponent } from './home/home.component';
 
 import { FormsModule } from '@angular/forms';
 import {RouteModule} from './route/route.module';
-import { DietComponent } from './diet/diet.component';
 import {Interceptor} from "./interceptor";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {DietService} from './diet.service';
 import {TokenStorageService} from './token-storage.service';
 import {AuthService} from './auth.service';
-import { EditComponent } from './edit/edit.component';
+
 
 import { Globals } from './globals';
-import { MealComponent } from './meal/meal.component';
 
 import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
@@ -27,9 +25,6 @@ import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
     AppComponent,
     LoginComponent,
     HomeComponent,
-    DietComponent,
-    EditComponent,
-    MealComponent
   ],
   imports: [
     BrowserModule,
