@@ -1,0 +1,42 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+.grid-container{
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 3fr; 
+    height: 250px; 
+    width: 400px; 
+}
+.left-panel .right-panel{
+    grid-column: 1/-1;
+    clear: both;
+}
+.left-panel{
+    background-color: #FBA827;
+}
+.right-panel{
+   background-color: #87878E;
+}
+.login-form{
+    top: 60px;
+    position: relative;
+    width: 200px;
+    display: block;
+    margin: 0 auto;
+    
+
+}
+.login-form input{
+    display: block;
+    padding: 5px;
+    margin: 5px;
+    width: 100%;
+}
+.login-form button{
+    display: block;
+    margin: 0 auto;
+    width: 100px;
+    height: 30px;
+}

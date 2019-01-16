@@ -19,6 +19,9 @@ import { EditComponent } from './edit/edit.component';
 import { Globals } from './globals';
 import { MealComponent } from './meal/meal.component';
 
+import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,13 +29,14 @@ import { MealComponent } from './meal/meal.component';
     HomeComponent,
     DietComponent,
     EditComponent,
-    MealComponent,
+    MealComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     RouteModule,
-    FormsModule
+    FormsModule,
+    NgbModule
   ],
   providers: [Globals, DietService, AuthService, TokenStorageService, TokenStorageService,
     {provide: HTTP_INTERCEPTORS,
