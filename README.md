@@ -9,3 +9,6 @@ Webapp for monitoring diet and training
 * JWT
 * MySQL
 * [Maven](https://maven.apache.org/)
+
+
+work in progress..
