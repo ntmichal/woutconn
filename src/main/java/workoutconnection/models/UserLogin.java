@@ -36,34 +36,7 @@ public class UserLogin {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	public void elo() {
 
-	
-		
-		List<Object[]> list = new ArrayList<Object[]>();
-		Object[] elo = new Object[2];
-		elo[0] = 1;
-		elo[1] = new int[] {1,2,3,4,5,6};
-		
-		list.add(elo);
-		elo = new Object[2];
-		elo[0] = 5;
-		elo[1] = new int[] {1,2,3,4,5,6};
-		list.add(elo);
-		
-		elo = new Object[2];
-		elo[0] = 7;
-		elo[1] = new int[] {1,2,3,4,5,6};
-		
-		list.add(elo);
-		elo = new Object[2];
-		elo[0] = 0;
-		elo[1] = new int[] {1,2,3,4,5,6};
-		
-		
-	}
-	
 	
 }
 
