@@ -24,7 +24,7 @@ public class UserGoals {
 	private int id;
 	
 	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-	@JoinColumn(name = "userId")
+	@JoinColumn(name = "user_id")
 	@JsonIgnore
 	private User user;
 	
