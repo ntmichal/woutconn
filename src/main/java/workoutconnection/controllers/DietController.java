@@ -24,7 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.jsonwebtoken.Claims;
 import workoutconnection.config.TokenProvider;
-import workoutconnection.dao.UserGoalsDAO;
+import workoutconnection.dao.UserInfoDAO;
 import workoutconnection.entities.Product;
 import workoutconnection.entities.UserGoals;
 import workoutconnection.models.MealInfoObject;
@@ -51,7 +51,7 @@ public class DietController {
 	private MealInfoService mealInfoService;
 
 	@Autowired
-	private UserGoalsDAO userDAO;
+	private UserInfoDAO userDAO;
 	
 
 
