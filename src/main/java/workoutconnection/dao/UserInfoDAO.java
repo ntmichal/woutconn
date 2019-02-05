@@ -38,7 +38,7 @@ public class UserInfoDAO implements IUserInfoDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<UserGoals> getAllGoals(int userid) {
-		String HQL = "From UserGoals WHERE user_id = "+ userid;
+		String HQL = "From UserGoals WHERE user_id = :user_id";
 		Query q = (Query)entityManager.createQuery(HQL);
 		q.setParameter("user_id", userid);
 		return (List<UserGoals>)q.getResultList();
