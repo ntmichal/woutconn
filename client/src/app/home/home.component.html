@@ -5,14 +5,15 @@
             <div class="sidebar">
                 <ul>
                     <li>
-                       <a href="#">User <span>Profile</span></a> 
+                       <a routerLink="/home" routerLinkActive="active">User <span>Profile</span></a> 
                     </li>
                     <li>
-                        <a href="/diet">Diet <span>Manager</span></a>
+                        <a routerLink="/workoutmanager" routerLinkActive="active">Workout <span>Manager</span></a>
                     </li>
-                    <li>
-                        <a href="#">Workout <span>Manager</span></a> 
-                    </li>
+                </ul>
+
+                <ul>
+                    <li><button class="btn-logout" (click)="signOut()">Logout</button></li>
                 </ul>
             </div>
             <div class="dashboard">
@@ -39,23 +40,25 @@
                                             {{oneMeal.meal.name}}
                                         </th>
         
-                                        <th>Proteins:{{this.Proteins(oneMeal.products)}}</th>
-                                        <th>Fats: {{this.Fats(oneMeal.products)}}</th>
-                                        <th>Carbs: {{this.Carbs(oneMeal.products)}}</th>
-                                        <th>Calories: {{this.Calories(oneMeal.products)}}</th>
+                                        <th>Proteins:{{this.Proteins(oneMeal.products, oneMeal.weightOfProducts)}}</th>
+                                        <th>Fats: {{this.Fats(oneMeal.products, oneMeal.weightOfProducts)}}</th>
+                                        <th>Carbs: {{this.Carbs(oneMeal.products, oneMeal.weightOfProducts)}}</th>
+                                        <th>Calories: {{this.Calories(oneMeal.products, oneMeal.weightOfProducts)}}</th>
                                         <th>
                                             <button type="button" class="close" aria-label="Close">
                                                     <i class="fas fa-cog"></i>
                                             </button>
-                                        </th> 
+                                        </th>
+                                        <th></th> 
                                     </tr>
-                                    <ng-container  *ngFor="let product of oneMeal.products" >
+                                    <ng-container  *ngFor="let product of oneMeal.products; let j = index" >
                                          <tr [hidden]="tableManagment(i)">
                                             <td class="title">{{product.name}}</td>
-                                            <td>{{product.proteins}}</td>
-                                            <td>{{product.fats}}</td>
-                                            <td>{{product.carbs}}</td>
-                                            <td>{{product.kcal}}</td>
+                                            <td>{{solveMacro(product.proteins,oneMeal.weightOfProducts[j])}}</td>
+                                            <td>{{solveMacro(product.fats,oneMeal.weightOfProducts[j])}}</td>
+                                            <td>{{solveMacro(product.carbs,oneMeal.weightOfProducts[j])}}</td>
+                                            <td>{{solveMacro(product.kcal,oneMeal.weightOfProducts[j])}}</td>
+                                            <td>{{oneMeal.weightOfProducts[j]}} grams</td>
                                             <td></td>
                                         </tr> 
                                     </ng-container>
@@ -92,7 +95,7 @@
                                         <span class="product-info">W: {{product.carbs}}</span> 
                                         <span class="product-info">T: {{product.fats}}</span> 
                                         <span class="product-info">                          
-                                            <button type="button" class="close" aria-label="Close">
+                                            <button (click)="deleteProduct(product)" type="button" class="close" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </span> 
@@ -117,6 +120,8 @@
                             <div class="modal-body">
                             <label for="typeahead-basic">Search for a product</label>
                             <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search"/>
+                            <label>Weight product</label>
+                            <input  type="text" class="form-control" [(ngModel)]="productWeightInMeal"/>
                             <button class="btn btn-outline-dark" (click)="addProductToMeal()">Add</button>
                             <button class="btn btn-outline-dark" (click)="open(ownproduct)">Add own product</button>  
                             </div>
@@ -159,43 +164,34 @@
 
                 </div>
                 <div class="usergoals">
-                   <ul>
-                       <li>Starts: </li>
-                       <li>Ends: </li>
-                       <li>Kalorie dziś: {{this.caloriesThisDay}}</li>
-                       <li>Zapotrzebowanie kaloryczne: {{this.userGoals[this.userGoals.length-1].zapotrzebowanie_kcal}}</li>
-                       <li>{{calcDiffer()}}</li>
-                   </ul>
-
-
+                    <ul>
+                        <li><span class="text">Starts</span>{{userGoals.start_date}}</li>
+                        <li><span class="text">Ends</span>{{userGoals.end_date}}</li> 
+                    </ul>
+                    <ul>
+                       <li><span class="text">Calories today</span> 0 / {{userGoals.calories_intake}}</li>    
+                    </ul>
+                    <ul>
+                            <li><span class="text">TARGET</span>{{userGoals.workout_goal}}</li>    
+                    </ul>
                 </div>
                 <div class="workout">
-                        <ng-container *ngFor="let workout of userWorkouts">
-                                <div class="no">
-                                    <h3>{{workout.name}}</h3>
-                                    <ul class="workout-table">               
-                                            <li>EXERCISE</li>
-                                            <li>SETS</li>
-                                            <li>REPS</li>
-                                    </ul>
-                                    <ng-container *ngFor="let exercise of workout.exercises">
-                                        <ng-container *ngFor="let exe of exercise.exercises">
-                                            <ul class="workout-table">               
-                                                <li>{{exe.exercise}}</li>
-                                                <ng-container *ngIf="exercise.workoutType == 'SETS'"> 
-                                                    <li>{{exe.range[1]}}</li>
-                                                    <li>{{exe.range[0]}}</li>
-                                                </ng-container>
-                                                <ng-container *ngIf="exercise.workoutType == 'ROUNDS'"> 
-                                                    <li></li>
-                                                    <li>{{exe.range}}</li>
-                                                </ng-container>   
-                                            </ul>
-                              
-                                        </ng-container>                                       
-                                    </ng-container>
-                                </div>
-                        </ng-container>
+                    <ng-container *ngFor="let workout of this.userInfoJson.workouts; let i = index">
+                    <div class="userworkouts">
+                               {{workout.name}}
+                             <ul>
+
+                                 <ng-container *ngFor="let exercise of workout.exercises">
+                                    <li>
+                                         <div class="exerciseLine"> 
+                                             {{exercise.name}} 
+                                         </div> 
+                                         <span class="detail">{{exercise.sets}} x {{exercise.reps}}</span> 
+                                     </li> 
+                                </ng-container>  
+                            </ul>
+                    </div>
+                    </ng-container>
                 </div>
 
     </div>

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DietService } from '../diet.service';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-
+import { Router } from '@angular/router';
 import {Observable} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
-
+import {TokenStorageService} from "../token-storage.service";
 
 @Component({
   selector: 'app-home',
@@ -14,16 +14,23 @@ import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 export class HomeComponent implements OnInit {
 
   constructor(private dietService:DietService,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal,
+    private tokenStorageService:TokenStorageService,
+    private router:Router) { }
 
-  userGoals:Array<any>;
+  userInfoJson = {
+    workouts: [],
+    goals: [],
+    measurements: []
+  };
+
+  userGoals = [];
   userDiet:Array<any>;
   userWorkouts:Array<any>;
-  caloriesThisDay:Number = 0;
   currentDate = new Date()
   prevDate = new Date(this.currentDate);
   nextDate = new Date(this.currentDate);
-
+  productWeightInMeal = 0;
   productList:Array<any>;  
   prevDateVal:any;
   nextDateVal:any;
@@ -59,7 +66,7 @@ export class HomeComponent implements OnInit {
 
   //meal
 
-  public mealName:any;
+  public mealName = null;
   public mealDate:String;
 
   public object = {
@@ -68,25 +75,21 @@ export class HomeComponent implements OnInit {
       name: "",
       mealDate: ""
       },
-      products: []  
+      products: [],
+      weightOfProducts:[]  
   }
+  
   
   ngOnInit() {
     this.dietService.getUserGoals().subscribe(data =>{
-      this.userGoals = data;
-
+      this.userInfoJson = data;
+      this.userGoals = data.goals[data.goals.length-1];
     });
-
+    
     this.dietService.getMeals().subscribe(data =>{
       this.userDiet = data;
       console.log(data);
       this.filterProductsWithCurrentDate(data);
-    });
-
-    this.dietService.getWorkouts().subscribe(data =>{
-      this.userWorkouts = data;
-
-      console.log(data);
     });
 
     this.dietService.getProducts().subscribe(data =>{
@@ -102,7 +105,6 @@ export class HomeComponent implements OnInit {
 
     //init date
     this.initDate();
-
     
   }
 
@@ -154,25 +156,11 @@ export class HomeComponent implements OnInit {
     filterProductsWithCurrentDate(object){
       var products = object.filter((x) => { return x.meal.mealDate == this.currentDate});
 
-
     }
 
 
 
-  solveCalories(obj:Array<any>):Number{
-    var objKcal = obj.map( x => x.kcal).reduce((x,y)=>{
-      return x+y;
-    });
-    this.caloriesThisDay += objKcal;
-    return objKcal;
-  }
-  calcDiffer():any{
-    if(this.caloriesThisDay < this.userGoals[this.userGoals.length-1].zapotrzebowanie_kcal){
-      return "Brakuje " +  (this.userGoals[this.userGoals.length-1].zapotrzebowanie_kcal-Number(this.caloriesThisDay)) + "Kcal";
-    }else{
-      return "Nadwyżka " +  Math.abs((this.userGoals[this.userGoals.length-1].zapotrzebowanie_kcal-Number(this.caloriesThisDay))) + "Kcal";
-    }
-  }
+
   BWT(obj):any{
 
     var B = obj.map( x => x.proteins).reduce((x,y)=>{
@@ -188,27 +176,47 @@ export class HomeComponent implements OnInit {
   
   }
 
-  Proteins(obj){
-    return obj.map( x => x.proteins).reduce((x,y)=>{
-      return x+y;
+  Proteins(obj, weigths){
+    var proteins = 0;
+
+    var i = 0;
+    obj.map( x => x.proteins).forEach(element => {
+      proteins += this.solveMacro(element,weigths[i]);
+      i++;
     });
+    return Math.round(proteins*100)/100;
+
   }
-  Carbs(obj){
-    return obj.map( x => x.carbs).reduce((x,y)=>{
-      return x+y;
+  Carbs(obj, weigths){
+    var carbs = 0;
+
+    var i = 0;
+    obj.map( x => x.carbs).forEach(element => {
+      carbs += this.solveMacro(element,weigths[i]);
+      i++;
     });
+    return Math.round(carbs*100)/100;
   }
 
-  Fats(obj){
-    return obj.map( x => x.fats).reduce((x,y)=>{
-      return x+y;
-    });
-  }
-  Calories(obj){
+  Fats(obj, weigths){
+    var fats = 0;
 
-    return obj.map(x => x.kcal).reduce( (x,y) =>{
-      return x+y;
+    var i = 0;
+    obj.map( x => x.fats).forEach(element => {
+      fats += this.solveMacro(element,weigths[i]);
+      i++;
     });
+    return Math.round(fats*100)/100;
+  }
+  Calories(obj, weigths){
+    var calories = 0;
+
+    var i = 0;
+    obj.map( x => x.kcal).forEach(element => {
+      calories += this.solveMacro(element,weigths[i]);
+      i++;
+    });
+    return Math.round(calories*100)/100;
   }
 
   //modal open
@@ -227,31 +235,34 @@ export class HomeComponent implements OnInit {
         name: "",
         mealDate: ""
         },
-        products: []  
+        products: [],
+        weightOfProducts: []
     }
     this.mealName = "";
   }
 
   closeAndSave(){
+    if(this.object.meal.name != "" && this.object.products.length > 0){
 
-
-    this.object.meal.mealDate = this.formatDate(this.currentDate);
-    
-
-    this.userDiet.push(this.object);
-
-    this.dietService.addMeals(this.object).subscribe(() => {
-      this.object = {
-        meal:  {
-          id: null,
-          name: "",
-          mealDate: ""
+      this.object.meal.mealDate = this.formatDate(this.currentDate);
+      this.userDiet.push(this.object);
+      this.dietService.addMeals(this.object).subscribe(() => {
+        this.object = {
+          meal:  {
+            id: null,
+            name: "",
+            mealDate: ""
           },
-          products: []  
-      }
-      this.mealName = "";
-     
-    });
+          products: [],
+          weightOfProducts: []
+        }
+        this.mealName = "";
+       
+      });
+    }else{
+      alert("Error!");
+    }
+ 
 
   }
   closeOwnProductWithoutSave(){
@@ -271,12 +282,24 @@ export class HomeComponent implements OnInit {
     )
  
     addProductToMeal(){
-      var productId = this.productList.map(x => x.name).indexOf(this.model);
-        this.object.products.push(this.productList[productId]);
-    }
+      if(this.model != null){
+        var productId = this.productList.map(x => x.name).indexOf(this.model);
+  
+        if(productId != -1 && !isNaN(this.productWeightInMeal)){
+          this.object.products.push(this.productList[productId]);
+          this.object.weightOfProducts.push(Number(this.productWeightInMeal));
+          this.model = '';
+          this.productWeightInMeal = null;
+        }else{
+          alert('Obiekt nie istnieje!');
+        }
+
+      }else{
+        alert('Chose product!');
+      }
+     }
 
     addProduct(){
-
       var productTMP = {
         id : null,
         name : this.productName,
@@ -289,17 +312,18 @@ export class HomeComponent implements OnInit {
       }
      
       this.dietService.saveProduct(productTMP).subscribe(res => {
-
         productTMP.id = res.headers.get('id') 
         this.productList.push(productTMP);
       });
-      
       this.object.products.push(productTMP);
-    
 
     }
 
 
+    deleteProduct(product){
+      var id = this.object.products.map(x => x.name).indexOf(product.name);
+     this.object.products.splice(id,1);
+    }
 
     zmienna:any = null;
 
@@ -320,5 +344,14 @@ export class HomeComponent implements OnInit {
       return true;
     }
 
-    
+    signOut(){
+      this.tokenStorageService.signOut();
+      this.router.navigate(['']);
+    }
+
+    solveMacro(value,weightOfProduct){
+      return value*weightOfProduct/100;
+    }
+
+
 }

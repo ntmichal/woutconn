@@ -1,0 +1,73 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"> 
+
+<div class="grid-container">
+  <div class="sidebar">
+    <ul>
+      <li>
+         <a routerLink="/home" routerLinkActive="active">User <span>Profile</span></a> 
+      </li>
+      <li>
+          <a routerLink="/workoutmanager" routerLinkActive="active">Workout <span>Manager</span></a>
+      </li>
+    </ul>
+
+    <ul>
+      <li><button class="btn-logout" (click)="signOut()">Logout</button></li>
+    </ul>
+  </div>
+  <div class="dashboard">
+      <div>
+          <input class="workoutname" type="text"   placeholder="Workout name.." [(ngModel)]="workoutName"/>
+          <button class="workout-btn" (click)="clearWorkout()">Clear</button>
+          <button class="workout-btn" (click)="saveWorkout()">Save</button>
+        </div>
+        <div class="workoutcontainer">
+          <ng-container>
+              <div class="chosenExercises">
+                  <ul>
+                    <ng-container *ngIf="chosenExercises.length == 0">
+                      <ul>
+                        <li>
+                          Aby wybrać ćwiczenie kliknij na interesujące cię po prawej!
+                        </li>
+                      </ul>
+                    </ng-container>
+                    <ng-container *ngFor="let chosenExercise of chosenExercises">
+                        <li>{{chosenExercise.name}} 
+                        <br />
+                         SETS:<input type="number" value="{{chosenExercise.sets}}" [(ngModel)]="chosenExercise.sets"> 
+                         REPS:<input type="number" value="{{chosenExercise.reps}}" [(ngModel)]="chosenExercise.reps">
+                         <br />
+                         <a (click)="deleteExercise(chosenExercise.id)">Delete</a>
+                        </li>
+                    </ng-container>
+                  </ul>
+                </div>
+                <div class="avaliableExercises">
+                  <input class="search" type="text" placeholder="Search.." [(ngModel)]="searchText">
+                  <ul>
+                      <cdk-virtual-scroll-viewport  style="height: 252px" itemSize="5" >
+                        <ng-container *cdkVirtualFor="let exercise of exercises | filter : searchText">
+                          <li (click)="sendExercise(exercise)"> {{exercise}} </li>
+                        </ng-container>
+                      </cdk-virtual-scroll-viewport>           
+                  </ul>
+
+                </div>
+          </ng-container>
+          <div class="userWorkouts">
+            <ul>
+                <ng-container *ngFor="let workout of this.userWorkouts; let i = index">
+                <li>{{workout.name}}
+                  <button (click)="editWorkout(workout, i)">Edit</button>
+                  <button (click)="deleteWorkout(workout)">Delete</button>
+              </li>
+              </ng-container>
+            </ul>
+          </div>
+        </div>
+        
+  </div>
+</div>
+
