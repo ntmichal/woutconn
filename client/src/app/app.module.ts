@@ -18,20 +18,25 @@ import {AuthService} from './auth.service';
 import { Globals } from './globals';
 
 import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { WorkoutmanagerComponent } from './workoutmanager/workoutmanager.component';
 
-
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import { FilterPipe } from './filter.pipe';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
+    WorkoutmanagerComponent,
+    FilterPipe,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     RouteModule,
     FormsModule,
-    NgbModule
+    NgbModule,
+    ScrollingModule
   ],
   providers: [Globals, DietService, AuthService, TokenStorageService, TokenStorageService,
     {provide: HTTP_INTERCEPTORS,
