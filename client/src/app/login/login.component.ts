@@ -22,19 +22,50 @@ export class LoginComponent implements OnInit {
   password:string;
   email:string;
 
+  buttonValue = "Register";
+  loginForm = false;
+  registerForm = true;
+
+  registerData = {
+    login: '',
+    password: '',
+    confirmpassword: '',
+    email: ''
+  };
   login(){
     this.authService.authenticate(this.username,this.password).subscribe(data =>{
       this.tokenStorage.saveToken(data.token);
+      this.username = '';
+      this.password = '';
       this.router.navigate(['home']);
     });
   }
 
   register(){
-    this.authService.register(this.username, this.password, this.email).subscribe(data =>{
-      console.log("registered");
-    });
+    console.log(this.registerData);
+      if(this.registerData.password == this.registerData.confirmpassword){
+        this.authService.register(
+          this.registerData.login, 
+          this.registerData.password, 
+          this.registerData.email
+          ).subscribe(data =>{
+          console.log("registered");
+        });
+      }
+     this.username = null;
+     this.password = null; 
   }
    ngOnInit() {
+   }
+   makeAction(){
+    this.registerForm = !this.registerForm;
+    this.loginForm = !this.loginForm;
+    if(this.buttonValue == "Register"){
+      this.buttonValue = "Login";
+    }else{
+      this.buttonValue = "Register";
+    }
+ 
    }
 
 }
