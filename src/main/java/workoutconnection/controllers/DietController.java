@@ -4,15 +4,8 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.oauth2.common.OAuth2AccessToken;
-//import org.springframework.security.oauth2.provider.OAuth2Authentication;
-//import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-//import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+
 import io.jsonwebtoken.Claims;
 import workoutconnection.config.TokenProvider;
 import workoutconnection.dao.UserInfoDAO;
@@ -30,7 +24,6 @@ import workoutconnection.entities.UserGoals;
 import workoutconnection.models.MealInfoObject;
 import workoutconnection.service.MealInfoService;
 import workoutconnection.service.ProductService;
-
 
 /**
  * 
@@ -44,7 +37,6 @@ public class DietController {
 
 	@Autowired
 	private TokenProvider tokenProvider;
-
 	@Autowired
 	private ProductService productService;
 	@Autowired
@@ -108,8 +100,7 @@ public class DietController {
 	//get 1 
 	@RequestMapping(value = "/api/meal/{userid}/{id}", method = RequestMethod.GET)
 	public MealInfoObject getMeal(@PathVariable int userid, @PathVariable int id) {
-		
-		
+
 		return mealInfoService.getMeal(id);
 	}
 
@@ -128,9 +119,6 @@ public class DietController {
 		
 		return ResponseEntity.accepted().body(HttpStatus.CREATED);
 	}
-	
-
-
 	//update meal 
 	@RequestMapping(value = "/api/meal/{id}", method = RequestMethod.PUT)
 	public void updateMeal(@RequestBody MealInfoObject meal, @PathVariable int id) {
@@ -144,23 +132,11 @@ public class DietController {
 		mealInfoService.deleteMeal(id);
 	}
 
-	//ShoppingList
-	@RequestMapping(value = "/api/lists/shoppingList", method = RequestMethod.GET)
-	public List<Product> getShoppingList(){
-		
-		return 	mealInfoService.getShoppingList();
-
-	}
 	
 	@RequestMapping(value = "/api/usergoals/{userid}", method = RequestMethod.GET)
 	public List<UserGoals> getGoals(@PathVariable int userid){
 		return userDAO.getAllGoals(userid);
 	}
-	
-	//statistics
-	
-	
-	
-	
-	
+
+
 }

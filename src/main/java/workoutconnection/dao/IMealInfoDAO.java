@@ -1,11 +1,7 @@
 package workoutconnection.dao;
 
-
-
 import java.util.List;
 
-import workoutconnection.entities.MealInfo;
-import workoutconnection.entities.Product;
 import workoutconnection.models.MealInfoObject;
 
 
@@ -16,5 +12,4 @@ public interface IMealInfoDAO {
 	void deleteMeal(int id);
 	void insertMeal(MealInfoObject meal);
 	void updateMeal(MealInfoObject meal);
-	List<Product> getShoppingList();
 }

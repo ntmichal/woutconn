@@ -1,10 +1,14 @@
 package workoutconnection.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +35,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import io.jsonwebtoken.Claims;
 import workoutconnection.config.TokenProvider;
+import workoutconnection.entities.Authority;
 import workoutconnection.entities.Measurement;
 import workoutconnection.entities.User;
 import workoutconnection.entities.UserGoals;
@@ -96,18 +101,31 @@ public class UserController {
 			user.setUsername(userLogin.getUsername());
 			user.setEmail(userLogin.getEmail());
 			user.setPassword(passwordEncoder.encode(userLogin.getPassword()));
-			
+			user.setEnabled(true);
+
+		Authority au = new Authority();
+		au.setRole("ROLE_USER");
+		au.setUser(user);
+		List<Authority> lAu = new ArrayList<>();
+		lAu.add(au);
+			user.setAuthorities(lAu);
 		//set ROLES
 			
 		
 		User result = userServiceImpl.save(user);
-		
+
 		URI location = URI.create("/api/user/"+result.getId());
-		
+
+		ObjectMapper om = new ObjectMapper();
+		try {
+			om.writeValue(new File("workoutstore/workoutuserid"+result.getId()+".json"),new ArrayList<>());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return ResponseEntity
 					.created(location)
 					.body(HttpStatus.ACCEPTED);
-		
+
 	}
 	
 
@@ -173,17 +191,11 @@ public class UserController {
 	}
 	
 	@PostMapping(value="/api/workouts")
-	public void getWorkouts(@RequestHeader("Authorization") String bearerToken,
-			@RequestBody Map<String, List<Exercise>> workouts) 
+	public Object saveWorkouts(@RequestHeader("Authorization") String bearerToken,
+			@RequestBody List<Map<String,Object>> workouts)
 			throws JsonParseException, JsonMappingException, IOException {
 		int id = userIdFromToken(bearerToken);
 		userInfo.saveWorkouts(workouts, id);
-		
-	}
-	
-	@DeleteMapping(value="/api/workouts")
-	public void deleteWorkout(@RequestBody List<Exercise> workout) 
-			throws JsonParseException, JsonMappingException, IOException {
-		userInfo.deleteWorkout(workout, 10);
+		return workouts;
 	}
 }

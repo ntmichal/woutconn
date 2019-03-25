@@ -44,11 +44,5 @@ public class MealInfoService implements IMealInfoService {
 		
 	}
 
-	@Override
-	public List<Product> getShoppingList() {
-		return mealInfoDAO.getShoppingList();
-	}
-
-
 
 }

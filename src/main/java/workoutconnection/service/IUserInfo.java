@@ -17,11 +17,7 @@ public interface IUserInfo {
 	public Object getUserInfo(int userid) 
 			throws JsonParseException, JsonMappingException, IOException;
 	
-	
-	void deleteWorkout(List<Exercise> workout, int userid) 
-			throws JsonParseException, JsonMappingException, IOException;
-	void saveWorkouts(Map<String, List<Exercise>> workouts, int userid) 
-			throws JsonGenerationException, JsonMappingException, IOException;
+
 	public Object getWorkouts(int userid)
 			throws JsonParseException, JsonMappingException, IOException;
 	
@@ -30,6 +26,10 @@ public interface IUserInfo {
 	public void insertMeasurement(Measurement measurement, int userid);
 	public void updateMeasurement(Measurement measurement);
 	public boolean deleteMeasurement(Measurement measurement);
+
+	void saveWorkouts(List<Map<String, Object>> workouts, int userid)
+			throws JsonGenerationException, JsonMappingException, IOException;
+
 	public Object getMeasurement(int userid);
 	
 	public void insertGoals(UserGoals userGoals, int userid);
