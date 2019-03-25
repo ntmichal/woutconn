@@ -1,14 +1,6 @@
 package workoutconnection.entities;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="mealinfo")
@@ -29,7 +21,10 @@ public class MealInfo {
 	@ManyToOne(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
 	@JoinColumn(name = "userId")
 	private User user;
-	
+
+	@Column(name = "product_weigth")
+	private double product_weigth;
+
 	public Meal getMeal() {
 		return meal;
 	}
@@ -62,7 +57,14 @@ public class MealInfo {
 		this.id = id;
 	}
 
-	
+	public double getProduct_weigth() {
+		return product_weigth;
+	}
+
+	public void setProduct_weigth(double product_weigth) {
+		this.product_weigth = product_weigth;
+	}
+
 	@Override
 	public int hashCode() {
 		return this.getProduct().getName().hashCode();

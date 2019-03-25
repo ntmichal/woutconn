@@ -15,22 +15,22 @@ import workoutconnection.models.Exercise;
 public interface IUserInfoDAO {
 	
 
-	void saveWorkouts(Map<String, List<Exercise>> workouts, int userid) 
+
+	void saveWorkouts(List<Map<String, Object>> workouts, int userId)
 			throws JsonGenerationException, JsonMappingException, IOException;
-	Object getWorkouts(int userid) 
+
+	Object getWorkouts(int userId)
 			throws JsonParseException, JsonMappingException, IOException;
-	
-	void deleteWorkout(List<Exercise> wrokout, int userid) 
-			throws JsonParseException, JsonMappingException, IOException;
-	Object getMeasurement(int userid);
+
+	Object getMeasurement(int userId);
 	
 	
-	public void insertMeasurement(Measurement measurement, int userid);
+	public void insertMeasurement(Measurement measurement, int userId);
 	public void updateMeasurement(Measurement measurement);
 	public boolean deleteMeasurement(Measurement measurement);
 	
-	public void insertGoals(UserGoals userGoals, int userid);
+	public void insertGoals(UserGoals userGoals, int userId);
 	public void updateGoals(UserGoals userGoals);
 	public void deleteGoals(UserGoals userGoals);
-	List<UserGoals> getAllGoals(int userid);
+	List<UserGoals> getAllGoals(int userId);
 }

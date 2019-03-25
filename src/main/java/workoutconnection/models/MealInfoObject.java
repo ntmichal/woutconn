@@ -11,9 +11,11 @@ public class MealInfoObject {
 	public Meal meal;
 	public int userid;
 	public List<Product> products; 
-	
+	public List<Double> weightOfProducts;
+
 	public MealInfoObject() {
 		products = new ArrayList<Product>();
+		weightOfProducts = new ArrayList<Double>();
 	}
 	
 	public Meal getMeal() {
@@ -33,7 +35,6 @@ public class MealInfoObject {
 		this.products.add(product);
 	}
 
-
 	public int getUserid() {
 		return userid;
 	}
@@ -42,6 +43,17 @@ public class MealInfoObject {
 		this.userid = userid;
 	}
 
+	public List<Double> getWeightOfProducts() {
+		return weightOfProducts;
+	}
+
+	public void setWeightOfProducts(List<Double> weightOfProducts) {
+		this.weightOfProducts = weightOfProducts;
+	}
+
+	public void addWeigth(Double weigth){
+		this.weightOfProducts.add(weigth);
+	}
 	@Override
 	public String toString() {
 		return "MealInfoObject [meal=" + meal + ", products=" + products + "]";

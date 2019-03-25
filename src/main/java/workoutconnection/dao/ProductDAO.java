@@ -23,10 +23,9 @@ public class ProductDAO implements IProductDAO{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Product> getAllProducts(){
-		
-		String hibernateQueryLangugageXD = "From Product";
+		String HQL = "From Product";
 		return (List<Product>)entityManager
-				.createQuery(hibernateQueryLangugageXD)
+				.createQuery(HQL)
 				.getResultList();
 	}
 
@@ -38,14 +37,12 @@ public class ProductDAO implements IProductDAO{
 
 	@Override
 	public Product insertProduct(Product product) {
-
 		entityManager.persist(product);
 		return product;
 	}
 
 	@Override
 	public void deleteById(int id) {
-		
 		Product p = entityManager.find(Product.class, id);
 		entityManager.remove(p);
 		
@@ -53,7 +50,6 @@ public class ProductDAO implements IProductDAO{
 
 	@Override
 	public void update(Product product) {
-		//Product findOne = entityManager.find(Product.class, product.getId());
 		entityManager.merge(product);
 		
 	}

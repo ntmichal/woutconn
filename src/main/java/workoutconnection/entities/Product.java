@@ -30,19 +30,19 @@ public class Product {
 	private String barcode;
 	
 	@Column(name="proteins")
-	private int proteins;
+	private float proteins;
 	
 	@Column(name="carbs")
-	private int carbs;
+	private float carbs;
 	
 	@Column(name="fats")
-	private int fats;
+	private float fats;
 	
 	@Column(name="kcal")
-	private int kcal;
+	private float kcal;
 	
 	@Column(name="volume")
-	private int volume;
+	private float volume;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="product")
 	private Set<MealInfo> association;
@@ -68,42 +68,37 @@ public class Product {
 	public void setBarcode(String barcode) {
 		this.barcode = barcode;
 	}
-	public int getProteins() {
+	public float getProteins() {
 		return proteins;
 	}
-	public void setProteins(int proteins) {
+	public void setProteins(float proteins) {
 		this.proteins = proteins;
 	}
-	public int getCarbs() {
+	public float getCarbs() {
 		return carbs;
 	}
-	public void setCarbs(int carbs) {
+	public void setCarbs(float carbs) {
 		this.carbs = carbs;
 	}
-	public int getFats() {
+	public float getFats() {
 		return fats;
 	}
-	public void setFats(int fats) {
+	public void setFats(float fats) {
 		this.fats = fats;
 	}
-	public int getKcal() {
+	public float getKcal() {
 		return kcal;
 	}
-	public void setKcal(int kcal) {
+	public void setKcal(float kcal) {
 		this.kcal = kcal;
 	}
-	public int getVolume() {
+	public float getVolume() {
 		return volume;
 	}
-	public void setVolume(int volume) {
+	public void setVolume(float volume) {
 		this.volume = volume;
 	}
-//	public Meal getMeal() {
-//		return meal;
-//	}
-//	public void setMeal(Meal meal) {
-//		this.meal = meal;
-//	}
+
 	@Override
 	public int hashCode() {
 		// TODO Auto-generated method stub

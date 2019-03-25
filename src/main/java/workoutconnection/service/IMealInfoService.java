@@ -16,5 +16,4 @@ public interface IMealInfoService {
 	void deleteMeal(int id);
 	void insertMeal(MealInfoObject meal);
 	void updateMeal(MealInfoObject meal);
-	List<Product> getShoppingList();
 }

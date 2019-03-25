@@ -141,13 +141,16 @@ public class User implements UserDetails{
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return this.getId() + " -- " + this.getUsername() + "- " + this.getPassword();
+		return this.getId() + " - " + this.getUsername() + "- " + this.getPassword();
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return (Collection<? extends GrantedAuthority>) authorities;
+	}
+
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
 	}
 
 	@Override

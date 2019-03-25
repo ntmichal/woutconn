@@ -2,10 +2,7 @@ package workoutconnection.dao;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -23,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import workoutconnection.entities.Measurement;
 import workoutconnection.entities.User;
 import workoutconnection.entities.UserGoals;
-import workoutconnection.models.Exercise;
+
 
 @Transactional
 @Repository
@@ -37,54 +34,38 @@ public class UserInfoDAO implements IUserInfoDAO {
 	private ObjectMapper objectMapper;
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<UserGoals> getAllGoals(int userid) {
+	public List<UserGoals> getAllGoals(int userId) {
 		String HQL = "From UserGoals WHERE user_id = :user_id";
-		Query q = (Query)entityManager.createQuery(HQL);
-		q.setParameter("user_id", userid);
+		Query q = entityManager.createQuery(HQL);
+		q.setParameter("user_id", userId);
+
+
 		return (List<UserGoals>)q.getResultList();
 
 	}
 	
 	
 	@Override
-	public void saveWorkouts(Map<String, List<Exercise>> workouts, int userid) 
+	public void saveWorkouts(List<Map<String,Object>> workouts, int userId)
 			throws JsonGenerationException, JsonMappingException, IOException{
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.writeValue(new File("workoutstore/workoutuserid"+userid+".json"), workouts);
-			
+
+		if(workouts.size() <= 5){
+			objectMapper.writeValue(new File("workoutstore/workoutuserid"+userId+".json"), workouts);
+		}
 	}
 
 	@Override
-	public Object getWorkouts(int userid) throws JsonParseException, JsonMappingException, IOException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.readValue(new File("workoutstore/workoutuserid"+userid+".json"), 
-				new TypeReference<Map<String,List<Exercise>>>(){});
+	public Object getWorkouts(int userId) throws JsonParseException, JsonMappingException, IOException {
+	    return objectMapper.readValue(new File("workoutstore/workoutuserid"+userId+".json"),
+				new TypeReference<List<Map<String,Object>>>(){});
 	}
-	
-	@Override 
-	public void deleteWorkout(List<Exercise> workout, int userid) 
-			throws JsonParseException, JsonMappingException, IOException {
-		Map<String, List<Exercise>> workouts =  objectMapper.readValue(new File("workoutstore/workoutuserid"+userid+".json"), 
-				new TypeReference<Map<String,List<Exercise>>>(){});
-		Iterator<Entry<String, List<Exercise>>> iterator = workouts.entrySet().iterator();
-		while(iterator.hasNext()) {
-			
-			Map.Entry<String, List<Exercise>> pair
-				= (Entry<String, List<Exercise>>) iterator.next();
-			if(pair.getValue().equals(workout)) {
-				workouts.remove(pair.getKey());
-				break;
-			}
-			iterator.remove();
-		}
-		this.saveWorkouts(workouts, userid);
-	}
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Measurement> getMeasurement(int userid) {
+	public List<Measurement> getMeasurement(int userId) {
 		String HQL = "From Measurement WHERE user_id = :user_id";
 		Query query = (Query)entityManager.createQuery(HQL);
-		query.setParameter("user_id", userid);
+		query.setParameter("user_id", userId);
 		List<Measurement> userMeasurement = (List<Measurement>)query.getResultList();
 	
 		return userMeasurement;
@@ -92,10 +73,10 @@ public class UserInfoDAO implements IUserInfoDAO {
 
 
 	@Override
-	public void insertMeasurement(Measurement measurement, int userid) {
+	public void insertMeasurement(Measurement measurement, int userId) {
 		String HQL = "From User Where id = :id";
 		Query query = (Query)entityManager.createQuery(HQL);
-		query.setParameter("id", userid);
+		query.setParameter("id", userId);
 		User usr = (User)query.getSingleResult();
 		measurement.setUser(usr);
 		entityManager.persist(measurement);
@@ -132,10 +113,10 @@ public class UserInfoDAO implements IUserInfoDAO {
 
 
 	@Override
-	public void insertGoals(UserGoals userGoals, int userid) {
+	public void insertGoals(UserGoals userGoals, int userId) {
 		String HQL = "From User Where id = :id";
 		Query query = (Query)entityManager.createQuery(HQL);
-		query.setParameter("id", userid);
+		query.setParameter("id", userId);
 		User usr = (User)query.getSingleResult();
 		userGoals.setUser(usr);
 		entityManager.persist(userGoals);

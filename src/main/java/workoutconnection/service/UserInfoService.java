@@ -47,16 +47,11 @@ public class UserInfoService implements IUserInfo {
 	}
 
 	@Override
-	public void saveWorkouts(Map<String, List<Exercise>> workouts, int userid) 
+	public void saveWorkouts(List<Map<String,Object>> workouts, int userid)
 			throws JsonGenerationException, JsonMappingException, IOException {
 		userInfoDAO.saveWorkouts(workouts, userid);
 	}
 
-	@Override 
-	public void deleteWorkout(List<Exercise> workout, int userid) 
-			throws JsonParseException, JsonMappingException, IOException {
-		userInfoDAO.deleteWorkout(workout, userid);
-	}
 	
 	@Override
 	public List<Measurement> getMeasurement(int userid) {
