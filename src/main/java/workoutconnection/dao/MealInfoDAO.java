@@ -27,13 +27,12 @@ public class MealInfoDAO implements IMealInfoDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<MealInfoObject> getAllMeals(int userid) {
-		String HQL = "From MealInfo  WHERE user_id  = "  + userid + " ORDER BY meal_id ";
-
+	public List<MealInfoObject> getAllMeals(int userId) {
+		String HQL = "From MealInfo WHERE user_id = :user_id ORDER BY meal_id";
 		List<MealInfo> mealInfo =  (List<MealInfo>)entityManager
 				.createQuery(HQL)
+				.setParameter("user_id", userId)
 				.getResultList();
-		
 
 				
 		List<MealInfoObject> mio2 = new ArrayList<MealInfoObject>();
@@ -43,15 +42,17 @@ public class MealInfoDAO implements IMealInfoDAO {
 		for(MealInfo i : mealInfo) {
 			
 			mx.setMeal(i.getMeal());
-			mx.setUserid(userid);
+			mx.setUserid(userId);
 	
 			
 			if( (indexer + 1) < mealInfo.size() &&
 					mealInfo.get(indexer).getMeal().getId() == mealInfo.get(indexer + 1).getMeal().getId()) {
 				mx.addProduct(mealInfo.get(indexer).getProduct());
+				mx.addWeigth(mealInfo.get(indexer).getProduct_weigth());
 				indexer++;
 			}else {
 				mx.addProduct(mealInfo.get(indexer).getProduct());
+				mx.addWeigth(mealInfo.get(indexer).getProduct_weigth());
 				mio2.add(mx);
 				mx = new MealInfoObject();
 				mx.setMeal(i.getMeal());
@@ -123,39 +124,17 @@ public class MealInfoDAO implements IMealInfoDAO {
 		tempMealInfo.setUser(user);
 		tempMealInfo.setMeal(meal.getMeal());
 
+		int j = 0;
 		for(Product i : meal.getProducts()) {			
 			tempMealInfo.setProduct(i);
+			tempMealInfo.setProduct_weigth(meal.weightOfProducts.get(j));
 			if(k == 0) {
 				k = entityManager.merge(tempMealInfo).getMeal().getId();
 				tempMealInfo.getMeal().setId(k);
 				continue;
 			}
-			entityManager.merge(tempMealInfo);	
-			
+			entityManager.merge(tempMealInfo);
+			j++;
 		}
-		
 	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Product> getShoppingList() {
-		
-		
-		String HQL = "FROM MealInfo ";
-
-		List<MealInfo> mf = (List<MealInfo>)entityManager.createQuery(HQL).getResultList();
-		List<MealInfo> xd = mf.stream().distinct().collect(Collectors.toList());
-
-		List<Product> shoppingList = new ArrayList<Product>();
-	
-		for(MealInfo i : xd) {
-			shoppingList.add(i.getProduct());
-		}
-		
-
-		return shoppingList;
-	}
-	
-	
-
 }
