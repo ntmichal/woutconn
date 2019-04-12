@@ -2,51 +2,54 @@ package workoutconnection.entities;
 
 
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
+import java.util.*;
+import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
-
-
-
 @Entity
+@Table(name = "Meal")
 public class Meal {
 
 	@Id
 	@Column(name="id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Column(name="name")
 	private String name;
-	
+
 	@Column(name="meal_date")
 	private LocalDate mealDate;
 
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="meal")
-	private Set<MealInfo> association;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@Column(name="xyz")
+	@ManyToMany(cascade = {CascadeType.PERSIST},
+				fetch = FetchType.EAGER)
+	@JoinTable(name = "meals_list",
+				joinColumns = @JoinColumn(name = "product_id"),
+				inverseJoinColumns = @JoinColumn(name = "meal_id"))
+	private List<Product>  productList;
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	@JsonIgnore
 	private User user;
-	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public List<Product> getProductList() {
+		return productList;
+	}
+
+	public void setProductList(List<Product> productList) {
+		this.productList = productList;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -64,7 +67,6 @@ public class Meal {
 	}
 
 
-
 	public LocalDate getMealDate() {
 		return mealDate;
 	}
@@ -73,35 +75,53 @@ public class Meal {
 		this.mealDate = mealDate;
 	}
 
-	
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Map<Integer,Integer> sortByMonth() {
-	
-		int year = this.getMealDate().getYear();
-
-		int month = this.getMealDate().getMonth().getValue();
-
-		
-		Map<Integer,Integer> yearMonth= new HashMap<Integer,Integer>();
-		yearMonth.put(year, month);
-		
-		System.out.println("year " + year + "month " + month + "hash: " + yearMonth.hashCode());
-		return yearMonth;
-	}
 
 	@Override
 	public String toString() {
 		return "Meal [id=" + id + ", name=" + name + ", user_id= , mealDate=" + mealDate
-				+ ", association=" + association + "] \n";
+				+ ", association=] \n";
 	}
-	
-	
-	
+
+	public static MealBuidler builder(){
+		return new MealBuidler();
+	}
+	public static final class MealBuidler{
+
+		private int id;
+		private String name;
+		private LocalDate mealDate;
+		private User user;
+		private List<Product> productList = new ArrayList<>();
+
+		public MealBuidler setName(String name){
+			this.name = name;
+			return this;
+		}
+		public MealBuidler setMealDate(LocalDate mealDate){
+			this.mealDate = mealDate;
+			return this;
+		}
+		public MealBuidler addProduct(Product product){
+			this.productList.add(product);
+			return this;
+		}
+		public MealBuidler addUser(User user){
+			this.user = user;
+			return this;
+		}
+		public MealBuidler setId(int id){
+			this.id = id;
+			return this;
+		}
+		public Meal build(){
+			Meal meal = new Meal();
+			meal.setId(id);
+			meal.setName(name);
+			meal.setMealDate(mealDate);
+			meal.setProductList(this.productList);
+			meal.setUser(user);
+			return meal;
+		}
+	}
+
 }

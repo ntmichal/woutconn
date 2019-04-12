@@ -22,71 +22,80 @@ public class UserGoals {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
-	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	@JsonIgnore
 	private User user;
-	
-	@Column(name="cel_treningowy")
-	private String cel_treningowy;
-	
-	@Column(name = "data_rozpoczecia")
-	private LocalDate data_rozpoczecia;
-	
-	@Column(name = "data_zakonczenia")
-	private LocalDate data_zakonczenia;
-	
+
+	@Column(name="workout_goal")
+	private String workout_goal;
+
+	@Column(name = "start_date")
+	private LocalDate start_date;
+
+	@Column(name = "end_date")
+	private LocalDate end_date;
+
 	@Column(name = "flag_is_active")
 	private int isActive;
-	
-	@Column(name = "zapotrzebowanie_kcal")
-	private int zapotrzebowanie_kcal;
-	
-	
+
+	@Column(name = "calories_intake")
+	private int calories_intake;
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public User getUser() {
 		return user;
 	}
+
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public String getCel_treningowy() {
-		return cel_treningowy;
+
+	public String getWorkout_goal() {
+		return workout_goal;
 	}
-	public void setCel_treningowy(String cel_treningowy) {
-		this.cel_treningowy = cel_treningowy;
+
+	public void setWorkout_goal(String workout_goal) {
+		this.workout_goal = workout_goal;
 	}
-	public LocalDate getData_rozpoczecia() {
-		return data_rozpoczecia;
+
+	public LocalDate getStart_date() {
+		return start_date;
 	}
-	public void setData_rozpoczecia(LocalDate data_rozpoczecia) {
-		this.data_rozpoczecia = data_rozpoczecia;
+
+	public void setStart_date(LocalDate start_date) {
+		this.start_date = start_date;
 	}
-	public LocalDate getData_zakonczenia() {
-		return data_zakonczenia;
+
+	public LocalDate getEnd_date() {
+		return end_date;
 	}
-	public void setData_zakonczenia(LocalDate data_zakonczenia) {
-		this.data_zakonczenia = data_zakonczenia;
+
+	public void setEnd_date(LocalDate end_date) {
+		this.end_date = end_date;
 	}
+
 	public int getIsActive() {
 		return isActive;
 	}
+
 	public void setIsActive(int isActive) {
 		this.isActive = isActive;
 	}
-	public int getZapotrzebowanie_kcal() {
-		return zapotrzebowanie_kcal;
+
+	public int getCalories_intake() {
+		return calories_intake;
 	}
-	public void setZapotrzebowanie_kcal(int zapotrzebowanie_kcal) {
-		this.zapotrzebowanie_kcal = zapotrzebowanie_kcal;
+
+	public void setCalories_intake(int calories_intake) {
+		this.calories_intake = calories_intake;
 	}
-	
-	
-	
 }

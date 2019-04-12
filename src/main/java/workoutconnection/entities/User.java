@@ -4,19 +4,11 @@ package workoutconnection.entities;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 
@@ -50,10 +42,51 @@ public class User implements UserDetails{
 
     @Column(name = "ENABLED")
     private boolean enabled;
-    
 
-    @OneToMany(cascade=CascadeType.ALL, mappedBy="user")
-    private List<Authority> authorities;
+
+	@Column(name="authorities")
+	@ManyToMany(cascade = {CascadeType.PERSIST,
+		CascadeType.MERGE},
+		fetch = FetchType.EAGER)
+	@JoinTable(name="authoritiesList",
+		joinColumns = @JoinColumn(name="authority_id"),
+		inverseJoinColumns = @JoinColumn(name = "user_id")
+	)
+    private List<Authority> authorityList;
+
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Meal> mealList;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Measurement> measurementList;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<UserGoals> goalsList;
+
+	public List<UserGoals> getGoalsList() {
+		return goalsList;
+	}
+
+	public void setGoalsList(List<UserGoals> goalsList) {
+		this.goalsList = goalsList;
+	}
+
+	public List<Measurement> getMeasurementList() {
+		return measurementList;
+	}
+
+	public void setMeasurementList(List<Measurement> measurementList) {
+		this.measurementList = measurementList;
+	}
+
+	public List<Meal> getMealList() {
+		return mealList;
+	}
+
+	public void setMealList(List<Meal> mealList) {
+		this.mealList = mealList;
+	}
 
 	public int getId() {
 		return id;
@@ -146,12 +179,10 @@ public class User implements UserDetails{
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return (Collection<? extends GrantedAuthority>) authorities;
+		return (Collection<? extends GrantedAuthority>) authorityList;
 	}
 
-	public void setAuthorities(List<Authority> authorities) {
-		this.authorities = authorities;
-	}
+
 
 	@Override
 	public boolean isAccountNonExpired() {
@@ -176,5 +207,11 @@ public class User implements UserDetails{
 		return this.enabled;
 	}
 
-	
+	public List<Authority> getAuthorityList() {
+		return authorityList;
+	}
+
+	public void setAuthorityList(List<Authority> authorityList) {
+		this.authorityList = authorityList;
+	}
 }
