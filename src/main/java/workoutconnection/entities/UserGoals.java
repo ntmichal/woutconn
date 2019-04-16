@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class UserGoals {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -29,19 +29,19 @@ public class UserGoals {
 	private User user;
 
 	@Column(name="workout_goal")
-	private String workout_goal;
+	private String workoutGoal;
 
 	@Column(name = "start_date")
-	private LocalDate start_date;
+	private LocalDate startDate;
 
 	@Column(name = "end_date")
-	private LocalDate end_date;
+	private LocalDate endDate;
 
 	@Column(name = "flag_is_active")
-	private int isActive;
+	private boolean isActive;
 
 	@Column(name = "calories_intake")
-	private int calories_intake;
+	private int caloriesIntake;
 
 	public int getId() {
 		return id;
@@ -59,43 +59,98 @@ public class UserGoals {
 		this.user = user;
 	}
 
-	public String getWorkout_goal() {
-		return workout_goal;
+	public String getWorkoutGoal() {
+		return workoutGoal;
 	}
 
-	public void setWorkout_goal(String workout_goal) {
-		this.workout_goal = workout_goal;
+	public void setWorkoutGoal(String workoutGoal) {
+		this.workoutGoal = workoutGoal;
 	}
 
-	public LocalDate getStart_date() {
-		return start_date;
+	public LocalDate getStartDate() {
+		return startDate;
 	}
 
-	public void setStart_date(LocalDate start_date) {
-		this.start_date = start_date;
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
 	}
 
-	public LocalDate getEnd_date() {
-		return end_date;
+	public LocalDate getEndDate() {
+		return endDate;
 	}
 
-	public void setEnd_date(LocalDate end_date) {
-		this.end_date = end_date;
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
 	}
 
-	public int getIsActive() {
+	public int getCaloriesIntake() {
+		return caloriesIntake;
+	}
+
+	public void setCaloriesIntake(int caloriesIntake) {
+		this.caloriesIntake = caloriesIntake;
+	}
+
+	public boolean getIsActive() {
 		return isActive;
 	}
 
-	public void setIsActive(int isActive) {
+	public void setIsActive(boolean isActive) {
 		this.isActive = isActive;
 	}
 
-	public int getCalories_intake() {
-		return calories_intake;
-	}
 
-	public void setCalories_intake(int calories_intake) {
-		this.calories_intake = calories_intake;
+	public static UserGoalsBuilder builder(){return new UserGoalsBuilder();};
+	public static final class UserGoalsBuilder{
+
+		private int id;
+		private User user;
+		private String workoutGoal;
+		private LocalDate startDate;
+		private LocalDate endDate;
+		private boolean isActive;
+		private int caloriesIntake;
+
+		public UserGoalsBuilder setId(int id){
+			this.id = id;
+			return this;
+		}
+		public UserGoalsBuilder setUser(User user){
+			this.user = user;
+			return this;
+		}
+		public UserGoalsBuilder setWorkoutGoal(String workoutGoal){
+			this.workoutGoal = workoutGoal;
+			return this;
+		}
+		public UserGoalsBuilder setStartDate(LocalDate startDate){
+			this.startDate = startDate;
+			return this;
+		}
+		public UserGoalsBuilder setEndDate(LocalDate endDate){
+			this.endDate = endDate;
+			return this;
+		}
+		public UserGoalsBuilder setIsActive(boolean isActive){
+			this.isActive = isActive;
+			return this;
+		}
+		public UserGoalsBuilder setCaloriesIntake(int caloriesIntake){
+			this.caloriesIntake = caloriesIntake;
+			return this;
+		}
+
+		public  UserGoals build(){
+			UserGoals userGoals = new UserGoals();
+			userGoals.setId(this.id);
+			userGoals.setUser(this.user);
+			userGoals.setWorkoutGoal(this.workoutGoal);
+			userGoals.setStartDate(this.startDate);
+			userGoals.setEndDate(this.endDate);
+			userGoals.setCaloriesIntake(this.caloriesIntake);
+			userGoals.setIsActive(this.isActive);
+
+			return userGoals;
+		}
 	}
 }
