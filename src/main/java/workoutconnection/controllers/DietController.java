@@ -3,33 +3,28 @@ package workoutconnection.controllers;
 import java.net.URI;
 import java.util.List;
 
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
-import io.jsonwebtoken.Claims;
 import workoutconnection.config.TokenProvider;
 import workoutconnection.dao.UserInfoDAO;
-import workoutconnection.entities.Product;
-import workoutconnection.entities.UserGoals;
-import workoutconnection.models.MealInfoObject;
+import workoutconnection.entities.*;
 import workoutconnection.service.MealInfoService;
 import workoutconnection.service.ProductService;
 
+import javax.persistence.EntityManager;
+
 /**
- * 
- * 
+ *
+ *
  * @author Michał Maciocha
- * 
+ *
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -43,8 +38,10 @@ public class DietController {
 	private MealInfoService mealInfoService;
 
 	@Autowired
+	private EntityManager entityManager;
+	@Autowired
 	private UserInfoDAO userDAO;
-	
+
 
 
 	@RequestMapping(value = "/api/product/list", method = RequestMethod.GET)
@@ -52,28 +49,28 @@ public class DietController {
 
 		return productService.getAllProducts();
 	}
-		
+
 
 	@RequestMapping(value = "/api/product/", method = RequestMethod.POST)
 	public ResponseEntity<Object> createProduct(@RequestBody Product product){
 		Product savedProduct = productService.insertProduct(product);
-	
+
 		//response path
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(savedProduct.getId()).toUri();
-		
+
 
 		return ResponseEntity.created(location).header("id", Integer.toString(savedProduct.getId())).build();
-		
-	
+
+
 	}
 
-	//delete product only from admin panel, function for admins/moderators
+	//TODO delete product only from admin panel, function for admins/moderators
 	@RequestMapping(value = "/api/product/{id}", method = RequestMethod.DELETE)
 	public void deleteProduct(@PathVariable int id) {
 		productService.deleteById(id);
 	}
-	
+
 	//update product only from admin panel, function for admins/morderators
 	@RequestMapping(value = "/api/product/{id}", method = RequestMethod.PUT)
 	public void updateProduct(@RequestBody Product product, @PathVariable int id){
@@ -81,58 +78,65 @@ public class DietController {
 		productService.update(product);
 	}
 
-	
+
 	/**
-	 * 
+	 *
 	 * @return list of meals
 	 */
+	//TODO fix me
 	@RequestMapping(value = "/api/meal", method = RequestMethod.GET)
-	public List<MealInfoObject> mealsList(@RequestHeader("Authorization") String bearerToken){
+	public List<Meal> mealsList(@RequestHeader("Authorization") String bearerToken){
 		String token = bearerToken.replace("Bearer ", "");
 		Claims userToken = tokenProvider.getAllClaimsFromToken(token);
 		int idFromToken = userToken.get("id", Integer.class);
-		
+
 		return mealInfoService.getAllMeals(idFromToken);
-	
+
 	}
 
-	
-	//get 1 
-	@RequestMapping(value = "/api/meal/{userid}/{id}", method = RequestMethod.GET)
-	public MealInfoObject getMeal(@PathVariable int userid, @PathVariable int id) {
 
+	//get 1
+	//TODO fix me
+	@RequestMapping(value = "/api/meal/{userid}/{id}", method = RequestMethod.GET)
+	public Meal getMeal(@PathVariable int userid, @PathVariable int id) {
 		return mealInfoService.getMeal(id);
 	}
 
-	
 	//insert meal
 	@RequestMapping(value = "/api/meal", method = RequestMethod.POST)
-	public ResponseEntity<Object> createMeal(@RequestHeader("Authorization") String token, @RequestBody MealInfoObject meal){
-		
-		
+	public ResponseEntity<Object> createMeal(@RequestHeader("Authorization") String token, @RequestBody Meal meal){
+
 		int idFromToken = tokenProvider
 				.getAllClaimsFromToken(token.replace("Bearer ", ""))
 				.get("id", Integer.class);
-		meal.setUserid(idFromToken);
-		mealInfoService.insertMeal(meal);
-		
-		
+
+		Meal mealTmp = Meal.builder()
+				.setName(meal.getName())
+				.build();
+
+		meal.getMealsList().forEach( x-> {mealTmp.addProduct(x.getProduct(),x.getProductWeight());});
+
+		mealInfoService.insertMeal(mealTmp,idFromToken);
+
+
 		return ResponseEntity.accepted().body(HttpStatus.CREATED);
 	}
-	//update meal 
-	@RequestMapping(value = "/api/meal/{id}", method = RequestMethod.PUT)
-	public void updateMeal(@RequestBody MealInfoObject meal, @PathVariable int id) {
-		mealInfoService.updateMeal(meal);
-	}
-	
+//	//TODO fix this
+//	//update meal
+//	@RequestMapping(value = "/api/meal/{id}", method = RequestMethod.PUT)
+//	public void updateMeal(@RequestBody MealInfoObject meal, @PathVariable int id) {
+//		mealInfoService.updateMeal(meal);
+//	}
+////
+
 	//delete meal
 	@RequestMapping(value = "/api/meal/{id}", method = RequestMethod.DELETE)
 	public void deleteMeal(@PathVariable int id) {
-		
+
 		mealInfoService.deleteMeal(id);
 	}
 
-	
+
 	@RequestMapping(value = "/api/usergoals/{userid}", method = RequestMethod.GET)
 	public List<UserGoals> getGoals(@PathVariable int userid){
 		return userDAO.getAllGoals(userid);

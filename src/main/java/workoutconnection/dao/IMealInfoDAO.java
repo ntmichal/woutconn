@@ -1,15 +1,18 @@
 package workoutconnection.dao;
 
-import java.util.List;
 
-import workoutconnection.models.MealInfoObject;
+
+import workoutconnection.entities.Meal;
+
+import java.util.List;
 
 
 public interface IMealInfoDAO {
 
-	List<MealInfoObject> getAllMeals(int userid);
-	MealInfoObject getMeal(int id);
+	List<Meal> getAllMeals(int userid);
+	Meal getMeal(int id);
 	void deleteMeal(int id);
-	void insertMeal(MealInfoObject meal);
-	void updateMeal(MealInfoObject meal);
+	void insertMeal(Meal meal);
+	void insertMeal(Meal meal,int id);
+	void updateMeal(Meal meal);
 }
