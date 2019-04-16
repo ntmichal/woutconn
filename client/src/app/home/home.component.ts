@@ -70,13 +70,10 @@ export class HomeComponent implements OnInit {
   public mealDate:String;
 
   public object = {
-    meal:  {
-      id: null,
       name: "",
-      mealDate: ""
-      },
-      products: [],
-      weightOfProducts:[]  
+      mealDate: "",
+      mealsList: []
+
   }
   
   
@@ -88,7 +85,6 @@ export class HomeComponent implements OnInit {
     
     this.dietService.getMeals().subscribe(data =>{
       this.userDiet = data;
-      console.log(data);
       this.filterProductsWithCurrentDate(data);
     });
 
@@ -154,7 +150,9 @@ export class HomeComponent implements OnInit {
 
     //map meal with current date
     filterProductsWithCurrentDate(object){
-      var products = object.filter((x) => { return x.meal.mealDate == this.currentDate});
+      var products = object.filter((x) => { 
+        return x.mealDate == this.currentDate
+      });
 
     }
 
@@ -176,12 +174,13 @@ export class HomeComponent implements OnInit {
   
   }
 
-  Proteins(obj, weigths){
+  Proteins(obj){
     var proteins = 0;
 
     var i = 0;
-    obj.map( x => x.proteins).forEach(element => {
-      proteins += this.solveMacro(element,weigths[i]);
+
+    obj.map( x => x.product.proteins).forEach(element => {
+      proteins += this.solveMacro(element,obj[i].productWeight);
       i++;
     });
     return Math.round(proteins*100)/100;
@@ -191,8 +190,8 @@ export class HomeComponent implements OnInit {
     var carbs = 0;
 
     var i = 0;
-    obj.map( x => x.carbs).forEach(element => {
-      carbs += this.solveMacro(element,weigths[i]);
+    obj.map( x => x.product.carbs).forEach(element => {
+      carbs += this.solveMacro(element,obj[i].productWeight);
       i++;
     });
     return Math.round(carbs*100)/100;
@@ -202,8 +201,8 @@ export class HomeComponent implements OnInit {
     var fats = 0;
 
     var i = 0;
-    obj.map( x => x.fats).forEach(element => {
-      fats += this.solveMacro(element,weigths[i]);
+    obj.map( x => x.product.fats).forEach(element => {
+      fats += this.solveMacro(element,obj[i].productWeight);
       i++;
     });
     return Math.round(fats*100)/100;
@@ -212,8 +211,8 @@ export class HomeComponent implements OnInit {
     var calories = 0;
 
     var i = 0;
-    obj.map( x => x.kcal).forEach(element => {
-      calories += this.solveMacro(element,weigths[i]);
+    obj.map( x => x.product.kcal).forEach(element => {
+      calories += this.solveMacro(element,obj[i].productWeight);
       i++;
     });
     return Math.round(calories*100)/100;
@@ -230,31 +229,23 @@ export class HomeComponent implements OnInit {
 
   closeAndDiscard(){
     this.object = {
-      meal:  {
-        id: null,
         name: "",
-        mealDate: ""
-        },
-        products: [],
-        weightOfProducts: []
+        mealDate: "",
+        mealsList: []
     }
     this.mealName = "";
   }
 
   closeAndSave(){
-    if(this.object.meal.name != "" && this.object.products.length > 0){
+    if(this.object.name != "" && this.object.mealsList.length > 0){
 
-      this.object.meal.mealDate = this.formatDate(this.currentDate);
+      this.object.mealDate = this.formatDate(this.currentDate);
       this.userDiet.push(this.object);
       this.dietService.addMeals(this.object).subscribe(() => {
         this.object = {
-          meal:  {
-            id: null,
-            name: "",
-            mealDate: ""
-          },
-          products: [],
-          weightOfProducts: []
+          name: "",
+          mealDate: "",
+          mealsList: []
         }
         this.mealName = "";
        
@@ -286,8 +277,10 @@ export class HomeComponent implements OnInit {
         var productId = this.productList.map(x => x.name).indexOf(this.model);
   
         if(productId != -1 && !isNaN(this.productWeightInMeal)){
-          this.object.products.push(this.productList[productId]);
-          this.object.weightOfProducts.push(Number(this.productWeightInMeal));
+          this.object.mealsList.push({
+            product: this.productList[productId],
+            productWeight: Number(this.productWeightInMeal)
+          });
           this.model = '';
           this.productWeightInMeal = null;
         }else{
@@ -299,6 +292,7 @@ export class HomeComponent implements OnInit {
       }
      }
 
+     //TO DO FIX
     addProduct(){
       var productTMP = {
         id : null,
@@ -315,14 +309,14 @@ export class HomeComponent implements OnInit {
         productTMP.id = res.headers.get('id') 
         this.productList.push(productTMP);
       });
-      this.object.products.push(productTMP);
+      // this.object.products.push(productTMP);
 
     }
 
 
     deleteProduct(product){
-      var id = this.object.products.map(x => x.name).indexOf(product.name);
-     this.object.products.splice(id,1);
+      var id = this.object.mealsList.map(x => x.product.name).indexOf(product.name);
+     this.object.mealsList.splice(id,1);
     }
 
     zmienna:any = null;
