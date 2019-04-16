@@ -22,27 +22,27 @@ public class UserInfoService implements IUserInfo {
 
 	@Autowired
 	private UserInfoDAO userInfoDAO;
-	
+
 	@Override
 	public List<UserGoals> getAllGoals(int userid) {
 		return userInfoDAO.getAllGoals(userid);
 	}
 
 	@Override
-	public Object getWorkouts(int userid) 
+	public Object getWorkouts(int userid)
 			throws JsonParseException, JsonMappingException, IOException {
 		return userInfoDAO.getWorkouts(userid);
 	}
 
 	@Override
-	public Object getUserInfo(int userid) 
+	public Object getUserInfo(int userid)
 			throws JsonParseException, JsonMappingException, IOException {
-	
+
 		Map<Object,Object> userInfo = new HashMap<Object,Object>();
 		userInfo.put("workouts",this.getWorkouts(userid));
 		userInfo.put("goals",this.getAllGoals(userid));
 		userInfo.put("measurements",this.getMeasurement(userid));
-		
+
 		return userInfo;
 	}
 
@@ -52,48 +52,52 @@ public class UserInfoService implements IUserInfo {
 		userInfoDAO.saveWorkouts(workouts, userid);
 	}
 
-	
+
 	@Override
 	public List<Measurement> getMeasurement(int userid) {
 		return userInfoDAO.getMeasurement(userid);
 	}
 
 	@Override
-	public void insertMeasurement(Measurement measurement, int userid) {
-		userInfoDAO.insertMeasurement(measurement, userid);
-		
+	public void insertMeasurement(Measurement measurement, int userId) {
+		userInfoDAO.insertMeasurement(measurement, userId);
+
 	}
 
 	@Override
 	public void updateMeasurement(Measurement measurement) {
 		userInfoDAO.updateMeasurement(measurement);
-		
+
 	}
 
 	@Override
 	public boolean deleteMeasurement(Measurement measurement) {
 		return userInfoDAO.deleteMeasurement(measurement);
-		
 	}
 
 	@Override
-	public void insertGoals(UserGoals userGoals, int userid) {
-		userInfoDAO.insertGoals(userGoals, userid);
-		
+	public void insertGoals(UserGoals userGoals) {
+		userInfoDAO.insertGoals(userGoals);
+	}
+
+	@Override
+	public void insertGoals(UserGoals userGoals,int userId) {
+		userInfoDAO.insertGoals(userGoals, userId);
+
 	}
 
 	@Override
 	public void updateGoals(UserGoals userGoals) {
 		userInfoDAO.updateGoals(userGoals);
-		
+
 	}
 
 	@Override
 	public void deleteGoals(UserGoals userGoals) {
 		userInfoDAO.deleteGoals(userGoals);
-		
+
 	}
 
 
-	
+
 }

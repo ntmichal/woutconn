@@ -22,14 +22,14 @@ import workoutconnection.entities.User;
 import workoutconnection.entities.UserGoals;
 
 
-@Transactional
 @Repository
+@Transactional
 public class UserInfoDAO implements IUserInfoDAO {
 
-	
+
 	@Autowired
 	private EntityManager entityManager;
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
 	@SuppressWarnings("unchecked")
@@ -43,8 +43,8 @@ public class UserInfoDAO implements IUserInfoDAO {
 		return (List<UserGoals>)q.getResultList();
 
 	}
-	
-	
+
+
 	@Override
 	public void saveWorkouts(List<Map<String,Object>> workouts, int userId)
 			throws JsonGenerationException, JsonMappingException, IOException{
@@ -67,20 +67,16 @@ public class UserInfoDAO implements IUserInfoDAO {
 		Query query = (Query)entityManager.createQuery(HQL);
 		query.setParameter("user_id", userId);
 		List<Measurement> userMeasurement = (List<Measurement>)query.getResultList();
-	
+
 		return userMeasurement;
 	}
 
 
 	@Override
 	public void insertMeasurement(Measurement measurement, int userId) {
-		String HQL = "From User Where id = :id";
-		Query query = (Query)entityManager.createQuery(HQL);
-		query.setParameter("id", userId);
-		User usr = (User)query.getSingleResult();
+		User usr = entityManager.find(User.class, userId);
 		measurement.setUser(usr);
 		entityManager.persist(measurement);
-			
 	}
 
 
@@ -89,10 +85,10 @@ public class UserInfoDAO implements IUserInfoDAO {
 		Measurement mr = entityManager.find(Measurement.class, measurement.getId());
 		measurement.setUser(mr.getUser());
 		entityManager.merge(measurement);
-		
+
 	}
 
-
+//TODO fix this
 	@Override
 	public boolean deleteMeasurement(Measurement measurement) {
 		try {
@@ -108,31 +104,31 @@ public class UserInfoDAO implements IUserInfoDAO {
 			return false;
 		}
 
-		
+
 	}
 
+
+	public void insertGoals(UserGoals userGoals) {
+		entityManager.persist(userGoals);
+	}
 
 	@Override
 	public void insertGoals(UserGoals userGoals, int userId) {
-		String HQL = "From User Where id = :id";
-		Query query = (Query)entityManager.createQuery(HQL);
-		query.setParameter("id", userId);
-		User usr = (User)query.getSingleResult();
-		userGoals.setUser(usr);
+		userGoals.setUser(entityManager.find(User.class,userId));
 		entityManager.persist(userGoals);
-		
+
 	}
 
-
+	//TODO fix this
 	@Override
 	public void updateGoals(UserGoals userGoals) {
 		UserGoals ug = entityManager.find(UserGoals.class, userGoals.getId());
 		userGoals.setUser(ug.getUser());
 		entityManager.merge(userGoals);
-		
+
 	}
 
-
+	//TODO fix this
 	@Override
 	public void deleteGoals(UserGoals userGoals) {
 		UserGoals usrGoals = entityManager.find(UserGoals.class, userGoals.getId());
@@ -142,7 +138,7 @@ public class UserInfoDAO implements IUserInfoDAO {
 		query.setParameter("user_id", usrGoals.getUser().getId());
 		query.setParameter("id", usrGoals.getId());
 		query.executeUpdate();
-		
+
 	}
 
 

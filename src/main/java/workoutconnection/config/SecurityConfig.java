@@ -25,13 +25,13 @@ import workoutconnection.service.UserServiceImpl;
 @EnableGlobalMethodSecurity(	prePostEnabled = true
 		)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
-	
+
 	@Autowired
 	private UserServiceImpl  userServiceImpl;
-	
+
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
-    
+
     @Bean
     public BCryptPasswordEncoder encoder() {
     	return new BCryptPasswordEncoder();
@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     public JwtAuthenticationFilter AuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
     		return new BCryptPasswordEncoder();
@@ -58,10 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	@Bean
 	protected AuthenticationManager authenticationManager() throws Exception {
-		// TODO Auto-generated method stub
 		return super.authenticationManager();
 	}
-	
+
     @Autowired
     public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userServiceImpl)
@@ -73,16 +72,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().
-                authorizeRequests()
-                .antMatchers("/api/signin","/api/signup").permitAll()
+        http.cors().and().csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/api/signin","/api/signup","/h2-console/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http
                 .addFilterBefore(AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.headers().frameOptions().disable();
+
     }
-    
+
 
 }

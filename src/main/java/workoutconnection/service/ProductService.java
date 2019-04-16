@@ -24,20 +24,20 @@ public class ProductService implements IProductService {
 	}
 	@Override
 	public Product insertProduct(Product product) {
-		productDAO.insertProduct(product);
-		
+		productDAO.save(product);
+
 		return product;
 	}
 	@Override
 	public void deleteById(int id) {
 		productDAO.deleteById(id);
-		
+
 	}
 	@Override
 	public void update(Product product) {
 		productDAO.update(product);
-		
+
 	}
 
-	
+
 }
