@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +38,6 @@ import workoutconnection.entities.Authority;
 import workoutconnection.entities.Measurement;
 import workoutconnection.entities.User;
 import workoutconnection.entities.UserGoals;
-import workoutconnection.models.Exercise;
 import workoutconnection.models.Token;
 import workoutconnection.models.UserLogin;
 import workoutconnection.service.IUserInfo;
@@ -53,22 +51,22 @@ public class UserController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private UserServiceImpl userServiceImpl;
-	
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
     private TokenProvider tokenProvider;
-	
+
     @Autowired
     private IUserInfo userInfo;
 
 
 	@RequestMapping(value="/api/signin", method = RequestMethod.POST)
-	public ResponseEntity<Object> singInUser(@RequestBody UserLogin userLogin)  
+	public ResponseEntity<Object> singInUser(@RequestBody UserLogin userLogin)
 			throws AuthenticationException {
 
         final Authentication authentication = authenticationManager.authenticate(
@@ -81,9 +79,9 @@ public class UserController {
         User user = (User)userServiceImpl.loadUserByUsername(userLogin.getUsername());
         final String token = tokenProvider.generateToken(authentication,user);
         return ResponseEntity.ok(new Token(token));
-   
+
     }
-	
+
 	@RequestMapping(value="/api/signup", method = RequestMethod.POST)
 	public ResponseEntity<Object> singUpUser(@RequestBody UserLogin userLogin){
 
@@ -103,15 +101,14 @@ public class UserController {
 			user.setPassword(passwordEncoder.encode(userLogin.getPassword()));
 			user.setEnabled(true);
 
-		Authority au = new Authority();
-		au.setRole("ROLE_USER");
-		au.setUser(user);
-		List<Authority> lAu = new ArrayList<>();
-		lAu.add(au);
-			user.setAuthorities(lAu);
-		//set ROLES
-			
-		
+		Authority authority = new Authority();
+		authority.setRole("ROLE_USER");
+		List<Authority> authorityList = new ArrayList<>();
+		authorityList.add(authority);
+		user.setAuthorityList(authorityList);
+
+
+
 		User result = userServiceImpl.save(user);
 
 		URI location = URI.create("/api/user/"+result.getId());
@@ -127,9 +124,9 @@ public class UserController {
 					.body(HttpStatus.ACCEPTED);
 
 	}
-	
 
-	
+
+
 	private int userIdFromToken(String bearerToken) {
 		String token = bearerToken.replace("Bearer ", "");
 		Claims userToken = tokenProvider.getAllClaimsFromToken(token);
@@ -137,12 +134,12 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/api/userinfojson", method=RequestMethod.GET)
-	public Object returnUserJson(@RequestHeader("Authorization") String bearerToken) 
+	public Object returnUserJson(@RequestHeader("Authorization") String bearerToken)
 			throws JsonGenerationException, JsonMappingException, IOException {
 		int id = userIdFromToken(bearerToken);
 		return userInfo.getUserInfo(id);
 	}
-	
+
 
 	@PostMapping(value="/api/usergoals")
 	public void insertGoals(@RequestHeader("Authorization") String bearerToken,
@@ -150,30 +147,30 @@ public class UserController {
 		int id = userIdFromToken(bearerToken);
 		userInfo.insertGoals(userGoals, id);
 	}
-	
+
 	@PutMapping(value="/api/usergoals")
 	public void updateGoals(@RequestBody UserGoals userGoals) {
 		userInfo.updateGoals(userGoals);
 	}
-	
+
 	@DeleteMapping(value="/api/usergoals")
 	public void deleteGoals(@RequestBody UserGoals userGoals) {
 		userInfo.deleteGoals(userGoals);
 	}
-	
+
 	@PostMapping(value="/api/measurement")
-	public void insertMeasurement(@RequestHeader("Authorization") String bearerToken, 
+	public void insertMeasurement(@RequestHeader("Authorization") String bearerToken,
 			@RequestBody Measurement measurement) {
 		int id = userIdFromToken(bearerToken);
 		userInfo.insertMeasurement(measurement, id);
 	}
-	
+
 	@PutMapping(value="/api/measurement")
 	public void updateMeasurement(@RequestBody Measurement measurement) {
 		userInfo.updateMeasurement(measurement);
 	}
-	
-	
+
+
 	@DeleteMapping(value="/api/measurement")
 	public ResponseEntity<Object> deleteMeasurement(@RequestBody Measurement measurement) {
 
@@ -187,9 +184,9 @@ public class UserController {
 					.created(URI.create("/api/measurement"))
 					.body("FAILED");
 		}
-	
+
 	}
-	
+
 	@PostMapping(value="/api/workouts")
 	public Object saveWorkouts(@RequestHeader("Authorization") String bearerToken,
 			@RequestBody List<Map<String,Object>> workouts)
