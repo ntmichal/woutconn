@@ -2,17 +2,18 @@ package workoutconnection.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 
 import javax.persistence.*;
 
 
 @Entity
-@Table(name="product")
+@Table(name="Product")
 public class Product {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private int id;
 
@@ -37,15 +38,12 @@ public class Product {
 	@Column(name="volume")
 	private float volume;
 
-	@Column(name="xyz")
-	@ManyToMany(cascade = {CascadeType.PERSIST,
-							CascadeType.MERGE},
-				fetch = FetchType.EAGER)
-	@JoinTable(name="meals_list",
-				joinColumns = @JoinColumn(name = "meal_id"),
-				inverseJoinColumns = @JoinColumn(name = "product_id"))
+
+	@OneToMany(mappedBy = "product",
+				cascade = CascadeType.MERGE,
+				orphanRemoval = true)
 	@JsonIgnore
-	private List<Meal> mealsList;
+	private List<MealsList> mealsList = new ArrayList<>();
 
 	public int getId() {
 		return id;
@@ -53,8 +51,6 @@ public class Product {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-
 	public String getName() {
 		return name;
 	}
@@ -100,31 +96,39 @@ public class Product {
 	}
 
 	@Override
-	public int hashCode() {
-		// TODO Auto-generated method stub
-		return this.getName().hashCode();
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Product product = (Product) o;
+		return Float.compare(product.proteins, proteins) == 0 &&
+				Float.compare(product.carbs, carbs) == 0 &&
+				Float.compare(product.fats, fats) == 0 &&
+				Float.compare(product.kcal, kcal) == 0 &&
+				Float.compare(product.volume, volume) == 0 &&
+				Objects.equals(name, product.name) &&
+				Objects.equals(barcode, product.barcode);
 	}
+
 	@Override
-	public boolean equals(Object obj) {
-
-		Product xd = (Product)obj;
-
-		return this.getName().compareTo(xd.getName()) == 0 ? true : false;
-
+	public int hashCode() {
+		return Objects.hash(name, barcode, proteins, carbs, fats, kcal, volume);
 	}
+
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", barcode=" + barcode + ", proteins=" + proteins + ", carbs="
 				+ carbs + ", fats=" + fats + ", kcal=" + kcal + ", volume=" + volume + ", association=]\n";
 	}
 
-	public List<Meal> getMealsList() {
+	public List<MealsList> getMealsList() {
 		return mealsList;
 	}
 
-	public void setMealsList(List<Meal> mealsList) {
+	public void setMealsList(List<MealsList> mealsList) {
 		this.mealsList = mealsList;
 	}
+
+
 	public static ProductBuilder builder(){
 	    return new ProductBuilder();
     }
