@@ -1,10 +1,11 @@
 package workoutconnection.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
 import java.util.*;
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Meal")
@@ -21,14 +22,23 @@ public class Meal {
 	@Column(name="meal_date")
 	private LocalDate mealDate;
 
-	@Column(name="xyz")
-	@ManyToMany(cascade = {CascadeType.PERSIST},
-				fetch = FetchType.EAGER)
-	@JoinTable(name = "meals_list",
-				joinColumns = @JoinColumn(name = "product_id"),
-				inverseJoinColumns = @JoinColumn(name = "meal_id"))
-	private List<Product>  productList;
+	@OneToMany(mappedBy = "meal",
+				cascade = CascadeType.ALL,
+				orphanRemoval = true)
 
+	private List<MealsList> mealsList = new ArrayList<>();
+
+	private  Meal(){};
+	public Meal(String name, List<MealsList> mealsList) {
+		this.name = name;
+		this.mealsList = mealsList;
+	}
+
+
+	public void addProduct(Product product, int weight){
+		MealsList meals = new MealsList(this,product,weight);
+		this.mealsList.add(meals);
+	}
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	@JsonIgnore
@@ -42,12 +52,12 @@ public class Meal {
 		this.user = user;
 	}
 
-	public List<Product> getProductList() {
-		return productList;
+	public List<MealsList> getMealsList() {
+		return mealsList;
 	}
 
-	public void setProductList(List<Product> productList) {
-		this.productList = productList;
+	public void setMealsList(List<MealsList> mealsList) {
+		this.mealsList = mealsList;
 	}
 
 	public int getId() {
@@ -87,11 +97,12 @@ public class Meal {
 	}
 	public static final class MealBuidler{
 
+		Meal meal = new Meal();
 		private int id;
 		private String name;
 		private LocalDate mealDate;
 		private User user;
-		private List<Product> productList = new ArrayList<>();
+		private List<MealsList> MealsList = new ArrayList<>();
 
 		public MealBuidler setName(String name){
 			this.name = name;
@@ -101,8 +112,8 @@ public class Meal {
 			this.mealDate = mealDate;
 			return this;
 		}
-		public MealBuidler addProduct(Product product){
-			this.productList.add(product);
+		public MealBuidler addProduct(Product product,int productWeight){
+			this.MealsList.add(new MealsList(meal,product,productWeight));
 			return this;
 		}
 		public MealBuidler addUser(User user){
@@ -114,11 +125,10 @@ public class Meal {
 			return this;
 		}
 		public Meal build(){
-			Meal meal = new Meal();
 			meal.setId(id);
 			meal.setName(name);
 			meal.setMealDate(mealDate);
-			meal.setProductList(this.productList);
+			meal.setMealsList(this.MealsList);
 			meal.setUser(user);
 			return meal;
 		}
