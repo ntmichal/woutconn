@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import workoutconnection.dao.IMealInfoDAO;
-import workoutconnection.entities.Product;
-import workoutconnection.models.MealInfoObject;
+import workoutconnection.entities.Meal;
+
 
 
 @Service
@@ -16,13 +16,19 @@ public class MealInfoService implements IMealInfoService {
 
 	@Autowired
 	private IMealInfoDAO mealInfoDAO;
+
 	@Override
-	public List<MealInfoObject> getAllMeals(int userid) {
-		return mealInfoDAO.getAllMeals(userid);
+	public void insertMeal(Meal meal,int userId) {
+		mealInfoDAO.insertMeal(meal,userId);
 	}
 
 	@Override
-	public MealInfoObject getMeal(int id) {
+	public List<Meal> getAllMeals(int userId) {
+		return mealInfoDAO.getAllMeals(userId);
+	}
+
+	@Override
+	public Meal getMeal(int id) {
 		return mealInfoDAO.getMeal(id);
 	}
 
@@ -33,16 +39,9 @@ public class MealInfoService implements IMealInfoService {
 	}
 
 	@Override
-	public void updateMeal(MealInfoObject meal) {
+	public void updateMeal(Meal meal) {
 		mealInfoDAO.updateMeal(meal);
 
 	}
-
-	@Override
-	public void insertMeal(MealInfoObject meal) {
-		mealInfoDAO.insertMeal(meal);
-		
-	}
-
 
 }

@@ -4,16 +4,14 @@ package workoutconnection.service;
 
 import java.util.List;
 
-import workoutconnection.entities.MealInfo;
-import workoutconnection.entities.Product;
-import workoutconnection.models.MealInfoObject;
+import workoutconnection.entities.Meal;
 
 
 public interface IMealInfoService {
-	
-	List<MealInfoObject> getAllMeals(int userid);
-	MealInfoObject getMeal(int id);
+
+	List<Meal> getAllMeals(int userId);
+	Meal getMeal(int id);
 	void deleteMeal(int id);
-	void insertMeal(MealInfoObject meal);
-	void updateMeal(MealInfoObject meal);
+	void insertMeal(Meal meal, int userId);
+	void updateMeal(Meal meal);
 }
