@@ -30,20 +30,20 @@
                     <div>
 
                         <ng-container *ngFor="let oneMeal of userDiet; let i = index">
-                                <ng-container *ngIf="oneMeal.meal.mealDate == this.formatDate(this.currentDate)">
+                                <ng-container *ngIf="oneMeal.mealDate == this.formatDate(this.currentDate)">
                                     <table>
                                     <tr (click)="openTable(i)">    
                                         <th class="title">                                  
                                             <button type="button" class="close" style="float: left">
                                                     <i class="fas fa-caret-down"></i>
                                             </button>
-                                            {{oneMeal.meal.name}}
+                                            {{oneMeal.name}}
                                         </th>
         
-                                        <th>Proteins:{{this.Proteins(oneMeal.products, oneMeal.weightOfProducts)}}</th>
-                                        <th>Fats: {{this.Fats(oneMeal.products, oneMeal.weightOfProducts)}}</th>
-                                        <th>Carbs: {{this.Carbs(oneMeal.products, oneMeal.weightOfProducts)}}</th>
-                                        <th>Calories: {{this.Calories(oneMeal.products, oneMeal.weightOfProducts)}}</th>
+                                        <th>Proteins:{{this.Proteins(oneMeal.mealsList)}}</th>
+                                        <th>Fats: {{this.Fats(oneMeal.mealsList)}}</th>
+                                        <th>Carbs: {{this.Carbs(oneMeal.mealsList)}}</th>
+                                        <th>Calories: {{this.Calories(oneMeal.mealsList)}}</th>
                                         <th>
                                             <button type="button" class="close" aria-label="Close">
                                                     <i class="fas fa-cog"></i>
@@ -51,14 +51,14 @@
                                         </th>
                                         <th></th> 
                                     </tr>
-                                    <ng-container  *ngFor="let product of oneMeal.products; let j = index" >
+                                    <ng-container  *ngFor="let object of oneMeal.mealsList; let j = index" >
                                          <tr [hidden]="tableManagment(i)">
-                                            <td class="title">{{product.name}}</td>
-                                            <td>{{solveMacro(product.proteins,oneMeal.weightOfProducts[j])}}</td>
-                                            <td>{{solveMacro(product.fats,oneMeal.weightOfProducts[j])}}</td>
-                                            <td>{{solveMacro(product.carbs,oneMeal.weightOfProducts[j])}}</td>
-                                            <td>{{solveMacro(product.kcal,oneMeal.weightOfProducts[j])}}</td>
-                                            <td>{{oneMeal.weightOfProducts[j]}} grams</td>
+                                            <td class="title">{{object.product.name}}</td>
+                                            <td>{{solveMacro(object.product.proteins,object.productWeight)}}</td>
+                                            <td>{{solveMacro(object.product.fats,object.productWeight)}}</td>
+                                            <td>{{solveMacro(object.product.carbs,object.productWeight)}}</td>
+                                            <td>{{solveMacro(object.product.kcal,object.productWeight)}}</td>
+                                            <td>{{object.productWeight}} g</td>
                                             <td></td>
                                         </tr> 
                                     </ng-container>
@@ -82,18 +82,18 @@
                         </div>
                         <div class="modal-body">
                             <label>Meal name:</label>
-                            <input type="text" class="form-control" [(ngModel)]="object.meal.name"/>
+                            <input type="text" class="form-control" [(ngModel)]="object.name"/>
                             <button type="button" class="btn btn-outline-dark" (click)="open(products)">Chose products</button> 
                             
                             <span>Meal products:</span>   
                             <hr>
                             <ul class="list-group">
-                                <ng-container *ngFor="let product of object.products">
+                                <ng-container *ngFor="let item of object.mealsList">
                                     <li class="list-group-item">
-                                        <span class="product-name">{{product.name}} </span>
-                                        <span class="product-info">B: {{product.proteins}}</span> 
-                                        <span class="product-info">W: {{product.carbs}}</span> 
-                                        <span class="product-info">T: {{product.fats}}</span> 
+                                        <span class="product-name">{{item.product.name}} </span>
+                                        <span class="product-info">B: {{item.product.proteins}}</span> 
+                                        <span class="product-info">W: {{item.product.carbs}}</span> 
+                                        <span class="product-info">T: {{item.product.fats}}</span> 
                                         <span class="product-info">                          
                                             <button (click)="deleteProduct(product)" type="button" class="close" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
@@ -122,7 +122,7 @@
                             <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search"/>
                             <label>Weight product</label>
                             <input  type="text" class="form-control" [(ngModel)]="productWeightInMeal"/>
-                            <button class="btn btn-outline-dark" (click)="addProductToMeal()">Add</button>
+                            <button class="btn btn-outline-dark" (click)="addProductToMeal()" (click)="modal.dismiss()">Add</button>
                             <button class="btn btn-outline-dark" (click)="open(ownproduct)">Add own product</button>  
                             </div>
                             <div class="modal-footer">
@@ -165,14 +165,14 @@
                 </div>
                 <div class="usergoals">
                     <ul>
-                        <li><span class="text">Starts</span>{{userGoals.start_date}}</li>
-                        <li><span class="text">Ends</span>{{userGoals.end_date}}</li> 
+                        <li><span class="text">Starts</span>{{userGoals.startDate}}</li>
+                        <li><span class="text">Ends</span>{{userGoals.endDate}}</li> 
                     </ul>
                     <ul>
-                       <li><span class="text">Calories today</span> 0 / {{userGoals.calories_intake}}</li>    
+                       <li><span class="text">Calories today</span> 0 / {{userGoals.caloriesIntake}}</li>    
                     </ul>
                     <ul>
-                            <li><span class="text">TARGET</span>{{userGoals.workout_goal}}</li>    
+                            <li><span class="text">TARGET</span>{{userGoals.workoutGoal}}</li>    
                     </ul>
                 </div>
                 <div class="workout">
