@@ -1,28 +1,56 @@
+
 <div class="grid-container">
   <div class="left-panel">
 
 
   </div>
   <div class="right-panel">
-    <div class="login-form" [hidden]="loginForm">
-        <form>
+    <div class="login-form">
+        <form [formGroup]="loginForm" (ngSubmit)="authenticate()">
+            <input placeholder="login" formControlName="login">
+            <input type="password" placeholder="password" formControlName="password"> 
+            <button [disabled]="loginForm.invalid">Login</button>
+        </form>
+        <!-- <form>
+                 <label for="name">Name</label>
+                <input type="text" class="form-control" id="name"
+                       required
+                       [(ngModel)]="registerForm2.login" name="login"
+                       #name="ngModel">
+                <div [hidden]="login.valid || login.pristine"
+                     class="alert alert-danger">
+                  Name is required
+                </div> 
+              
             <input type="text" placeholder="name" [(ngModel)]="username" name="username" required>
             <input type="password" placeholder="password" [(ngModel)]="password" name="password" required>
             <button (click)="login()">Login</button>
+        </form> -->
+    </div> 
+   <div class="login-form">
+        <form [formGroup]="registerForm" [hidden]="success" (ngSubmit)="register()">
+            <input placeholder="login" formControlName="login">
+            <div *ngIf="login.invalid && login.touched">
+                Login is required
+            </div>
+            <input type="password" placeholder="password" formControlName="password">
+            <div *ngIf="password.invalid && password.touched">
+                    Password invalid
+            </div>
+            <input type="password" placeholder="confirmpassword" formControlName="confirmpassword">
+            <div *ngIf="confirmpassword.invalid && confirmpassword.touched">
+                    Password invalid
+            </div>
+            <input placeholder="email" formControlName="email">
+            <div *ngIf="email.invalid && email.touched">
+                    Email is invalid
+            </div>
+            <button [disabled]="registerForm.invalid">Register</button>
+            <div *ngIf="success">
+                Register!
+            </div>
         </form>
+    </div> 
 
-    </div>
-    <div class="login-form"  [hidden]="registerForm">
-        <form>
-            <input type="text" placeholder="login" [(ngModel)]="registerData.login" [ngModelOptions]="{standalone: true}" />
-            <input type="password" placeholder="password" [(ngModel)]="registerData.password" [ngModelOptions]="{standalone: true}"/>
-            <input type="password" placeholder="confirm password" [(ngModel)]="registerData.confirmpassword" [ngModelOptions]="{standalone: true}"/>
-            <input type="text" placeholder="email" [(ngModel)]="registerData.email" [ngModelOptions]="{standalone: true}"/>
-            <button (click)="register()">Register</button>
-         </form>
-    </div>
-    <div class="login-form">
-            <button (click)="makeAction()">{{buttonValue}}</button>
-      </div>
-  </div>
-</div> 
+ </div>
+</div>  
