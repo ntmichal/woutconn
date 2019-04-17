@@ -22,13 +22,17 @@ import { WorkoutmanagerComponent } from './workoutmanager/workoutmanager.compone
 
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { FilterPipe } from './filter.pipe';
+
+import {ReactiveFormsModule } from '@angular/forms';
+
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
     WorkoutmanagerComponent,
-    FilterPipe,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
@@ -36,7 +40,8 @@ import { FilterPipe } from './filter.pipe';
     RouteModule,
     FormsModule,
     NgbModule,
-    ScrollingModule
+    ScrollingModule,
+    ReactiveFormsModule
   ],
   providers: [Globals, DietService, AuthService, TokenStorageService, TokenStorageService,
     {provide: HTTP_INTERCEPTORS,
