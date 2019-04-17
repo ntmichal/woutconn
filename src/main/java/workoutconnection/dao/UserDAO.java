@@ -3,6 +3,7 @@ package workoutconnection.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +42,15 @@ public class UserDAO  implements IUserDAO{
 
 	@Override
 	public User findByUsername(String username) {
-		User user = (User) entityManager
-				.createQuery("From User WHERE user_name = :username")
-				.setParameter("username", username)
-				.getSingleResult();
+		User user;
+		try{
+			user = (User) entityManager
+					.createQuery("From User WHERE user_name = :username")
+					.setParameter("username", username)
+					.getSingleResult();
+		}catch(NoResultException e){
+			user = null;
+		}
 		return user;
 	}
 
