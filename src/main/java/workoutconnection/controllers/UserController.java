@@ -6,6 +6,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,15 +70,20 @@ public class UserController {
 	public ResponseEntity<Object> singInUser(@RequestBody UserLogin userLogin)
 			throws AuthenticationException {
 
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                		userLogin.getUsername(),
-                		userLogin.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = (User)userServiceImpl.loadUserByUsername(userLogin.getUsername());
-        final String token = tokenProvider.generateToken(authentication,user);
+
+		User user = (User)userServiceImpl.loadUserByUsername(userLogin.getUsername());
+		if(user == null){
+			return ResponseEntity.status(401).body("User not exist");
+		}
+		final Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(
+						userLogin.getUsername(),
+						userLogin.getPassword()
+				)
+		);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+       final String token = tokenProvider.generateToken(authentication,user);
         return ResponseEntity.ok(new Token(token));
 
     }
