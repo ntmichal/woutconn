@@ -30,7 +30,11 @@ export class LoginComponent implements OnInit {
 
   closeResult:string;
   username:string;
-
+  
+  swapFormBoolean = false;
+  swapForm = () => {
+    this.swapFormBoolean = !this.swapFormBoolean;
+  };
  
   authenticate(){
     const loginForm = this.loginForm.value;
@@ -88,6 +92,7 @@ export class LoginComponent implements OnInit {
   get email(){
     return this.registerForm.get('email');
   }
+
 
 
 }
