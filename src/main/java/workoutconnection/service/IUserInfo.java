@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import workoutconnection.entities.Measurement;
 import workoutconnection.entities.UserGoals;
-import workoutconnection.models.Exercise;
 
 public interface IUserInfo {
 
