@@ -8,7 +8,7 @@ tracking diet and training
  * REST, JPA
 * Angular
 * JWT
-* MySQL
+* H2
 * [Maven](https://maven.apache.org/)
 
 
