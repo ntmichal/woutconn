@@ -133,3 +133,9 @@ button:focus{
 .info-register{
     left: 0;
 }
+
+.error-container{
+    width: 100%;
+    font-size: 13px;
+    border-top: 1px solid #FBA827;
+}
