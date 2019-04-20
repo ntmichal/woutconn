@@ -14,22 +14,35 @@
             <form [formGroup]="registerForm" (ngSubmit)="register()">
                     <h1>Create Account</h1>
                     <input type="text" placeholder="login" formControlName="login">
-                    <span *ngIf="login.invalid && login.touched"> 
-                        Login incorrect!
+                    <span class="error-container" *ngIf="login.invalid && login.touched && errorMessages.login == null">
+                        Login invalid!
+                    </span>
+                    <span class="error-container"  *ngIf="serverError(errorMessages.login, &#34;login&#34;)">
+                       {{errorMessages.login}}
                     </span>
                     <input type="password" placeholder="password" formControlName="password">
-                    <span *ngIf="password.invalid && password.touched">
-                        Password must have 8 digits and special letters
+                    <span class="error-container" *ngIf="password.invalid && password.touched && errorMessages.password == null">
+                        Password require min 8 digits and special chars
+                    </span>
+                    <span  class="error-container" *ngIf="serverError(errorMessages.password, &#34;password&#34;)">
+                        {{errorMessages.password}}
                     </span>
                     <input type="password" placeholder="confirm password" formControlName="confirmpassword">
-                    <span *ngIf="password.invalid && password.touched">
+                    <span  class="error-container" *ngIf="registerForm.get('confirmpassword').errors && registerForm.get('confirmpassword').errors.ConfirmPassword">
                         Passwords don't match!
                     </span>
                     <input type="text" placeholder="email" formControlName="email">
-                    <span *ngIf="email.invalid && email.touched">
-                        Email incorrect!
+                    <span class="error-container" *ngIf="email.invalid && email.touched && errorMessages.email == null">
+                        Email invalid!
                     </span>
-                    <button [disabled]="registerForm.invalid">Sign up</button>
+                    <span class="error-container" *ngIf="serverError(errorMessages.email, &#34;email&#34;)">
+                        {{errorMessages.email}}
+                    </span>
+                    <!-- <button [disabled]="registerForm.invalid">Sign up</button> -->
+                    <button>Sign up</button>
+                    <span class="error-container" *ngIf="success">
+                        Registered!
+                    </span>
             </form>
         </div>
         <div class="info-container">
