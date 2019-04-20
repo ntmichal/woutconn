@@ -21,11 +21,12 @@ public class UserServiceImpl implements UserDetailsService, IUserService {
 	@Autowired
 	private IUserDAO userDao;
 
-	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String userId){
 		User user = userDao.findByUsername(userId);
-		if(user == null){
-			throw new UsernameNotFoundException("Invalid username or password.");
-		}
+//		if(user == null){
+//
+//			throw new UsernameNotFoundException("Invalid username or password.");
+//		}
 		//return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority());
 		return user;
 	}
