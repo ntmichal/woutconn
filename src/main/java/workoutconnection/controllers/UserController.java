@@ -4,8 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,20 +68,26 @@ public class UserController {
     @Autowired
     private IUserInfo userInfo;
 
+    
 
 	@RequestMapping(value="/api/signin", method = RequestMethod.POST)
 	public ResponseEntity<Object> singInUser(@RequestBody UserLogin userLogin)
 			throws AuthenticationException {
 
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                		userLogin.getUsername(),
-                		userLogin.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = (User)userServiceImpl.loadUserByUsername(userLogin.getUsername());
-        final String token = tokenProvider.generateToken(authentication,user);
+
+		User user = (User)userServiceImpl.loadUserByUsername(userLogin.getUsername());
+		if(user == null){
+			return ResponseEntity.status(401).body("User not exist");
+		}
+		final Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(
+						userLogin.getUsername(),
+						userLogin.getPassword()
+				)
+		);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+       final String token = tokenProvider.generateToken(authentication,user);
         return ResponseEntity.ok(new Token(token));
 
     }
@@ -85,16 +95,42 @@ public class UserController {
 	@RequestMapping(value="/api/signup", method = RequestMethod.POST)
 	public ResponseEntity<Object> singUpUser(@RequestBody UserLogin userLogin){
 
-		if(userServiceImpl.isUserExist(userLogin.getUsername())) {
-	         return ResponseEntity
-	        		 .created(URI.create("/api/signUp"))
-	        		 .body(HttpStatus.BAD_REQUEST);
+		Map<String,String> errorMessages = new HashMap<>();
+		
+		if(userLogin.getUsername() != null && userLogin.getUsername().length() != 0) {
+			if(userServiceImpl.isUserExist(userLogin.getUsername())) {
+				errorMessages.put("user","user alredy exist!");
+			}
+		}else {
+			errorMessages.put("user","login is required");
 		}
-		if(userServiceImpl.isEmailExist(userLogin.getEmail())) {
-			return ResponseEntity
-					.created(URI.create("/api/singUp"))
-					.body(HttpStatus.BAD_REQUEST);
+		
+		if(userLogin.getEmail()!= null && userLogin.getEmail().length() != 0) {
+			if(userServiceImpl.isEmailExist(userLogin.getEmail()) ) {
+				errorMessages.put("email","email already used");
+			}
+		}else {
+			errorMessages.put("email","email is required");
 		}
+		
+
+
+		if(userLogin.getPassword() != null && userLogin.getPassword().length() != 0) {
+			final String passwordPattern = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})";
+			Matcher matcher = Pattern.compile(passwordPattern).matcher(userLogin.getPassword());
+			if(!matcher.matches()) {
+				errorMessages.put("password","password is too weak");
+			}
+	
+			
+		}else {
+			errorMessages.put("password","password is required");
+		}
+		
+		if(!errorMessages.isEmpty()) {
+			return new ResponseEntity<>(errorMessages, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
 		User user = new User();
 			user.setUsername(userLogin.getUsername());
 			user.setEmail(userLogin.getEmail());
