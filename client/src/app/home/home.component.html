@@ -1,33 +1,31 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"> 
 
-<div class="grid-container">
-            <div class="sidebar">
-                <ul>
-                    <li>
-                       <a routerLink="/home" routerLinkActive="active">User <span>Profile</span></a> 
-                    </li>
-                    <li>
-                        <a routerLink="/workoutmanager" routerLinkActive="active">Workout <span>Manager</span></a>
-                    </li>
-                </ul>
+<div class="nav-bar">
 
-                <ul>
-                    <li><button class="btn-logout" (click)="signOut()">Logout</button></li>
-                </ul>
-            </div>
+    <div class="nav-bar-container">
+        <i class="fas fa-bars icon"></i> 
+        <h1>Diet Manager</h1>   
+    </div>
+
+    <div class="diet-nav-container">
+            <ul>
+                <li (click)="decreaseDate()">{{this.formatDate(this.prevDate)}}</li>
+                <li>{{this.formatDate(this.currentDate)}}</li>
+                <li (click)="increaseDate()">{{this.formatDate(this.nextDate)}}</li>
+            </ul>       
+    <div>
+
+</div>
+
+
+
+
+<div class="grid-container">
+
             <div class="dashboard">
                 <div class="diet">
- 
-                <div>
-                    <div class="dateContainer">
-                        <ul>
-                            <li (click)="decreaseDate()">{{this.formatDate(this.prevDate)}}</li>
-                            <li>{{this.formatDate(this.currentDate)}}</li>
-                            <li (click)="increaseDate()">{{this.formatDate(this.nextDate)}}</li>
-                        </ul>       
-                    </div>
-                    <div>
+
 
                         <ng-container *ngFor="let oneMeal of userDiet; let i = index">
                                 <ng-container *ngIf="oneMeal.mealDate == this.formatDate(this.currentDate)">
@@ -69,7 +67,7 @@
                             <button class="btn-workout" (click)="open(content)">Add meal</button> 
       
                     </div>                                 
-                  </div> 
+                </div> 
 
 
                   <!-- modale do zmiany  -->
@@ -163,36 +161,5 @@
 
 
                 </div>
-                <div class="usergoals">
-                    <ul>
-                        <li><span class="text">Starts</span>{{userGoals.startDate}}</li>
-                        <li><span class="text">Ends</span>{{userGoals.endDate}}</li> 
-                    </ul>
-                    <ul>
-                       <li><span class="text">Calories today</span> 0 / {{userGoals.caloriesIntake}}</li>    
-                    </ul>
-                    <ul>
-                            <li><span class="text">TARGET</span>{{userGoals.workoutGoal}}</li>    
-                    </ul>
-                </div>
-                <div class="workout">
-                    <ng-container *ngFor="let workout of this.userInfoJson.workouts; let i = index">
-                    <div class="userworkouts">
-                               {{workout.name}}
-                             <ul>
-
-                                 <ng-container *ngFor="let exercise of workout.exercises">
-                                    <li>
-                                         <div class="exerciseLine"> 
-                                             {{exercise.name}} 
-                                         </div> 
-                                         <span class="detail">{{exercise.sets}} x {{exercise.reps}}</span> 
-                                     </li> 
-                                </ng-container>  
-                            </ul>
-                    </div>
-                    </ng-container>
-                </div>
-
     </div>
 </div>

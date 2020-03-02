@@ -1,102 +1,78 @@
 *{
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Lato', sans-serif;
 } 
-body {font-family: Verdana, sans-serif;}
-.grid-container{
-    display: grid;
-    grid-gap: 0rem;
-    grid-template-columns: 100px 6fr;
-    grid-template-rows: 1fr;
-    grid-template-areas: 
-        "sidebar dashboard dashboard";
+body {
+    font-family: 'Lato', sans-serif;
+}
 
-    width: 100vw;
-    height: 100vh;
+.nav-bar{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-top: 8px solid #FBA827;
+    
 }
-.sidebar{
-    grid-area: sidebar;
-    height: 100%;
-    background-color: #FBA827;
+.nav-bar .nav-bar-container{
+    width: 450px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
 }
-.sidebar ul{
-    position: relative;
-    top: 100px;
+.nav-bar-container i{
+    font-size: 1.8rem;
+    width: 31px;
+    padding: 3px;
+    border-left: 5px solid white;
+}
+.nav-bar-container i:hover{
+    cursor: pointer;
+    border-left: 5px solid #FBA827; 
+}
+.nav-bar-container h1{
+    flex-grow: 1;
+    text-align: center;
+    font-size: 1.7rem;
+}
+.diet-nav-container{
+    width: 450px;
+}
+
+.diet-nav-container ul{
+    list-style: none;
     margin: 0;
     padding: 0;
-   
+  
 }
-.sidebar ul li{
-    text-decoration: none;
-    list-style: none;
-
-}
-
-.sidebar ul li a{
-    display: block;
-    padding: 10px;
-    text-decoration: none;
-    color: black;
-}
-.sidebar ul li a:hover{
-    background-color: #fdd79b;
+.diet-nav-container ul li{
+    background-color: #FBA827;
+    display: inline-block;
     cursor: pointer;
+    height: 50px;
+    width: 33%;
+    line-height: 50px;
+    text-align: center;
+
+} 
+.diet-nav-container ul li:first-child{
+    margin: 0 1px 0 0;
+}
+.diet-nav-container ul li:last-child{
+    margin: 0 0 0 1px;
 }
 
-.active{
-    background-color: #fdd79b;
-}
-.sidebar ul li a span{
-    display: block;
-    position: relative;
-    left: 15px;
+.diet-nav-container ul li:nth-child(even){
+    margin: 0 1px 0;
 }
 
-.sidebar ul li .btn-logout{
-    width:100%;
-    height: 45px;
-    padding: 5px;
-    border: none;
-    background-color: #E8500C;
-    transition: background 1s;
-    transition: color 1s;
-    color: beige;
-}
 
-.sidebar ul li .btn-logout:hover{
-    cursor:pointer;
-    background-color: #B83F09;
-    color: white;
-}
-
-.dashboard{
-    grid-area: dashboard;
-    display: grid;
-    margin: 10px;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 480px 600fr;
-    grid-template-areas:
-        "diet usergoals"
-        "workout workout";
-    grid-gap: 5px;
-
-}
-.diet{
-    grid-area:diet;
-    background-color: #fef5e6;
-
-}
-.usergoals{
-    grid-area: usergoals;
-    background-color: #fef5e6;
-}
-.workout{
-    grid-area: workout;
-    background-color: #fef5e6;
-}
-.diet table{
+/* old */
+ .diet table{
     border-collapse: collapse;
     width: 100%;
 }
@@ -126,12 +102,8 @@ body {font-family: Verdana, sans-serif;}
     font-weight: 600;
 }
 
- .usergoals ul {
-    list-style: none;
-}
-/* .usergoals ul li{
-    display: inline;
-} */ 
+
+
 
 .workout-table {
     list-style-type: none;
@@ -164,7 +136,7 @@ body {font-family: Verdana, sans-serif;}
     cursor: pointer;
 }
 .date-box{
-    /* display: block; */
+     display: block; 
     width: 80px;
     height: 40px;
     line-height: 40px;
@@ -179,92 +151,8 @@ body {font-family: Verdana, sans-serif;}
     width: 120px;
 }
 
-.dateContainer{
-    position: relative;
-    width:360px;
-    margin: 0 auto;
-}
-.dateContainer ul{
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  
-}
 
-.dateContainer ul li{
-    background-color: #FBA827;
-    display: inline-block;
-    cursor: pointer;
-    margin: 2px;
-    height: 50px;
-    width: 110px;
-    line-height: 50px;
-    text-align: center;
 
-}
-.workout{
-    display: flex;
-}
-.userworkouts{
-    height: 400px;
-    display: inline-block;
-    padding: 5px;
-}
-.userworkouts ul {
-    top: 0px;
-    position: relative;
-    padding: 0;
-    margin: 0;
-    width: 200px;
-    list-style: none;
-}
 
-.userworkouts ul li{
-    border: 1px solid;
-    border-radius: 10px;
-}
-.userworkouts ul li span{
-    display: block;
-    position: relative;
-    left: 70px;
-    line-height: 18px;
-}
 
-.exerciseLine {
-    line-height: 20px;
-    border-bottom: 1px solid;
-    background-color: #FBA827;
-    border-top-left-radius: 9px;
-    border-top-right-radius: 9px;
-    padding-left: 4px;
-}
 
-.usergoals{
-
-}
-
-.usergoals ul{
-    position: relative;
-    width: 350px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    
-}
-.usergoals ul li{
-    display: inline-block;
-    line-height: 25px;
-    background-color: rgba(255, 255, 255, 0.4); 
-    border-bottom: 2px solid #FBA827;
-    text-align: center;
-  
-    
-}
-.usergoals ul li .text {
-     display: inline-block;
-     background-color: #FBA827; 
-     padding: 5px;
-}
-
-.usergoals ul li{
-
-}
