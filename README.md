@@ -1,7 +1,7 @@
 # workout-connection
 
 Webapp for 
-tracking diet and training
+tracking diet
 
 
 * SpringBoot
