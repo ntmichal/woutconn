@@ -41,6 +41,7 @@ body {
 }
 .diet-nav-container{
     width: 450px;
+    margin: 0 0 2px 0;
 }
 
 .diet-nav-container ul{
@@ -59,6 +60,7 @@ body {
     text-align: center;
 
 } 
+
 .diet-nav-container ul li:first-child{
     margin: 0 1px 0 0;
 }
@@ -69,6 +71,98 @@ body {
 .diet-nav-container ul li:nth-child(even){
     margin: 0 1px 0;
 }
+
+.meals-container{
+    display: flex;
+    flex-direction: column;
+}
+.meals-container .meal-container{
+    width: 450px;
+}
+
+.meals-container .meal-container .meal-info{
+    height: 54px;
+    margin: 2px;
+    padding: 2px;
+    background-color: #FBA827;
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+.meals-container .meal-container .meal-info:hover{
+    cursor: pointer;
+}
+
+.meals-container .meal-container .meal-info .meal-name{
+    display: block;
+    height: 30px;
+    width: 400px;
+    display: block;
+    font-size: 1.3rem;
+
+}
+.meals-container .meal-container .meal-info ul{
+    height: 20px;
+    width: 400px;
+    padding: 0 0 0 45px;
+    display: flex;
+    flex-direction: row;
+    list-style:none; 
+ 
+}
+.meals-container .meal-container .meal-info ul li{
+    font-size: .8rem; 
+    width: 30px;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 4px 0 0;
+   
+}
+.meals-container .meal-container .meal-info ul li:last-child{
+    width: 120px;
+}
+
+.meals-container .meal-container .meal-details{
+    background-color: rgb(246, 246, 246);
+    margin: 2px;
+}
+
+.meals-container .meal-container .meal-details .product-name{
+    display: block;
+    width: 100%;
+    padding: 0 0 0 30px;
+    font-size: 1rem;
+}
+.meals-container .meal-container .meal-details .product-weight{
+    display: block;
+    width: 100%;
+    padding: 0 0 0 45px;
+    font-size: .68rem;
+}
+
+.meals-container .meal-container .meal-details ul{
+    height: 20px;
+    width: 400px;
+    padding: 0 0 0 45px;
+    display: flex;
+    flex-direction: row;
+    list-style:none; 
+ 
+}
+.meals-container .meal-container .meal-details ul li{
+    font-size: .68rem; 
+    width: 30px;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 4px 0 0;
+   
+}
+.meals-container .meal-container .meal-details ul li:last-child{
+    width: 120px;
+}
+
+
+
 
 
 /* old */
