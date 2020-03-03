@@ -14,62 +14,48 @@
                 <li>{{this.formatDate(this.currentDate)}}</li>
                 <li (click)="increaseDate()">{{this.formatDate(this.nextDate)}}</li>
             </ul>       
-    <div>
+    </div>
+    <div class="meals-container">
+
+      <ng-container *ngFor="let oneMeal of userDiet; let i = index">
+        <div class="meal-container">
+          <div class="meal-info">
+            <span class="meal-name">
+              <i class="fas fa-caret-down"></i>
+              {{oneMeal.name}}
+            </span>
+            <ul>
+              <li>{{this.Proteins(oneMeal.mealsList)}}g </li>
+              <li>{{this.Fats(oneMeal.mealsList)}}g </li>
+              <li>{{this.Carbs(oneMeal.mealsList)}}g </li>
+              <li>{{this.Calories(oneMeal.mealsList)}} kcal</li>
+            </ul>
+          </div>
+          <div class="meal-details">
+            <ng-container  *ngFor="let object of oneMeal.mealsList; let j = index" >
+              <div class="meal-product">
+                <span class="product-name">{{object.product.name}}</span>
+                <span class="product-weight">Waga: 120g</span>
+                <ul>
+                  <li>{{solveMacro(object.product.fats,object.productWeight)}} g</li>
+                  <li>{{solveMacro(object.product.carbs,object.productWeight)}} g</li>
+                  <li>{{solveMacro(object.product.kcal,object.productWeight)}} g</li>
+                  <li>{{object.productWeight}} kcal</li>
+                </ul>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+
+      
+    </div> 
+    <button class="btn-workout" (click)="open(content)">Add meal</button> 
 
 </div>
 
 
-
-
 <div class="grid-container">
-
-            <div class="dashboard">
-                <div class="diet">
-
-
-                        <ng-container *ngFor="let oneMeal of userDiet; let i = index">
-                                <ng-container *ngIf="oneMeal.mealDate == this.formatDate(this.currentDate)">
-                                    <table>
-                                    <tr (click)="openTable(i)">    
-                                        <th class="title">                                  
-                                            <button type="button" class="close" style="float: left">
-                                                    <i class="fas fa-caret-down"></i>
-                                            </button>
-                                            {{oneMeal.name}}
-                                        </th>
-        
-                                        <th>Proteins:{{this.Proteins(oneMeal.mealsList)}}</th>
-                                        <th>Fats: {{this.Fats(oneMeal.mealsList)}}</th>
-                                        <th>Carbs: {{this.Carbs(oneMeal.mealsList)}}</th>
-                                        <th>Calories: {{this.Calories(oneMeal.mealsList)}}</th>
-                                        <th>
-                                            <button type="button" class="close" aria-label="Close">
-                                                    <i class="fas fa-cog"></i>
-                                            </button>
-                                        </th>
-                                        <th></th> 
-                                    </tr>
-                                    <ng-container  *ngFor="let object of oneMeal.mealsList; let j = index" >
-                                         <tr [hidden]="tableManagment(i)">
-                                            <td class="title">{{object.product.name}}</td>
-                                            <td>{{solveMacro(object.product.proteins,object.productWeight)}}</td>
-                                            <td>{{solveMacro(object.product.fats,object.productWeight)}}</td>
-                                            <td>{{solveMacro(object.product.carbs,object.productWeight)}}</td>
-                                            <td>{{solveMacro(object.product.kcal,object.productWeight)}}</td>
-                                            <td>{{object.productWeight}} g</td>
-                                            <td></td>
-                                        </tr> 
-                                    </ng-container>
-                                    </table>
-                                </ng-container>
-        
-                            </ng-container>
-                            <button class="btn-workout" (click)="open(content)">Add meal</button> 
-      
-                    </div>                                 
-                </div> 
-
-
                   <!-- modale do zmiany  -->
                   <ng-template #content let-modal>
                         <div class="modal-header">
@@ -159,7 +145,4 @@
                         </div>
                     </ng-template>
 
-
-                </div>
-    </div>
 </div>
