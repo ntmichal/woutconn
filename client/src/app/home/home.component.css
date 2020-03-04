@@ -1,10 +1,9 @@
 *{
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-} 
-body {
     font-family: 'Lato', sans-serif;
-}
+} 
 
 .nav-bar{
     width: 100%;
@@ -13,6 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     border-top: 8px solid #FBA827;
+    
     
 }
 .nav-bar .nav-bar-container{
@@ -162,9 +162,87 @@ body {
 }
 
 
+/* modal */
+.create-meal-modal{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    background-color: rgba(128, 128, 128, 0.3);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    
+}
 
-
-
+.create-meal-modal .create-meal-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    width: 450px;
+    height: 450px;
+    background-color: white;
+}
+.create-meal-modal .create-meal-container .modal-title{
+    width: 450px;
+    padding: 10px 25px;
+    display: flex;
+    flex-direction: row;
+    /* height: 50px; */
+}
+.modal-title h4{
+    display: block;
+    flex-basis: 90%;
+    width: 90%;
+    font-size: 1.6rem;
+    line-height: 60px;
+    height: 60px;
+  
+}
+.modal-close-btn{
+    border: none;
+    background-color: inherit;
+    width: 10%;
+    font-size: 46px;
+    cursor: pointer;
+    display: inline-block;
+    
+}
+.create-meal-modal .create-meal-container form .meal-name{
+    width: 350px;
+    /* width: 80%; */
+    height: 30px;
+    font-size: 1.1rem;
+    padding: 5px;
+    margin: 5px;
+    border: none;
+    border-bottom: 2px solid #FBA827;
+}
+.create-meal-modal .create-meal-container .modal-add-product{
+    padding: 5px;
+    width: 350px;
+    height: 25px;
+}
+.create-meal-modal .create-meal-container .modal-add-product span{
+    display: inline-block;
+    width: 70%;
+    height: 25px;
+}
+.create-meal-modal .create-meal-container .modal-add-product button{
+    display: inline-block;
+    width: 30%;
+    height: 25px;
+    font-size: 0.9rem;
+    border: 1px solid #FBA827;
+    background-color: inherit;
+    cursor: pointer;
+    transition: ease-in-out 0.2s;
+}
+.create-meal-modal .create-meal-container .modal-add-product button:hover{
+    background-color: #FBA827;
+}
 /* old */
  .diet table{
     border-collapse: collapse;
