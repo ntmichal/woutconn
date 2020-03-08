@@ -36,7 +36,7 @@
             <ng-container  *ngFor="let object of oneMeal.mealsList; let j = index" >
               <div class="meal-product" [hidden]="tableManagment(i)">
                 <span class="product-name">{{object.product.name}}</span>
-                <span class="product-weight">Waga: 120g</span>
+                <span class="product-weight">Waga: {{object.productWeight}}g</span>
                 <ul>
                   <li>{{solveMacro(object.product.fats,object.productWeight)}} g</li>
                   <li>{{solveMacro(object.product.carbs,object.productWeight)}} g</li>
@@ -70,9 +70,60 @@
     <div class="modal-add-product">
       <span>Products</span><button>Add</button>
     </div>
+    <div class="meal-product">
+      <span class="product-name">Product 1</span>        
+      <button class="modal-delete-product">
+        &times;
+      </button>
+      <span class="product-weight">Waga: 120g</span>
+      <ul>
+        <li>10 g</li>
+        <li>10 g</li>
+        <li>19 g</li>
+        <li>220 kcal</li>
+      </ul>
+    </div>
+    
   </div>
-
 </div>
+
+<div class="create-meal-modal">
+  <div class="create-meal-container">
+    <div class="modal-title"> 
+      <h4>Find product</h4>
+      <button class="modal-close-btn">
+        &times;
+      </button>
+    </div>
+  <form>
+    <input class="meal-name" placeholder="product name" type="text">
+  </form>
+  <div class="meal-product">
+    <span class="product-name">Product 1</span>        
+    <button class="modal-delete-product">
+      &times;
+    </button>
+    <ul>
+      <li>10 g</li>
+      <li>10 g</li>
+      <li>19 g</li>
+      <li>220 kcal</li>
+    </ul>
+    <form class="insert-product-weight">
+      <label>Weight</label>
+      <input class="product-weight" placeholder="product weight grams" type="text">
+    </form>
+    </div>
+    <div class="modal-title"> 
+      <h4></h4>
+      <button class="product-add-btn">
+        <i class="fas fa-check"></i>
+      </button>
+    </div>
+
+  </div>
+</div>
+
 
 <div class="grid-container">
                   <!-- modale do zmiany  -->
