@@ -130,7 +130,7 @@ button:focus {
 }
 
 .meal-product{
-    margin: 7px;
+    height: 74px;
 }
 .meal-product .product-name{
     display: inline-block;
@@ -181,21 +181,21 @@ button:focus {
     top: 0;
     left: 0;
     z-index: 5;
-    background-color: rgba(128, 128, 128, 0.3);
     width: 100%;
     height: 100%;
-    display: flex;
+    background-color: rgba(128, 128, 128, 0.3);
     justify-content: center;
-    /* display:none; */
+    display:none;
 }
 
 .create-meal-modal .create-meal-container{
+    position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 10px;
     width: 450px;
-    height: 450px;
+    min-height: 250px;
     background-color: white;
 }
 .create-meal-modal .create-meal-container .modal-title{
@@ -223,7 +223,7 @@ button:focus {
     display: inline-block;
     
 }
-.create-meal-modal .create-meal-container form .meal-name{
+.create-meal-modal .create-meal-container .meal-name{
     width: 350px;
     /* width: 80%; */
     height: 30px;
