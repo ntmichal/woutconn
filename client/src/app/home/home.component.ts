@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DietService } from '../diet.service';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, ModalDismissReasons, NgbTypeaheadSelectItemEvent} from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import {Observable} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
@@ -14,7 +14,6 @@ import {TokenStorageService} from "../token-storage.service";
 export class HomeComponent implements OnInit {
 
   constructor(private dietService:DietService,
-    private modalService: NgbModal,
     private tokenStorageService:TokenStorageService,
     private router:Router) { }
 
@@ -26,7 +25,6 @@ export class HomeComponent implements OnInit {
 
   userGoals = [];
   userDiet:Array<any>;
-  userWorkouts:Array<any>;
   currentDate = new Date()
   prevDate = new Date(this.currentDate);
   nextDate = new Date(this.currentDate);
@@ -46,15 +44,7 @@ export class HomeComponent implements OnInit {
 
 
   //product
-  product = {
-    name : "",
-    barcode: "",
-    proteins: 0,
-    carbs: 0,
-    fats: 0,  
-    kcal: 0,
-    volume: 0,
-  }
+  product:any = null;
 
   public productName:any;
   public productProteins:any;
@@ -69,11 +59,12 @@ export class HomeComponent implements OnInit {
   public mealName = null;
   public mealDate:String;
 
+
+  
   public object = {
       name: "",
       mealDate: "",
       mealsList: []
-
   }
   
   
@@ -98,10 +89,10 @@ export class HomeComponent implements OnInit {
     this.year = cDate.getFullYear();
 
     this.mealDate = this.formatDate(this.currentDate);
-
+    
+    
     //init date
     this.initDate();
-    
   }
 
     range = {
@@ -218,23 +209,7 @@ export class HomeComponent implements OnInit {
     return Math.round(calories*100)/100;
   }
 
-  //modal open
-  
-  open(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
-  }
 
-
-  //modal logic
-
-  closeAndDiscard(){
-    this.object = {
-        name: "",
-        mealDate: "",
-        mealsList: []
-    }
-    this.mealName = "";
-  }
 
   closeAndSave(){
     if(this.object.name != "" && this.object.mealsList.length > 0){
@@ -250,6 +225,7 @@ export class HomeComponent implements OnInit {
         this.mealName = "";
        
       });
+      this.closeModal('createmealmodal');
     }else{
       alert("Error!");
     }
@@ -269,20 +245,43 @@ export class HomeComponent implements OnInit {
       debounceTime(200),
       distinctUntilChanged(),
       map(term => term.length < 2 ? []
-        : this.productList.map(x => x.name).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-    )
- 
-    addProductToMeal(){
-      if(this.model != null){
-        var productId = this.productList.map(x => x.name).indexOf(this.model);
+        : this.productList.map(x => x.name)
+        .filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)
+        .slice(0, 10))
+  )
   
-        if(productId != -1 && !isNaN(this.productWeightInMeal)){
-          this.object.mealsList.push({
-            product: this.productList[productId],
+  /**
+   * 
+   * @param element get $event when selected item in search product list 
+   */
+  selectItemFromResults(element){ 
+    var productId = this.productList.map(x => x.name).indexOf(element.item);
+    this.product  = this.productList[productId];
+  }
+
+  /**
+   *  remove selected item
+   */
+  removeItemFromResults(){
+    this.product = null;
+    this.model = null;
+    this.productWeightInMeal = null;
+  }
+
+  addProductToMeal(){
+
+      if(this.product != null){
+        if(!isNaN(this.productWeightInMeal)){
+          this.object.mealsList.push(
+            {
+            product: this.product,
             productWeight: Number(this.productWeightInMeal)
-          });
-          this.model = '';
+            }
+          );
+          this.product = null;
           this.productWeightInMeal = null;
+          this.model = '';
+          this.closeModal('addproductmodal');
         }else{
           alert('Obiekt nie istnieje!');
         }
@@ -290,33 +289,16 @@ export class HomeComponent implements OnInit {
       }else{
         alert('Chose product!');
       }
-     }
-
-     //TO DO FIX
-    addProduct(){
-      var productTMP = {
-        id : null,
-        name : this.productName,
-        barcode: "",
-        proteins: this.productProteins,
-        carbs: this.productCarbs,
-        fats: this.productFats,  
-        kcal: this.productKcal,
-        volume: this.productWeight,
-      }
-     
-      this.dietService.saveProduct(productTMP).subscribe(res => {
-        productTMP.id = res.headers.get('id') 
-        this.productList.push(productTMP);
-      });
-      // this.object.products.push(productTMP);
-
-    }
+   
+  }
 
 
-    deleteProduct(product){
-      var id = this.object.mealsList.map(x => x.product.name).indexOf(product.name);
-     this.object.mealsList.splice(id,1);
+
+
+    deleteProduct(name){
+      var id = this.object.mealsList.map(x => x.product.name).indexOf(name);
+      console.log(this.object.mealsList.map(x => x.product.name).indexOf(name));
+      this.object.mealsList.splice(id,1);
     }
 
     zmienna:any = null;
@@ -348,4 +330,30 @@ export class HomeComponent implements OnInit {
     }
 
 
+    /**
+     * open modal
+     */
+    openModal(element){
+      document.getElementById(element).style.display = 'flex';
+    }
+    /**
+     * close modal
+     */
+    closeModal(element){
+      document.getElementById(element).style.display = 'none';
+      
+    }
+      
+    /**
+     * discard changes
+     */
+    closeAndDiscard(){
+      this.object = {
+        name: "",
+        mealDate: "",
+        mealsList: []
+      }
+      this.mealName = "";
+    }
+  
 }
