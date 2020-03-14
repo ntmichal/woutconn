@@ -18,7 +18,6 @@ export class HomeComponent implements OnInit {
     private router:Router) { }
 
   userInfoJson = {
-    workouts: [],
     goals: [],
     measurements: []
   };
@@ -99,7 +98,7 @@ export class HomeComponent implements OnInit {
       starts: 0,
       ends: 0
     }
-    //date logic
+    //date
     initDate(){
  
       this.prevDate.setDate(this.prevDate.getDate() -1);
@@ -213,6 +212,7 @@ export class HomeComponent implements OnInit {
 
   closeAndSave(){
     if(this.object.name != "" && this.object.mealsList.length > 0){
+
 
       this.object.mealDate = this.formatDate(this.currentDate);
       this.userDiet.push(this.object);

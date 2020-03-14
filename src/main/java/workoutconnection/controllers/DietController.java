@@ -112,6 +112,7 @@ public class DietController {
 
 		Meal mealTmp = Meal.builder()
 				.setName(meal.getName())
+				.setMealDate(meal.getMealDate())
 				.build();
 
 		meal.getMealsList().forEach( x-> {mealTmp.addProduct(x.getProduct(),x.getProductWeight());});
@@ -121,13 +122,6 @@ public class DietController {
 
 		return ResponseEntity.accepted().body(HttpStatus.CREATED);
 	}
-//	//TODO fix this
-//	//update meal
-//	@RequestMapping(value = "/api/meal/{id}", method = RequestMethod.PUT)
-//	public void updateMeal(@RequestBody MealInfoObject meal, @PathVariable int id) {
-//		mealInfoService.updateMeal(meal);
-//	}
-////
 
 	//delete meal
 	@RequestMapping(value = "/api/meal/{id}", method = RequestMethod.DELETE)
