@@ -220,15 +220,7 @@ public class UserController {
 					.created(URI.create("/api/measurement"))
 					.body("FAILED");
 		}
-
 	}
 
-	@PostMapping(value="/api/workouts")
-	public Object saveWorkouts(@RequestHeader("Authorization") String bearerToken,
-			@RequestBody List<Map<String,Object>> workouts)
-			throws JsonParseException, JsonMappingException, IOException {
-		int id = userIdFromToken(bearerToken);
-		userInfo.saveWorkouts(workouts, id);
-		return workouts;
-	}
+
 }
