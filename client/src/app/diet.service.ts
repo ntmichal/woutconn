@@ -63,16 +63,4 @@ export class DietService {
     return this._http.get(uri);
   }
 
-
-  saveWorkout(object){
-    const uri = "http://localhost:8080/api/workouts";
-    return this._http.post(uri,object);
-  }
-
-  deleteWorkout(id){
-    const uri = "http://localhost:8080/api/workouts";
-    return this._http.delete(uri);
-  }
-
-
 }

@@ -13,16 +13,10 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {DietService} from './diet.service';
 import {TokenStorageService} from './token-storage.service';
 import {AuthService} from './auth.service';
-
-
 import { Globals } from './globals';
-
 import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { WorkoutmanagerComponent } from './workoutmanager/workoutmanager.component';
-
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { FilterPipe } from './filter.pipe';
-
 import {ReactiveFormsModule } from '@angular/forms';
 
 
@@ -31,7 +25,6 @@ import {ReactiveFormsModule } from '@angular/forms';
     AppComponent,
     LoginComponent,
     HomeComponent,
-    WorkoutmanagerComponent,
     FilterPipe
   ],
   imports: [

@@ -28,30 +28,17 @@ public class UserInfoService implements IUserInfo {
 		return userInfoDAO.getAllGoals(userid);
 	}
 
-	@Override
-	public Object getWorkouts(int userid)
-			throws JsonParseException, JsonMappingException, IOException {
-		return userInfoDAO.getWorkouts(userid);
-	}
 
 	@Override
 	public Object getUserInfo(int userid)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		Map<Object,Object> userInfo = new HashMap<Object,Object>();
-		userInfo.put("workouts",this.getWorkouts(userid));
 		userInfo.put("goals",this.getAllGoals(userid));
 		userInfo.put("measurements",this.getMeasurement(userid));
 
 		return userInfo;
 	}
-
-	@Override
-	public void saveWorkouts(List<Map<String,Object>> workouts, int userid)
-			throws JsonGenerationException, JsonMappingException, IOException {
-		userInfoDAO.saveWorkouts(workouts, userid);
-	}
-
 
 	@Override
 	public List<Measurement> getMeasurement(int userid) {
