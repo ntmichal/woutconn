@@ -3,6 +3,7 @@ package workoutconnection.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +35,18 @@ public class MealInfoDAO implements IMealInfoDAO {
 
     @Override
 	public List<Meal> getAllMeals(int userId){
-	    String HQL = "From Meal WHERE user_id = :user_id";
-	    List<Meal> mealsList = (List<Meal>)entityManager
-                .createQuery(HQL)
-                .setParameter("user_id",userId)
-                .getResultList();
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Meal> mealCriteriaQuery = cb.createQuery(Meal.class);
+		Root<Meal> meal = mealCriteriaQuery.from(Meal.class);
 
-        return mealsList;
+		Subquery<User> subquery = mealCriteriaQuery.subquery(User.class);
+		Root<User> user = subquery.from(User.class);
+		subquery.select(user).where(cb.equal(user.get("id"),userId));
+
+		mealCriteriaQuery.select(meal).where(cb.in(meal.get("user")).value(subquery));
+
+		return (List<Meal>)entityManager.createQuery(mealCriteriaQuery).getResultList();
+
 	}
 
 
