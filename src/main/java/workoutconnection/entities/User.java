@@ -20,7 +20,7 @@ public class User implements UserDetails{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private int id;
+    private Integer id;
 
     @Column(name = "USER_NAME")
     private String username;
@@ -88,81 +88,57 @@ public class User implements UserDetails{
 		this.mealList = mealList;
 	}
 
-	public int getId() {
+	public Integer getId(){
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
-
-
 
 	public String getUsername() {
 		return username;
 	}
 
-
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-
 
 	public String getPassword() {
 		return password;
 	}
 
-
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-
 
 	public boolean isAccountExpired() {
 		return accountExpired;
 	}
 
-
-
 	public void setAccountExpired(boolean accountExpired) {
 		this.accountExpired = accountExpired;
 	}
-
-
 
 	public boolean isAccountLocked() {
 		return accountLocked;
 	}
 
-
-
 	public void setAccountLocked(boolean accountLocked) {
 		this.accountLocked = accountLocked;
 	}
-
-
 
 	public boolean isCredentialsExpired() {
 		return credentialsExpired;
 	}
 
-
-
 	public void setCredentialsExpired(boolean credentialsExpired) {
 		this.credentialsExpired = credentialsExpired;
 	}
 
-
-
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-
-
 
 	public String getEmail() {
 		return email;
@@ -182,23 +158,18 @@ public class User implements UserDetails{
 		return (Collection<? extends GrantedAuthority>) authorityList;
 	}
 
-
-
 	@Override
 	public boolean isAccountNonExpired() {
-
 		return !this.accountExpired;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-
 		return !this.accountLocked;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-
 		return !this.credentialsExpired;
 	}
 
@@ -214,4 +185,45 @@ public class User implements UserDetails{
 	public void setAuthorityList(List<Authority> authorityList) {
 		this.authorityList = authorityList;
 	}
+
+	public static final UserBuilder builder(){
+		return new UserBuilder();
+	}
+	private static class UserBuilder{
+		private Integer id;
+		private String username;
+		private String password;
+		private String email;
+
+		public UserBuilder setId(Integer id) {
+			this.id = id;
+			return this;
+		}
+
+		public UserBuilder setUsername(String username) {
+			this.username = username;
+			return this;
+		}
+
+		public UserBuilder setPassword(String password) {
+			this.password = password;
+			return this;
+		}
+
+		public UserBuilder setEmail(String email) {
+			this.email = email;
+			return this;
+		}
+
+		public User build(){
+			User user = new User();
+			user.setId(this.id);
+			user.setUsername(this.username);
+			user.setPassword(this.password);
+			user.setEmail(this.email);
+			user.setEnabled(true);
+			return user;
+		}
+	}
+
 }
