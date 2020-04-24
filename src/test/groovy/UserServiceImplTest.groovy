@@ -2,6 +2,7 @@ package workoutconnection.service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.TestPropertySource
 import spock.lang.Specification
 import workoutconnection.entities.User
 
@@ -15,6 +16,7 @@ import javax.transaction.Transactional
 
 @Transactional
 @SpringBootTest
+@TestPropertySource(locations =  "classpath:application-test.properties")
 class UserServiceImplTest extends Specification {
 
     @Autowired
