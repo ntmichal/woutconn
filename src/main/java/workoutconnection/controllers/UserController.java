@@ -59,8 +59,6 @@ public class UserController {
 	@Autowired
 	private UserServiceImpl userServiceImpl;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -70,27 +68,27 @@ public class UserController {
 
     
 
-	@RequestMapping(value="/api/signin", method = RequestMethod.POST)
-	public ResponseEntity<Object> singInUser(@RequestBody UserLogin userLogin)
-			throws AuthenticationException {
-
-
-		User user = (User)userServiceImpl.loadUserByUsername(userLogin.getUsername());
-		if(user == null){
-			return ResponseEntity.status(401).body("User not exist");
-		}
-		final Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-						userLogin.getUsername(),
-						userLogin.getPassword()
-				)
-		);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-       final String token = tokenProvider.generateToken(authentication,user);
-        return ResponseEntity.ok(new Token(token));
-
-    }
+//	@RequestMapping(value="/api/signin", method = RequestMethod.POST)
+//	public ResponseEntity<Object> singInUser(@RequestBody UserLogin userLogin)
+//			throws AuthenticationException {
+//
+//
+//		User user = (User)userServiceImpl.loadUserByUsername(userLogin.getUsername());
+//		if(user == null){
+//			return ResponseEntity.status(401).body("User not exist");
+//		}
+//		final Authentication authentication = authenticationManager.authenticate(
+//				new UsernamePasswordAuthenticationToken(
+//						userLogin.getUsername(),
+//						userLogin.getPassword()
+//				)
+//		);
+//		SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//       final String token = tokenProvider.generateToken(authentication,user);
+//        return ResponseEntity.ok(new Token(token));
+//
+//    }
 
 	@RequestMapping(value="/api/signup", method = RequestMethod.POST)
 	public ResponseEntity<Object> singUpUser(@RequestBody UserLogin userLogin){

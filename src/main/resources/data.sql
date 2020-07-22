@@ -16,8 +16,8 @@ INSERT INTO "AUTHORITIES" VALUES
 (4, 'ROLE_USER');
 
 INSERT INTO "USERS" VALUES
-(1, FALSE, FALSE, FALSE, 'admin@gmail.com', TRUE, '$2a$10$sarwiTVmQk/TNkUgSCmTuu9Xx8fdPgQCNp8CO6YKl2bWYjkt/Xzm2', 'ADMIN'),
-(2, FALSE, FALSE, FALSE, 'admin2@gmail.com', TRUE, '$2a$10$mbiICv6XHRGLcKE6UxbmKux3BE96Igx8Nv4HDaNiGdgK0Ap5H4RxK', 'ADMIN2');
+(1, FALSE, FALSE, FALSE, 'admin@gmail.com', TRUE, '$2a$10$sarwiTVmQk/TNkUgSCmTuu9Xx8fdPgQCNp8CO6YKl2bWYjkt/Xzm2', 'admin'),
+(2, FALSE, FALSE, FALSE, 'admin2@gmail.com', TRUE, '$2a$10$mbiICv6XHRGLcKE6UxbmKux3BE96Igx8Nv4HDaNiGdgK0Ap5H4RxK', 'admin2');
 
 INSERT INTO "AUTHORITIES_LIST" VALUES
 (1, 1),
