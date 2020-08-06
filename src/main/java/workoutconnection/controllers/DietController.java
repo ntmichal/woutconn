@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
-import workoutconnection.config.TokenProvider;
 import workoutconnection.dao.UserInfoDAO;
 import workoutconnection.entities.*;
 import workoutconnection.service.MealInfoService;
@@ -31,14 +31,10 @@ import javax.persistence.EntityManager;
 public class DietController {
 
 	@Autowired
-	private TokenProvider tokenProvider;
-	@Autowired
 	private ProductService productService;
 	@Autowired
 	private MealInfoService mealInfoService;
 
-	@Autowired
-	private EntityManager entityManager;
 	@Autowired
 	private UserInfoDAO userDAO;
 
@@ -71,7 +67,7 @@ public class DietController {
 		productService.deleteById(id);
 	}
 
-	//update product only from admin panel, function for admins/morderators
+
 	@RequestMapping(value = "/api/product/{id}", method = RequestMethod.PUT)
 	public void updateProduct(@RequestBody Product product, @PathVariable int id){
 		product.setId(id);
@@ -83,20 +79,17 @@ public class DietController {
 	 *
 	 * @return list of meals
 	 */
-	//TODO fix me
 	@RequestMapping(value = "/api/meal", method = RequestMethod.GET)
-	public List<Meal> mealsList(@RequestHeader("Authorization") String bearerToken){
-		String token = bearerToken.replace("Bearer ", "");
-		Claims userToken = tokenProvider.getAllClaimsFromToken(token);
-		int idFromToken = userToken.get("id", Integer.class);
+	public List<Meal> mealsList(){
 
-		return mealInfoService.getAllMeals(idFromToken);
+		User user =
+				(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		return mealInfoService.getAllMeals(user.getId());
 
 	}
 
-
 	//get 1
-	//TODO fix me
 	@RequestMapping(value = "/api/meal/{userid}/{id}", method = RequestMethod.GET)
 	public Meal getMeal(@PathVariable int userid, @PathVariable int id) {
 		return mealInfoService.getMeal(id);
@@ -104,11 +97,11 @@ public class DietController {
 
 	//insert meal
 	@RequestMapping(value = "/api/meal", method = RequestMethod.POST)
-	public ResponseEntity<Object> createMeal(@RequestHeader("Authorization") String token, @RequestBody Meal meal){
+	public ResponseEntity<Object> createMeal(@RequestBody Meal meal){
 
-		int idFromToken = tokenProvider
-				.getAllClaimsFromToken(token.replace("Bearer ", ""))
-				.get("id", Integer.class);
+		User user =
+				(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
 
 		Meal mealTmp = Meal.builder()
 				.setName(meal.getName())
@@ -117,8 +110,7 @@ public class DietController {
 
 		meal.getMealsList().forEach( x-> {mealTmp.addProduct(x.getProduct(),x.getProductWeight());});
 
-		mealInfoService.insertMeal(mealTmp,idFromToken);
-
+		mealInfoService.insertMeal(mealTmp,user.getId());
 
 		return ResponseEntity.accepted().body(HttpStatus.CREATED);
 	}
