@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     login: null,
     email: null,
     password: null
-    }
+  }
 
   closeResult:string;
   username:string;
@@ -44,12 +44,12 @@ export class LoginComponent implements OnInit {
  
   authenticate(){
     const loginForm = this.loginForm.value;
-    this.authService.authenticate(loginForm.login, loginForm.password).subscribe(res =>{
-      this.tokenStorage.saveToken(res.token);
+    this.authService.login(loginForm.login, loginForm.password).subscribe(data =>{
+      this.tokenStorage.saveToken(JSON.stringify(data));
       this.loginForm.reset();
       this.router.navigate(['home']);
     },err =>{
-      // this.serverMessages = err.error;
+      console.log(err.error);
     });
   }
 
