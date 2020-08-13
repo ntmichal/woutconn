@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,10 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,17 +27,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 
 import io.jsonwebtoken.Claims;
-import workoutconnection.config.TokenProvider;
 import workoutconnection.entities.Authority;
 import workoutconnection.entities.Measurement;
 import workoutconnection.entities.User;
 import workoutconnection.entities.UserGoals;
-import workoutconnection.models.Token;
 import workoutconnection.models.UserLogin;
 import workoutconnection.service.IUserInfo;
 import workoutconnection.service.UserServiceImpl;
@@ -60,37 +52,8 @@ public class UserController {
 	private UserServiceImpl userServiceImpl;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private TokenProvider tokenProvider;
-
-    @Autowired
     private IUserInfo userInfo;
 
-    
-
-	@RequestMapping(value="/api/signin", method = RequestMethod.POST)
-	public ResponseEntity<Object> singInUser(@RequestBody UserLogin userLogin)
-			throws AuthenticationException {
-
-
-		User user = (User)userServiceImpl.loadUserByUsername(userLogin.getUsername());
-		if(user == null){
-			return ResponseEntity.status(401).body("User not exist");
-		}
-		final Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-						userLogin.getUsername(),
-						userLogin.getPassword()
-				)
-		);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-       final String token = tokenProvider.generateToken(authentication,user);
-        return ResponseEntity.ok(new Token(token));
-
-    }
 
 	@RequestMapping(value="/api/signup", method = RequestMethod.POST)
 	public ResponseEntity<Object> singUpUser(@RequestBody UserLogin userLogin){
@@ -161,27 +124,19 @@ public class UserController {
 
 	}
 
-
-
-	private int userIdFromToken(String bearerToken) {
-		String token = bearerToken.replace("Bearer ", "");
-		Claims userToken = tokenProvider.getAllClaimsFromToken(token);
-		return  userToken.get("id", Integer.class);
-	}
-
 	@RequestMapping(value = "/api/userinfojson", method=RequestMethod.GET)
-	public Object returnUserJson(@RequestHeader("Authorization") String bearerToken)
-			throws JsonGenerationException, JsonMappingException, IOException {
-		int id = userIdFromToken(bearerToken);
-		return userInfo.getUserInfo(id);
+	public Object returnUserJson() throws IOException {
+		User user =
+				(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return userInfo.getUserInfo(user.getId());
 	}
 
 
 	@PostMapping(value="/api/usergoals")
-	public void insertGoals(@RequestHeader("Authorization") String bearerToken,
-			@RequestBody UserGoals userGoals) {
-		int id = userIdFromToken(bearerToken);
-		userInfo.insertGoals(userGoals, id);
+	public void insertGoals(@RequestBody UserGoals userGoals) {
+		User user =
+				(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		userInfo.insertGoals(userGoals, user.getId());
 	}
 
 	@PutMapping(value="/api/usergoals")
@@ -194,33 +149,7 @@ public class UserController {
 		userInfo.deleteGoals(userGoals);
 	}
 
-	@PostMapping(value="/api/measurement")
-	public void insertMeasurement(@RequestHeader("Authorization") String bearerToken,
-			@RequestBody Measurement measurement) {
-		int id = userIdFromToken(bearerToken);
-		userInfo.insertMeasurement(measurement, id);
-	}
 
-	@PutMapping(value="/api/measurement")
-	public void updateMeasurement(@RequestBody Measurement measurement) {
-		userInfo.updateMeasurement(measurement);
-	}
-
-
-	@DeleteMapping(value="/api/measurement")
-	public ResponseEntity<Object> deleteMeasurement(@RequestBody Measurement measurement) {
-
-		boolean result = userInfo.deleteMeasurement(measurement);
-		if(result) {
-			return ResponseEntity
-					.created(URI.create("/api/measurement"))
-					.body("SUCCESFULL");
-		}else {
-			return ResponseEntity
-					.created(URI.create("/api/measurement"))
-					.body("FAILED");
-		}
-	}
 
 
 }
