@@ -8,7 +8,6 @@ import { HomeComponent } from './home/home.component';
 
 import { FormsModule } from '@angular/forms';
 import {RouteModule} from './route/route.module';
-import {Interceptor} from "./interceptor";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {DietService} from './diet.service';
 import {TokenStorageService} from './token-storage.service';
@@ -36,10 +35,7 @@ import {ReactiveFormsModule } from '@angular/forms';
     ScrollingModule,
     ReactiveFormsModule
   ],
-  providers: [Globals, DietService, AuthService, TokenStorageService, TokenStorageService,
-    {provide: HTTP_INTERCEPTORS,
-    useClass: Interceptor,
-    multi : true}
+  providers: [Globals, DietService, AuthService, TokenStorageService
   ],
   bootstrap: [AppComponent]
 })
