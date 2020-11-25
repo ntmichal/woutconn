@@ -5,9 +5,8 @@ tracking diet
 
 
 * SpringBoot
- * REST, JPA
+* REST, JPA
 * Angular
-* JWT
 * H2 Database
 * [Maven](https://maven.apache.org/)
 
