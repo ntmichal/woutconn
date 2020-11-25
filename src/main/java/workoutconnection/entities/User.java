@@ -49,8 +49,8 @@ public class User implements UserDetails{
 		CascadeType.MERGE},
 		fetch = FetchType.EAGER)
 	@JoinTable(name="authoritiesList",
-		joinColumns = @JoinColumn(name="authority_id"),
-		inverseJoinColumns = @JoinColumn(name = "user_id")
+		joinColumns = @JoinColumn(name="user_id"), //właściciel realcji
+		inverseJoinColumns = @JoinColumn(name = "authority_id") // druga część relacji
 	)
     private List<Authority> authorityList;
 
