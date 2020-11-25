@@ -25,11 +25,8 @@ public class Authority implements GrantedAuthority{
 	@Column(name="users")
 	@ManyToMany(cascade = {CascadeType.PERSIST,
 							CascadeType.MERGE},
-				fetch = FetchType.EAGER)
-	@JoinTable(name="authoritiesList",
-				joinColumns = @JoinColumn(name="user_id"),
-				inverseJoinColumns = @JoinColumn(name = "authority_id")
-	)
+				fetch = FetchType.EAGER,
+				mappedBy = "authorityList")
 	private List<User> usersList;
 
 	public int getId() {
