@@ -51,4 +51,15 @@ public class ProductDAO implements IProductDAO{
 		entityManager.merge(product);
 	}
 
+
+	public List<Product> findProductByName(String productName) {
+		List<Product> products = (List<Product>)entityManager
+				.createQuery("FROM Product " +
+						"WHERE lower(name) LIKE lower(:param)")
+				.setParameter("param","%"+productName + "%")
+				.getResultList();
+		return products;
+
+
+	}
 }
