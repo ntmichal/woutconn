@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import workoutconnection.dao.ProductDAO;
 import workoutconnection.entities.Product;
 import workoutconnection.service.IProductService;
 
@@ -42,15 +41,16 @@ public class ProductController {
 
 
 
-    @RequestMapping(value = "/api/product/", method = RequestMethod.POST)
-    public ResponseEntity<Object> createProduct(@RequestBody Product product){
+    @PostMapping
+    public ResponseEntity createProduct(@RequestBody Product product){
         Product savedProduct = productService.insertProduct(product);
 
         //response path
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedProduct.getId()).toUri();
 
-        return ResponseEntity.created(location).header("id", Integer.toString(savedProduct.getId())).build();
+        return ResponseEntity.created(location).build();
+
     }
 
 
