@@ -11,6 +11,7 @@ public interface IProductDAO {
 	 */
 	List<Product> getAllProducts();
 
+	List<Product> findProductByName(String productName);
 	/**
 	 *
 	 * @param id of single record in database
@@ -23,4 +24,5 @@ public interface IProductDAO {
 	void deleteById(int id);
 
 	void update(Product product);
+
 }
