@@ -31,48 +31,11 @@ import javax.persistence.EntityManager;
 public class DietController {
 
 	@Autowired
-	private ProductService productService;
-	@Autowired
 	private MealInfoService mealInfoService;
 
 	@Autowired
 	private UserInfoDAO userDAO;
 
-
-
-	@RequestMapping(value = "/api/product/list", method = RequestMethod.GET)
-	public List<Product> productList(){
-
-		return productService.getAllProducts();
-	}
-
-
-	@RequestMapping(value = "/api/product/", method = RequestMethod.POST)
-	public ResponseEntity<Object> createProduct(@RequestBody Product product){
-		Product savedProduct = productService.insertProduct(product);
-
-		//response path
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(savedProduct.getId()).toUri();
-
-
-		return ResponseEntity.created(location).header("id", Integer.toString(savedProduct.getId())).build();
-
-
-	}
-
-	//TODO delete product only from admin panel, function for admins/moderators
-	@RequestMapping(value = "/api/product/{id}", method = RequestMethod.DELETE)
-	public void deleteProduct(@PathVariable int id) {
-		productService.deleteById(id);
-	}
-
-
-	@RequestMapping(value = "/api/product/{id}", method = RequestMethod.PUT)
-	public void updateProduct(@RequestBody Product product, @PathVariable int id){
-		product.setId(id);
-		productService.update(product);
-	}
 
 
 	/**
