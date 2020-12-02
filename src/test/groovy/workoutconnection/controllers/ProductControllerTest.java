@@ -61,6 +61,7 @@ class ProductControllerTest {
                 mock.getResponse().getContentAsString(),
                 new TypeReference<List<Product>>() {}
         );
+        assertEquals(productFromDatabase.size(), ONE_PRODUCT);
     }
 
     @Test
