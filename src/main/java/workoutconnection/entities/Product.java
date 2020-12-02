@@ -1,6 +1,8 @@
 package workoutconnection.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.modelmapper.ModelMapper;
+import workoutconnection.dto.ProductDto;
 
 import java.io.Serializable;
 import java.util.*;
@@ -12,10 +14,11 @@ import javax.persistence.*;
 @Table(name="Product")
 public class Product {
 
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private int id;
+	private Long id;
 
 	@Column(name="name")
 	private String name;
@@ -45,12 +48,15 @@ public class Product {
 	@JsonIgnore
 	private List<MealsList> mealsList = new ArrayList<>();
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+
+	public Product setId(Long id) {
 		this.id = id;
+		return this;
 	}
+
 	public String getName() {
 		return name;
 	}
@@ -95,6 +101,12 @@ public class Product {
 		this.volume = volume;
 	}
 
+	public ProductDto convertToDto(){
+		ModelMapper modelMapper = new ModelMapper();
+		ProductDto productDto = modelMapper.map(this,ProductDto.class);
+		return productDto;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -134,7 +146,7 @@ public class Product {
     }
 	public static final class ProductBuilder{
 
-        private int id;
+        private Long id;
         private String name;
         private String barcode;
         private float proteins;
@@ -143,7 +155,7 @@ public class Product {
         private float kcal;
         private float volume;
 
-        public ProductBuilder setId(int id){
+        public ProductBuilder setId(Long id){
             this.id = id;
             return  this;
         }
@@ -171,7 +183,7 @@ public class Product {
             this.kcal = kcal;
             return this;
         }
-        public ProductBuilder setVolume(String name){
+        public ProductBuilder setVolume(float volume){
             this.volume = volume;
             return this;
         }
