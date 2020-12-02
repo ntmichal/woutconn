@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.Product;
 import workoutconnection.service.IProductService;
 
@@ -25,7 +26,7 @@ public class ProductController {
 
     @GetMapping()
     public ResponseEntity getProduct(@RequestParam("name") String name){
-        List<Product> foundProducts = productService.findProductByName(name);
+        List<ProductDto> foundProducts = productService.findProductByName(name);
         if(foundProducts.size() == 0){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -34,16 +35,15 @@ public class ProductController {
 
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<Product> productList(){
-
+    public List<ProductDto> productList(){
         return productService.getAllProducts();
     }
 
 
 
     @PostMapping
-    public ResponseEntity createProduct(@RequestBody Product product){
-        Product savedProduct = productService.insertProduct(product);
+    public ResponseEntity createProduct(@RequestBody ProductDto product){
+        ProductDto savedProduct = productService.insertProduct(product);
 
         //response path
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -62,7 +62,7 @@ public class ProductController {
 
 
     @RequestMapping(value = "/api/product/{id}", method = RequestMethod.PUT)
-    public void updateProduct(@RequestBody Product product, @PathVariable int id){
+    public void updateProduct(@RequestBody Product product, @PathVariable Long id){
         product.setId(id);
         productService.update(product);
     }

@@ -2,19 +2,20 @@ package workoutconnection.service;
 
 import java.util.List;
 
+import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.Product;
 
 public interface IProductService {
 
-	List<Product> getAllProducts();
+	List<ProductDto> getAllProducts();
 
-	Product getProduct(int id);
+	ProductDto getProduct(int id);
 
-	Product insertProduct(Product product);
+	ProductDto insertProduct(ProductDto product);
 
 	void deleteById(int id);
 
 	void update(Product product);
 
-	List<Product> findProductByName(String productName);
+	List<ProductDto> findProductByName(String productName);
 }

@@ -1,11 +1,14 @@
 package workoutconnection.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import workoutconnection.dao.IProductDAO;
+import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.Product;
 
 @Service
@@ -13,18 +16,25 @@ public class ProductService implements IProductService {
 
 	@Autowired
 	private IProductDAO productDAO;
-	@Override
-	public List<Product> getAllProducts() {
 
-		return productDAO.getAllProducts();
+
+	@Override
+	public List<ProductDto> getAllProducts() {
+
+		return productDAO.getAllProducts()
+				.stream()
+				.map(Product::convertToDto)
+				.collect(Collectors.toList());
 	}
 	@Override
-	public Product getProduct(int id) {
-		return productDAO.getProduct(id);
+	public ProductDto getProduct(int id) {
+		return productDAO.getProduct(id).convertToDto();
 	}
 	@Override
-	public Product insertProduct(Product product) {
-		productDAO.save(product);
+	public ProductDto insertProduct(ProductDto product) {
+		Product productToSave = product.convertToEntity();
+		productToSave.setId(null);
+		productDAO.save(productToSave);
 
 		return product;
 	}
@@ -40,8 +50,15 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public List<Product> findProductByName(String productName) {
-		return productDAO.findProductByName(productName);
+	public List<ProductDto> findProductByName(String productName) {
+
+		List<Product> products = productDAO.findProductByName(productName);
+		List<ProductDto> productDtoList = products
+				.stream()
+				.map(Product::convertToDto)
+				.collect(Collectors.toList());
+
+		return productDtoList;
 	}
 
 }
