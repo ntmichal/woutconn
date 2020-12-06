@@ -61,8 +61,9 @@ public class ProductController {
     }
 
 
+    //TODO zabezpieczyć odpowiednio
     @RequestMapping(value = "/api/product/{id}", method = RequestMethod.PUT)
-    public void updateProduct(@RequestBody Product product, @PathVariable Long id){
+    public void updateProduct(@RequestBody ProductDto product, @PathVariable Long id){
         product.setId(id);
         productService.update(product);
     }

@@ -44,7 +44,8 @@ public class ProductService implements IProductService {
 
 	}
 	@Override
-	public void update(Product product) {
+	public void update(ProductDto productDto) {
+		Product product = productDto.convertToEntity();
 		productDAO.update(product);
 
 	}
