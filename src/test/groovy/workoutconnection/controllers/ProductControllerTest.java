@@ -3,14 +3,18 @@ package workoutconnection.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.util.Base64Utils;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.Product;
 
 import java.util.List;
@@ -37,6 +41,28 @@ class ProductControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+
+    private String getAccessToken(String login, String password) throws Exception {
+        String auth = "client:clientsecret";
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type","password");
+        params.add("username",login);
+        params.add("password",password);
+
+        MvcResult result = mockMvc.perform(post("/oauth/token")
+                    .params(params)
+                    .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(auth.getBytes()))
+                    .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String resultString = result.getResponse().getContentAsString();
+
+        JacksonJsonParser jsonParser = new JacksonJsonParser();
+        return jsonParser.parseMap(resultString).get("access_token").toString();
+
+    }
 
     @Test
     void anyProductNotFound() throws Exception{
@@ -76,8 +102,8 @@ class ProductControllerTest {
     }
 
     @Test
-    void insertNewProduct_Unauthorized() throws Exception{
-        Product product = new Product();
+    void notAuthenticated_insertNewProduct() throws Exception{
+        ProductDto product = new ProductDto();
 
        mockMvc.perform(post("/api/product")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -85,4 +111,32 @@ class ProductControllerTest {
                 .andExpect(status().isUnauthorized());
 
     }
+
+    @Test
+    void isAuthenticated_invaildRole_thenForbridden() throws Exception {
+        String token = "Bearer " + getAccessToken("admin2","admin");
+
+        ProductDto productDto = new ProductDto();
+
+        mockMvc.perform(post("/api/product")
+                .header(HttpHeaders.AUTHORIZATION, token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(productDto)))
+                .andExpect(status().isForbidden());
+
+    }
+
+    @Test
+    void isAuthenticated_validRole_thenCreated() throws Exception{
+        String token = "Bearer " + getAccessToken("admin","admin");
+
+        ProductDto productDto = new ProductDto();
+
+        mockMvc.perform(post("/api/product")
+                    .header(HttpHeaders.AUTHORIZATION, token)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(productDto)))
+                .andExpect(status().isCreated());
+    }
+
 }
