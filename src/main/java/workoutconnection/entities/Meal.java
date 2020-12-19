@@ -28,7 +28,7 @@ public class Meal {
 
 	private List<MealsList> mealsList = new ArrayList<>();
 
-	private  Meal(){};
+	public Meal(){};
 	public Meal(String name, List<MealsList> mealsList) {
 		this.name = name;
 		this.mealsList = mealsList;
