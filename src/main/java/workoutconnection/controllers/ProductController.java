@@ -54,10 +54,15 @@ public class ProductController {
     }
 
 
-    //TODO delete product only from admin panel, function for admins/moderators
-    @RequestMapping(value = "/api/product/{id}", method = RequestMethod.DELETE)
-    public void deleteProduct(@PathVariable int id) {
-        productService.deleteById(id);
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity deleteProduct(@PathVariable Long id) {
+        try{
+            productService.getProduct(id);
+            productService.deleteById(id);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
 
