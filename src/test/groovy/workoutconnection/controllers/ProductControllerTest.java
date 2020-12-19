@@ -20,8 +20,7 @@ import workoutconnection.entities.Product;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,6 +34,14 @@ class ProductControllerTest {
     static final String PRODUCT_ONE_FOUND = "dark chocolate";
     static final String PRODUCT_MANY_FOUND = "milk";
 
+    static final String USER_NAME_WITH_USER_ROLE = "admin2";
+    static final String USER_PASSWORD_WITH_USER_ROLE = "admin";
+
+    static final String USER_NAME_WITH_ADMIN_ROLE = "admin";
+    static final String USER_PASSWORD_WITH_ADMIN_ROLE = "admin";
+
+    static final int PRODUCT_ID = 1;
+    static final int PRODUCT_ID_NOT_FOUND = 0;
     @Autowired
     private MockMvc mockMvc;
 
@@ -114,7 +121,7 @@ class ProductControllerTest {
 
     @Test
     void isAuthenticated_invaildRole_thenForbridden() throws Exception {
-        String token = "Bearer " + getAccessToken("admin2","admin");
+        String token = "Bearer " + getAccessToken(USER_NAME_WITH_USER_ROLE,USER_PASSWORD_WITH_USER_ROLE);
 
         ProductDto productDto = new ProductDto();
 
@@ -128,7 +135,7 @@ class ProductControllerTest {
 
     @Test
     void isAuthenticated_validRole_thenCreated() throws Exception{
-        String token = "Bearer " + getAccessToken("admin","admin");
+        String token = "Bearer " + getAccessToken(USER_NAME_WITH_ADMIN_ROLE,USER_PASSWORD_WITH_ADMIN_ROLE);
 
         ProductDto productDto = new ProductDto();
 
@@ -137,6 +144,31 @@ class ProductControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(productDto)))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    void deleteProduct_notAuthenticated() throws Exception {
+        mockMvc.perform(delete("/api/product/"+PRODUCT_ID))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+
+    }
+    @Test
+    void deleteProduct_isAuthenticated_validRole_thenNotFound() throws Exception{
+        String token = "Bearer " + getAccessToken(USER_NAME_WITH_ADMIN_ROLE,USER_PASSWORD_WITH_ADMIN_ROLE);
+        mockMvc.perform(delete("/api/product/"+PRODUCT_ID_NOT_FOUND)
+                    .header(HttpHeaders.AUTHORIZATION, token))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void deleteProduct_isAuthenticated_validRole_thenDeleted() throws Exception{
+        String token = "Bearer " + getAccessToken(USER_NAME_WITH_ADMIN_ROLE,USER_PASSWORD_WITH_ADMIN_ROLE);
+        mockMvc.perform(delete("/api/product/"+PRODUCT_ID)
+                    .header(HttpHeaders.AUTHORIZATION, token))
+                .andExpect(status().isOk());
+
     }
 
 }
