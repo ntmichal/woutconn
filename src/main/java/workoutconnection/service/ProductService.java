@@ -27,7 +27,7 @@ public class ProductService implements IProductService {
 				.collect(Collectors.toList());
 	}
 	@Override
-	public ProductDto getProduct(int id) {
+	public ProductDto getProduct(Long id) {
 		return productDAO.getProduct(id).convertToDto();
 	}
 	@Override
@@ -39,7 +39,7 @@ public class ProductService implements IProductService {
 		return product;
 	}
 	@Override
-	public void deleteById(int id) {
+	public void deleteById(Long id) {
 		productDAO.deleteById(id);
 
 	}

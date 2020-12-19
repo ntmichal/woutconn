@@ -17,11 +17,11 @@ public interface IProductDAO {
 	 * @param id of single record in database
 	 * @return	return single object Product
 	 */
-	Product getProduct(int id);
+	Product getProduct(Long id);
 
 	Product save(Product product);
 
-	void deleteById(int id);
+	void deleteById(Long id);
 
 	void update(Product product);
 
