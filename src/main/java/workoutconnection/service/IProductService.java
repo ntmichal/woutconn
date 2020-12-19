@@ -9,11 +9,11 @@ public interface IProductService {
 
 	List<ProductDto> getAllProducts();
 
-	ProductDto getProduct(int id);
+	ProductDto getProduct(Long id);
 
 	ProductDto insertProduct(ProductDto product);
 
-	void deleteById(int id);
+	void deleteById(Long id);
 
 	void update(ProductDto product);
 

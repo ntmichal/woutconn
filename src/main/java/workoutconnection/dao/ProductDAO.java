@@ -33,14 +33,14 @@ public class ProductDAO implements IProductDAO{
 	}
 
 	@Override
-	public Product getProduct(int id) {
+	public Product getProduct(Long id) {
 		return (Product)entityManager.createQuery("From Product WHERE id = :id")
                 .setParameter("id",id)
                 .getSingleResult();
 	}
 
 	@Override
-	public void deleteById(int id) {
+	public void deleteById(Long id) {
 		Product p = entityManager.find(Product.class, id);
 		entityManager.remove(p);
 
