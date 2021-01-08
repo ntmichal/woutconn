@@ -1,5 +1,6 @@
 package workoutconnection.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -50,6 +51,16 @@ public class MealInfoDAO implements IMealInfoDAO {
 	}
 
 
+	@Override
+	public List<Meal> getMealByDate(int userId, LocalDate localDate) {
+
+		return (List<Meal>)entityManager.createQuery("From Meal WHERE mealDate = :mealDate AND user.id = :userId")
+				.setParameter("mealDate", localDate)
+				.setParameter("userId",userId)
+				.getResultList();
+
+
+	}
 
 	@Override
 	public Meal getMeal(int id) {
