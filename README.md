@@ -11,7 +11,9 @@ tracking diet
 * [Maven](https://maven.apache.org/)
 * Docker
 
-work in progress..
+API documentation
+
+https://ntmichal.github.io/diet-tracker-api-swagger/
 
 ##### Clone source code from git
 ```
