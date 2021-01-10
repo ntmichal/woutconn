@@ -27,4 +27,3 @@ docker build -t diet-tracker .
 ##### Run Docker Container
 ```
 docker run -p 8080:8080 -it --rm diet-tracker:latest
-```
