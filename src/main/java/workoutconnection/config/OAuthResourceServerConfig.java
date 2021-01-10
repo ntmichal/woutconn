@@ -23,6 +23,7 @@ public class OAuthResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/api/product","/api/product/list").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/product").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/product").hasRole("ADMIN")
+                .antMatchers("/api/meal/{userId}/list").hasRole("USER")
                 .anyRequest().authenticated();
 
     }
