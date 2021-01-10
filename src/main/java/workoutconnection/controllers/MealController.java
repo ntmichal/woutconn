@@ -51,7 +51,12 @@ public class MealController {
 
 	@GetMapping(value = "/api/meal/{userId}/list")
 	public ResponseEntity getMealByDate(@RequestParam("date") String mealDate, @PathVariable int userId){
+        User user =
+                (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        if(user.getId().compareTo(userId) != 0){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 		List<Map<String,Object>> meals = mealInfoService.getMealByDate(userId,LocalDate.parse(mealDate));
 		return ResponseEntity.ok(meals);
 
