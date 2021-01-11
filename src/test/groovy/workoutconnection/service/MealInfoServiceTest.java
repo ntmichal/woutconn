@@ -3,6 +3,8 @@ package workoutconnection.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import workoutconnection.dto.ProductDto;
+import workoutconnection.entities.Meal;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -41,4 +43,10 @@ class MealInfoServiceTest {
     }
 
 
+    @Test
+    void getMeal() {
+        List<ProductDto> mealProductsList = mealInfoService.getMealProducts(1,1);
+
+        assertEquals(9, mealProductsList.size());
+    }
 }
