@@ -48,6 +48,22 @@ public class Product {
 	@JsonIgnore
 	private List<MealsList> mealsList = new ArrayList<>();
 
+
+	public Product() {
+	}
+
+	public Product(Long id, String name, String barcode, float proteins, float carbs, float fats, float kcal, float volume){
+		this.id = id;
+		this.name = name;
+		this.barcode = barcode;
+		this.proteins = proteins;
+		this.carbs = carbs;
+		this.fats = fats;
+		this.kcal = kcal;
+		this.volume = volume;
+	}
+
+
 	public Long getId() {
 		return id;
 	}
