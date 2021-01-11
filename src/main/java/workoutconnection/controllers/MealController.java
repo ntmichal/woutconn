@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import workoutconnection.dao.UserInfoDAO;
+import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.*;
 import workoutconnection.service.MealInfoService;
 
@@ -62,12 +63,20 @@ public class MealController {
 
 	}
 
-	//get 1
-	@RequestMapping(value = "/api/meal/{userid}/{id}", method = RequestMethod.GET)
-	public Meal getMeal(@PathVariable int userid, @PathVariable int id) {
+	@GetMapping(value = "/api/meal/{userId}/id/{mealId}/product/list")
+	public ResponseEntity getMeal(@PathVariable int userId, @PathVariable int mealId){
+		User user =
+				(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		return mealInfoService.getMeal(id);
+		if(user.getId().compareTo(userId) != 0){
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+		}
+		List<ProductDto> mealsList = mealInfoService.getMealProducts(mealId,userId);
+		
+		return ResponseEntity.ok(mealsList);
 	}
+	//get 1
+
 
 	//insert meal
 	@RequestMapping(value = "/api/meal", method = RequestMethod.POST)

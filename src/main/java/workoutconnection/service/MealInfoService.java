@@ -6,13 +6,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import workoutconnection.dao.IMealInfoDAO;
+import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.Meal;
-
+import workoutconnection.entities.MealsList;
+import workoutconnection.entities.Product;
 
 
 @Service
@@ -60,8 +63,20 @@ public class MealInfoService implements IMealInfoService {
 	}
 
 	@Override
-	public Meal getMeal(int id) {
-		return mealInfoDAO.getMeal(id);
+	public List<ProductDto> getMealProducts(int id, int userId) {
+		Meal meal = mealInfoDAO.getMeal(id,userId);
+		if(meal != null){
+			List<ProductDto> mealProductsList = mealInfoDAO.
+					getMealProducts(id)
+					.stream().map(x -> x.convertToDto()).collect(Collectors.toList());
+
+			return mealProductsList;
+		}
+		return null;
+	}
+	@Override
+	public Meal getMeal(int id, int userId) {
+		return mealInfoDAO.getMeal(id, userId);
 	}
 
 	@Override

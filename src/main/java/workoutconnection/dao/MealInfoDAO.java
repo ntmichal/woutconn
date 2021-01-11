@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import workoutconnection.entities.Meal;
+import workoutconnection.entities.Product;
 import workoutconnection.entities.User;
 
 
@@ -63,13 +64,32 @@ public class MealInfoDAO implements IMealInfoDAO {
 	}
 
 	@Override
-	public Meal getMeal(int id) {
+	public Meal getMeal(int id, int userId) {
 	    return (Meal)entityManager
-                .createQuery("From Meal WHERE id = :id")
+                .createQuery("From Meal WHERE id = :id AND user.id = :userId")
                 .setParameter("id",id)
+				.setParameter("userId", userId)
 				.getSingleResult();
 	}
 
+
+	@Override
+	public List<Product> getMealProducts(int id) {
+		List<Product> object = (List<Product>) entityManager
+				.createQuery("select new Product(product.id, " +
+						"product.name, " +
+						"product.barcode, " +
+						"product.proteins, " +
+						"product.carbs, " +
+						"product.fats, " +
+						"product.kcal, " +
+						"product.volume) " +
+						"From MealsList WHERE meal.id = :id ")
+				.setParameter("id", id)
+				.getResultList();
+		return object;
+
+	}
 	@Override
 	public void deleteMeal(int id) {
 		Meal meal = entityManager.find(Meal.class,id);
