@@ -3,6 +3,8 @@ package workoutconnection.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.Meal;
 
@@ -14,6 +16,8 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@TestPropertySource(locations = "/application-test.properties")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class MealInfoServiceTest {
 
     @Autowired
