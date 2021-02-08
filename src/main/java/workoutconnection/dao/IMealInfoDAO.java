@@ -2,6 +2,7 @@ package workoutconnection.dao;
 
 
 
+import workoutconnection.dto.MealDto;
 import workoutconnection.entities.Meal;
 import workoutconnection.entities.Product;
 
@@ -17,6 +18,7 @@ public interface IMealInfoDAO {
 	List<Meal> getMealByDate(int userId, LocalDate localDate);
 	void deleteMeal(int id);
 	void insertMeal(Meal meal);
-	void insertMeal(Meal meal,int id);
+	Meal insertMeal(Meal meal, int id);
+	Meal insertProductToMeal(Meal meal, int productId, int productVolume);
 	void updateMeal(Meal meal);
 }

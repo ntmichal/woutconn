@@ -58,8 +58,6 @@ public class User implements UserDetails{
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Meal> mealList;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Measurement> measurementList;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<UserGoals> goalsList;
@@ -70,14 +68,6 @@ public class User implements UserDetails{
 
 	public void setGoalsList(List<UserGoals> goalsList) {
 		this.goalsList = goalsList;
-	}
-
-	public List<Measurement> getMeasurementList() {
-		return measurementList;
-	}
-
-	public void setMeasurementList(List<Measurement> measurementList) {
-		this.measurementList = measurementList;
 	}
 
 	public List<Meal> getMealList() {

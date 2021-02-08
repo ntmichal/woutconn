@@ -8,25 +8,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import workoutconnection.dao.IMealInfoDAO;
+import workoutconnection.dto.MealDto;
+import workoutconnection.dto.MealInsertDto;
 import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.Meal;
-import workoutconnection.entities.MealsList;
-import workoutconnection.entities.Product;
+
 
 
 @Service
 public class MealInfoService implements IMealInfoService {
 
-	@Autowired
 	private IMealInfoDAO mealInfoDAO;
 
-	@Override
-	public void insertMeal(Meal meal,int userId) {
-		mealInfoDAO.insertMeal(meal,userId);
+	public MealInfoService(IMealInfoDAO mealInfoDAO){
+		this.mealInfoDAO = mealInfoDAO;
 	}
 
 	@Override
@@ -79,9 +77,25 @@ public class MealInfoService implements IMealInfoService {
 		return mealInfoDAO.getMeal(id, userId);
 	}
 
+
 	@Override
-	public void deleteMeal(int id) {
-		mealInfoDAO.deleteMeal(id);
+	public MealDto insertMeal(MealInsertDto mealInsertDto, int userId) {
+
+		Meal meal = Meal.builder()
+				.setName(mealInsertDto.getName())
+				.setMealDate(mealInsertDto.getMealDate())
+				.build();
+
+		Meal finalMeal = mealInfoDAO.insertMeal(meal, userId);
+
+		mealInsertDto.getProductPaths().forEach(productPath -> {
+					mealInfoDAO.insertProductToMeal(finalMeal,
+							productPath.getVolume(),
+							productPath.getVolume());
+				}
+		);
+
+		return finalMeal.convertToDto();
 
 	}
 
@@ -90,5 +104,12 @@ public class MealInfoService implements IMealInfoService {
 		mealInfoDAO.updateMeal(meal);
 
 	}
+
+	@Override
+	public void deleteMeal(int id) {
+		mealInfoDAO.deleteMeal(id);
+
+	}
+
 
 }

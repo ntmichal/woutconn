@@ -2,6 +2,8 @@ package workoutconnection.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.modelmapper.ModelMapper;
+import workoutconnection.dto.MealDto;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -92,9 +94,15 @@ public class Meal {
 				+ ", association=] \n";
 	}
 
+	public MealDto convertToDto(){
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(this, MealDto.class);
+	}
+
 	public static MealBuidler builder(){
 		return new MealBuidler();
 	}
+
 	public static final class MealBuidler{
 
 		Meal meal = new Meal();

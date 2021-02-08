@@ -28,12 +28,19 @@ public class MealInfoDAO implements IMealInfoDAO {
 		entityManager.merge(meal);
 	}
 	@Override
-	public void insertMeal(Meal meal, int id) {
+	public Meal insertMeal(Meal meal, int id) {
 		meal.setUser(entityManager.find(User.class,id));
- 		entityManager.merge(meal);
+ 		return entityManager.merge(meal);
 	}
 
-
+	@Override
+	public Meal insertProductToMeal(Meal meal, int productId, int productVolume){
+		meal.addProduct(
+				entityManager.find(Product.class, productId),
+				productVolume
+		);
+		return meal;
+	}
 
     @Override
 	public List<Meal> getAllMeals(int userId){
@@ -55,7 +62,8 @@ public class MealInfoDAO implements IMealInfoDAO {
 	@Override
 	public List<Meal> getMealByDate(int userId, LocalDate localDate) {
 
-		return (List<Meal>)entityManager.createQuery("From Meal WHERE mealDate = :mealDate AND user.id = :userId")
+		return (List<Meal>)entityManager.createQuery("From Meal " +
+				"WHERE mealDate = :mealDate AND user.id = :userId")
 				.setParameter("mealDate", localDate)
 				.setParameter("userId",userId)
 				.getResultList();

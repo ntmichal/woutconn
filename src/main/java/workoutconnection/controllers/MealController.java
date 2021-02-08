@@ -1,5 +1,6 @@
 package workoutconnection.controllers;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -12,8 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-
-import workoutconnection.dao.UserInfoDAO;
+import workoutconnection.dto.MealInsertDto;
 import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.*;
 import workoutconnection.service.MealInfoService;
@@ -31,34 +31,23 @@ public class MealController {
 	@Autowired
 	private MealInfoService mealInfoService;
 
-	@Autowired
-	private UserInfoDAO userDAO;
 
-
-
-	/**
-	 *
-	 * @return list of meals
-	 */
-	@RequestMapping(value = "/api/meal", method = RequestMethod.GET)
-	public List<Meal> mealsList(){
-
-		User user =
-				(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		return mealInfoService.getAllMeals(user.getId());
-
-	}
 
 	@GetMapping(value = "/api/meal/{userId}/list")
-	public ResponseEntity getMealByDate(@RequestParam("date") String mealDate, @PathVariable int userId){
+	public ResponseEntity getMealByDate(@RequestParam("date") String mealDate,
+										@PathVariable int userId){
         User user =
-                (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                (User) SecurityContextHolder
+						.getContext()
+						.getAuthentication()
+						.getPrincipal();
 
         if(user.getId().compareTo(userId) != 0){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-		List<Map<String,Object>> meals = mealInfoService.getMealByDate(userId,LocalDate.parse(mealDate));
+		List<Map<String,Object>> meals =
+				mealInfoService.getMealByDate(userId,LocalDate.parse(mealDate));
+
 		return ResponseEntity.ok(meals);
 
 	}
@@ -75,41 +64,49 @@ public class MealController {
 		
 		return ResponseEntity.ok(mealsList);
 	}
-	//get 1
 
 
-	//insert meal
 	@RequestMapping(value = "/api/meal", method = RequestMethod.POST)
-	public ResponseEntity<Object> createMeal(@RequestBody Meal meal){
+	public ResponseEntity<Object> createMeal(@RequestBody MealInsertDto meal){
 
 		User user =
 				(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+		mealInfoService.insertMeal(meal,user.getId());
 
-		Meal mealTmp = Meal.builder()
-				.setName(meal.getName())
-				.setMealDate(meal.getMealDate())
-				.build();
+		return ResponseEntity.ok().build();
 
-		meal.getMealsList().forEach( x-> {mealTmp.addProduct(x.getProduct(),x.getProductWeight());});
 
-		mealInfoService.insertMeal(mealTmp,user.getId());
-
-		return ResponseEntity.accepted().body(HttpStatus.CREATED);
 	}
 
-	//delete meal
+	@PutMapping(value = "/api/meal/{mealId}")
+	public ResponseEntity updateMeal(@PathVariable int mealId, @RequestBody Meal meal){
+
+		if(mealId != meal.getId())
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+
+		User user =
+				(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(mealInfoService.getMeal(mealId,user.getId()) != null){
+//			todo impl update
+			return ResponseEntity.ok().build();
+		}else{
+			return ResponseEntity.notFound().build();
+		}
+
+	}
+
 	@RequestMapping(value = "/api/meal/{id}", method = RequestMethod.DELETE)
-	public void deleteMeal(@PathVariable int id) {
-
-		mealInfoService.deleteMeal(id);
+	public ResponseEntity deleteMeal(@PathVariable int id) {
+		User user =
+				(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		try{
+			mealInfoService.getMeal(id, user.getId());
+			mealInfoService.deleteMeal(id);
+		}catch (Exception e){
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok().build();
 	}
-
-
-	@RequestMapping(value = "/api/usergoals/{userid}", method = RequestMethod.GET)
-	public List<UserGoals> getGoals(@PathVariable int userid){
-		return userDAO.getAllGoals(userid);
-	}
-
 
 }
