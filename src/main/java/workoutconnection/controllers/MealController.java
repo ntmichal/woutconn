@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import workoutconnection.dto.MealDto;
 import workoutconnection.dto.MealInsertDto;
 import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.*;
@@ -53,28 +54,34 @@ public class MealController {
 	}
 
 	@GetMapping(value = "/api/meal/{userId}/id/{mealId}/product/list")
-	public ResponseEntity getMeal(@PathVariable int userId, @PathVariable int mealId){
+	public ResponseEntity getMealProductList(@PathVariable int userId, @PathVariable int mealId){
 		User user =
 				(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		if(user.getId().compareTo(userId) != 0){
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 		}
-		List<ProductDto> mealsList = mealInfoService.getMealProducts(mealId,userId);
-		
-		return ResponseEntity.ok(mealsList);
+		List<String> mealsList;
+		try{
+			mealsList = mealInfoService.getMealProducts(mealId,userId);
+			return ResponseEntity.ok(mealsList);
+		}catch (Exception e){
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 
 	@RequestMapping(value = "/api/meal", method = RequestMethod.POST)
-	public ResponseEntity<Object> createMeal(@RequestBody MealInsertDto meal){
+	public ResponseEntity<MealDto> createMeal(@RequestBody MealInsertDto meal){
 
 		User user =
 				(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		mealInfoService.insertMeal(meal,user.getId());
+		MealDto mealDto = mealInfoService.insertMeal(meal,user.getId());
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity
+				.created(URI.create(Integer.toString(mealDto.getId())))
+				.build();
 
 
 	}
