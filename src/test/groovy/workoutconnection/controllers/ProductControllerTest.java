@@ -78,6 +78,24 @@ class ProductControllerTest {
     }
 
     @Test
+    void getProductById_isNotFound() throws Exception {
+        mockMvc.perform(get("/api/product/"+PRODUCT_ID_NOT_FOUND))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void getProductById_isOk() throws Exception {
+        MvcResult mockResult = mockMvc.perform(get("/api/product/"+PRODUCT_ID))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        ProductDto productDto =
+                objectMapper
+                        .readValue(mockResult.getResponse().getContentAsString(),ProductDto.class);
+        assertEquals(productDto.getId(), PRODUCT_ID);
+    }
+    @Test
     void anyProductNotFound() throws Exception{
         mockMvc.perform(get("/api/product?name="+PRODUCT_NOT_FOUND))
                 .andDo(print())

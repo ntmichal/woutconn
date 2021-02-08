@@ -20,7 +20,7 @@ public class OAuthResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/api/product","/api/product/list").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/product","/api/product/list", "/api/product/{id}").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/product").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/product").hasRole("ADMIN")
                 .antMatchers("/api/meal/{userId}/list").hasRole("USER")

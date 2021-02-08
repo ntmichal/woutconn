@@ -10,6 +10,7 @@ import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.Product;
 import workoutconnection.service.IProductService;
 
+import javax.persistence.NoResultException;
 import java.net.URI;
 import java.util.List;
 
@@ -22,6 +23,19 @@ public class ProductController {
     @Autowired
     public ProductController(IProductService productService){
         this.productService = productService;
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id){
+        ProductDto productDto;
+        try{
+            productDto = productService.getProduct(id);
+
+        }catch(Exception e){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(productDto);
     }
 
     @GetMapping()
