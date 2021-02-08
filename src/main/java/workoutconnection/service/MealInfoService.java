@@ -47,11 +47,12 @@ public class MealInfoService implements IMealInfoService {
 			apiLinkToMeal.append(userId);
 			apiLinkToMeal.append("/id/");
 			apiLinkToMeal.append(meal.getId());
+			apiLinkToMeal.append("/product/list");
 
 			Map<String, Object> mealsLinksMap = new HashMap<>();
 			mealsLinksMap.put("id", meal.getId());
 			mealsLinksMap.put("name", meal.getName());
-			mealsLinksMap.put("link", apiLinkToMeal.toString());
+			mealsLinksMap.put("path", apiLinkToMeal.toString());
 
 			mealsLinksMapList.add(mealsLinksMap);
 
@@ -62,12 +63,12 @@ public class MealInfoService implements IMealInfoService {
 	}
 
 	@Override
-	public List<ProductDto> getMealProducts(int id, int userId) {
+	public List<String> getMealProducts(int id, int userId) {
 		Meal meal = mealInfoDAO.getMeal(id,userId);
 		if(meal != null){
-			List<ProductDto> mealProductsList = mealInfoDAO.
+			List<String> mealProductsList = mealInfoDAO.
 					getMealProducts(id)
-					.stream().map(x -> x.convertToDto()).collect(Collectors.toList());
+					.stream().map(x -> "/api/product/"+ x.getId()).collect(Collectors.toList());
 
 			return mealProductsList;
 		}
