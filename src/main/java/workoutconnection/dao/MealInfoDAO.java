@@ -30,15 +30,19 @@ public class MealInfoDAO implements IMealInfoDAO {
 	@Override
 	public Meal insertMeal(Meal meal, int id) {
 		meal.setUser(entityManager.find(User.class,id));
- 		return entityManager.merge(meal);
+ 		entityManager.persist(meal);
+		entityManager.flush();
+		return meal;
 	}
 
 	@Override
-	public Meal insertProductToMeal(Meal meal, int productId, int productVolume){
+	public Meal insertProductToMeal(Meal meal, Long productId, int productVolume){
+
 		meal.addProduct(
 				entityManager.find(Product.class, productId),
 				productVolume
 		);
+		entityManager.persist(meal);
 		return meal;
 	}
 

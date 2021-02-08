@@ -16,6 +16,7 @@ import workoutconnection.dto.MealInsertDto;
 import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.Meal;
 
+import javax.transaction.Transactional;
 
 
 @Service
@@ -79,6 +80,7 @@ public class MealInfoService implements IMealInfoService {
 
 
 	@Override
+	@Transactional
 	public MealDto insertMeal(MealInsertDto mealInsertDto, int userId) {
 
 		Meal meal = Meal.builder()
@@ -90,7 +92,7 @@ public class MealInfoService implements IMealInfoService {
 
 		mealInsertDto.getProductPaths().forEach(productPath -> {
 					mealInfoDAO.insertProductToMeal(finalMeal,
-							productPath.getVolume(),
+							productPath.getId(),
 							productPath.getVolume());
 				}
 		);

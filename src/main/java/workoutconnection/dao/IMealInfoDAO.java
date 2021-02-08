@@ -19,6 +19,6 @@ public interface IMealInfoDAO {
 	void deleteMeal(int id);
 	void insertMeal(Meal meal);
 	Meal insertMeal(Meal meal, int id);
-	Meal insertProductToMeal(Meal meal, int productId, int productVolume);
+	Meal insertProductToMeal(Meal meal, Long productId, int productVolume);
 	void updateMeal(Meal meal);
 }

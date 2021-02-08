@@ -11,7 +11,7 @@ import java.util.Objects;
 public class MealsList {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
     private int id;
 
@@ -36,6 +36,13 @@ public class MealsList {
         this.productWeight = productWeight;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Meal getMeal() {
         return meal;
@@ -60,7 +67,6 @@ public class MealsList {
     public void setProductWeight(int productWeight) {
         this.productWeight = productWeight;
     }
-
 
     @Override
     public boolean equals(Object o) {

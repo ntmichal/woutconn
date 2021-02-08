@@ -9,12 +9,20 @@ public class MealInsertDto {
     private LocalDate mealDate;
     private List<ProductPath> productPaths;
 
-    public class ProductPath{
+    public static class ProductPath{
         private Long id;
         private int volume;
 
         public Long getId() {
             return id;
+        }
+
+        public ProductPath() {
+        }
+
+        public ProductPath(Long id, int volume) {
+            this.id = id;
+            this.volume = volume;
         }
 
         public ProductPath setId(Long id) {

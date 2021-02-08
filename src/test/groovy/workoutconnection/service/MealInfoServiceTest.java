@@ -1,14 +1,22 @@
 package workoutconnection.service;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import workoutconnection.dto.MealDto;
+import workoutconnection.dto.MealInsertDto;
 import workoutconnection.dto.ProductDto;
 import workoutconnection.entities.Meal;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +32,39 @@ class MealInfoServiceTest {
     private IMealInfoService mealInfoService;
 
     @Test
+    void inserMeal(){
+
+        List<MealInsertDto.ProductPath> productPathList = new ArrayList<>();
+        productPathList.add(new MealInsertDto.ProductPath(1l,10));
+        productPathList.add(new MealInsertDto.ProductPath(2l,20));
+        productPathList.add(new MealInsertDto.ProductPath(3l,30));
+
+        MealInsertDto mealInsertDto = new MealInsertDto()
+                .setName("Breakfast")
+                .setMealDate(LocalDate.now())
+                .setProductPaths(productPathList);
+
+        MealDto meal = mealInfoService.insertMeal(mealInsertDto, 1);
+
+
+
+        assertNotNull(meal.getId());
+        assertEquals(meal.getName(),mealInsertDto.getName());
+        assertEquals(meal.getMealDate(), mealInsertDto.getMealDate());
+
+        List<ProductDto> productsList = mealInfoService
+                .getMealProducts(meal.getId(),1);
+
+        assertEquals(productPathList.size(),productsList.size());
+
+    }
+
+    @Test
     void getMealByDate_then_return_two_meals(){
         List<Map<String,Object>> mealsLinkMap = mealInfoService
                 .getMealByDate(1, LocalDate.now());
 
-        assertEquals(2, mealsLinkMap.size());
+        assertEquals(3, mealsLinkMap.size());
 
         Map<String, Object> mealsLinksMap1 = new HashMap<>();
         mealsLinksMap1.put("id", 1);
@@ -53,4 +89,8 @@ class MealInfoServiceTest {
 
         assertEquals(9, mealProductsList.size());
     }
+
+
+
+
 }
