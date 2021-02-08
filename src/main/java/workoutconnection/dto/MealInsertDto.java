@@ -1,6 +1,7 @@
 package workoutconnection.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MealInsertDto {
@@ -8,6 +9,10 @@ public class MealInsertDto {
     private String name;
     private LocalDate mealDate;
     private List<ProductPath> productPaths;
+
+    public MealInsertDto() {
+        this.productPaths = new ArrayList<>();
+    }
 
     public static class ProductPath{
         private Long id;
@@ -40,6 +45,10 @@ public class MealInsertDto {
         }
     }
 
+    public MealInsertDto insertProductPath(ProductPath productPath){
+        this.productPaths.add(productPath);
+        return this;
+    }
     public String getName() {
         return name;
     }

@@ -52,7 +52,7 @@ class MealInfoServiceTest {
         assertEquals(meal.getName(),mealInsertDto.getName());
         assertEquals(meal.getMealDate(), mealInsertDto.getMealDate());
 
-        List<ProductDto> productsList = mealInfoService
+        List<String> productsList = mealInfoService
                 .getMealProducts(meal.getId(),1);
 
         assertEquals(productPathList.size(),productsList.size());
@@ -69,14 +69,14 @@ class MealInfoServiceTest {
         Map<String, Object> mealsLinksMap1 = new HashMap<>();
         mealsLinksMap1.put("id", 1);
         mealsLinksMap1.put("name", "Sniadanie");
-        mealsLinksMap1.put("link", "/api/meal/1/id/1");
+        mealsLinksMap1.put("path", "/api/meal/1/id/1/product/list");
 
         assertEquals(mealsLinkMap.get(0).equals(mealsLinksMap1),true);
 
         Map<String, Object> mealsLinksMap2 = new HashMap<>();
         mealsLinksMap2.put("id", 2);
         mealsLinksMap2.put("name", "Sniadanie2");
-        mealsLinksMap2.put("link", "/api/meal/1/id/2");
+        mealsLinksMap2.put("path", "/api/meal/1/id/2/product/list");
 
         assertEquals(mealsLinkMap.get(1).equals(mealsLinksMap2),true);
 
@@ -85,7 +85,7 @@ class MealInfoServiceTest {
 
     @Test
     void getMeal() {
-        List<ProductDto> mealProductsList = mealInfoService.getMealProducts(1,1);
+        List<String> mealProductsList = mealInfoService.getMealProducts(1,1);
 
         assertEquals(9, mealProductsList.size());
     }
