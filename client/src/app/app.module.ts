@@ -1,42 +1,31 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DietNavigationComponent } from './diet-navigation/diet-navigation.component';
+import { MealComponent } from './meal/meal.component';
 import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-
-
-import { FormsModule } from '@angular/forms';
-import {RouteModule} from './route/route.module';
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {DietService} from './diet.service';
-import {TokenStorageService} from './token-storage.service';
-import {AuthService} from './auth.service';
-import { Globals } from './globals';
-import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {ScrollingModule} from '@angular/cdk/scrolling';
-import { FilterPipe } from './filter.pipe';
-import {ReactiveFormsModule } from '@angular/forms';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { MainComponent } from './main/main.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    DietNavigationComponent,
+    MealComponent,
     LoginComponent,
-    HomeComponent,
-    FilterPipe
+    MainComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
-    RouteModule,
+    AppRoutingModule,
     FormsModule,
-    NgbModule,
-    ScrollingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
   ],
-  providers: [Globals, DietService, AuthService, TokenStorageService
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

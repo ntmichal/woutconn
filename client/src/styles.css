@@ -1,6 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
-
 *{
-    padding: 0;
     margin: 0;
+}
+
+
+.item{
+    margin: 5px;
+    text-align: center;
+    font-size: 22px;
+
+}
+.grow-1{
+    flex-grow: 1;
+}
+.grow-4{
+    flex-grow: 4;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+
+.hover-item:hover{
+    background-color: rgb(196, 196, 196);
+    border-radius: 35px;
+}
+
+.app-container{
+    font-family: 'Lato', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.navigation-container{
+    margin: 2px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: rgb(224, 224, 224);
+    border-radius: 12px;
+    width: 370px;
+}
+
+.navigation-container .item{
+    padding: 10px;
+}
+.meal-container{
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+}
+
+.one-meal-container{
+    margin: 5px 0 0 0px;
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(224, 224, 224);
+    border-radius: 12px;
+}
+.meal-name-min-width{
+    /* min-width: 160px; */
+}
+.danger-font-color{
+    color: rgb(172, 4, 4);
+}
+.meal-container .one-meal-container .item i{
+    padding: 7px;
 }

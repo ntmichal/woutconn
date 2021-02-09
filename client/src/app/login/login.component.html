@@ -10,50 +10,11 @@
                     <button [disabled]=loginForm.invalid>Sign In</button>
             </form>
         </div>
-        <div class="form-container sign-up-container" [hidden]="!swapFormBoolean">
-            <form [formGroup]="registerForm" (ngSubmit)="register()">
-                    <h1>Create Account</h1>
-                    <input type="text" placeholder="login" formControlName="login">
-                    <span class="error-container" *ngIf="login.invalid && login.touched && errorMessages.login == null">
-                        Login invalid!
-                    </span>
-                    <span class="error-container"  *ngIf="serverError(errorMessages.login, &#34;login&#34;)">
-                       {{errorMessages.login}}
-                    </span>
-                    <input type="password" placeholder="password" formControlName="password">
-                    <span class="error-container" *ngIf="password.invalid && password.touched && errorMessages.password == null">
-                        Password require min 8 digits and special chars
-                    </span>
-                    <span  class="error-container" *ngIf="serverError(errorMessages.password, &#34;password&#34;)">
-                        {{errorMessages.password}}
-                    </span>
-                    <input type="password" placeholder="confirm password" formControlName="confirmpassword">
-                    <span  class="error-container" *ngIf="registerForm.get('confirmpassword').errors && registerForm.get('confirmpassword').errors.ConfirmPassword">
-                        Passwords don't match!
-                    </span>
-                    <input type="text" placeholder="email" formControlName="email">
-                    <span class="error-container" *ngIf="email.invalid && email.touched && errorMessages.email == null">
-                        Email invalid!
-                    </span>
-                    <span class="error-container" *ngIf="serverError(errorMessages.email, &#34;email&#34;)">
-                        {{errorMessages.email}}
-                    </span>
-                    <!-- <button [disabled]="registerForm.invalid">Sign up</button> -->
-                    <button>Sign up</button>
-                    <span class="error-container" *ngIf="success">
-                        Registered!
-                    </span>
-            </form>
-        </div>
         <div class="info-container">
             <div class="info">
-                <div class="info-panel info-login" [hidden]="!swapFormBoolean">
-                    <p>Already have an account?</p>
-                    <button class="button-negative" (click)="swapForm()">Sign In</button>
-                </div>
                 <div class="info-panel info-register" [hidden]="swapFormBoolean">
                     <p>Don't have an account? Join to us!</p>
-                    <button class="button-negative" (click)="swapForm()">Sign Up</button>
+                    <button class="button-negative" >Sign Up</button>
                 </div>
             </div>
         </div>

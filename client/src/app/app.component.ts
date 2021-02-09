@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import {Router} from '@angular/router';
-
+import { DietNavigationComponent } from './diet-navigation/diet-navigation.component';
+import { MealComponent } from './meal/meal.component';
+import { LoginComponent } from './login/login.component';
 @Component({
-
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor() {
-  }
+  title = 'diet-app';
 }

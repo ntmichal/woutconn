@@ -1,0 +1,16 @@
+<ng-container *ngFor="let meal of meals; let i = index">
+    <div class="one-meal-container">
+        <div class="item grow-4 meal-name-min-width">
+            {{meal.name}}
+        </div>
+        <div class="item grow-1">
+            <i class="far fa-edit pointer hover-item"></i>
+        </div>
+        <div class="item grow-1">
+            <i class="fas fa-arrow-down pointer hover-item" (click)="loadProducts(i)"></i>
+        </div>
+        <div class="item grow-1 ">
+            <i class="far fa-times-circle danger-font-color pointer hover-item" (click)="deleteMeal(meal.id)"></i>
+        </div>
+    </div>
+</ng-container>
